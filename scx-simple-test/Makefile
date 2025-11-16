@@ -1,4 +1,6 @@
-all: bpf user
+all:
+	$(MAKE) -C bpf
+	$(MAKE) -C user
 
 bpf:
 	$(MAKE) -C bpf

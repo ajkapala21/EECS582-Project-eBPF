@@ -1,6 +1,6 @@
-CLANG ?= clang
-LLVM_STRIP ?= llvm-strip
-BPF_CFLAGS = -O2 -g -target bpf -I. -I../include
+CLANG ?= clang-17
+LLVM_STRIP ?= llvm-strip-17
+BPF_CFLAGS = -O2 -g -target bpf -I. -I./include
 
 all: scx_simple.bpf.o
 
