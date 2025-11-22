@@ -39,11 +39,8 @@ install_toolchains() {
     echo "Installing cross-compile toolchains..."
 
     if command -v apt &> /dev/null; then
-        sudo apt update && sudo apt install -y \
-            gcc-aarch64-linux-gnu gcc-x86-64-linux-gnu \
-            #gcc-arm-linux-gnueabi gcc-mips64-linux-gnuabi64 \
-            gcc-powerpc64le-linux-gnu gcc-riscv64-linux-gnu \
-            gcc-s390x-linux-gnu gcc-x86-64-linux-gnu
+        sudo apt update
+        sudo apt install -y build-essential libncurses-dev bc flex bison libelf-dev libssl-dev
     elif command -v dnf &> /dev/null; then
         sudo dnf install -y \
             gcc-aarch64-linux-gnu gcc-x86_64-linux-gnu \
