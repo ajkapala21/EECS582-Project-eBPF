@@ -62,6 +62,7 @@ s32 BPF_STRUCT_OPS(simple_select_cpu, struct task_struct *p, s32 prev_cpu, u64 w
 	if(res == 5){
 		stat_inc(2);
 	}
+	stat_inc(2);
 
 
 	cpu = scx_bpf_select_cpu_dfl(p, prev_cpu, wake_flags, &is_idle);
