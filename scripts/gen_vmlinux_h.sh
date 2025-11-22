@@ -24,7 +24,7 @@ declare -A ARCHS
 ARCHS=(
     [arm]="arm-linux-gnueabi-"
     [arm64]="aarch64-linux-gnu-"
-    [mips]="mips64-linux-gnu-"
+    #[mips]="mips64-linux-gnu-"
     [powerpc]="powerpc64le-linux-gnu-"
     [riscv]="riscv64-linux-gnu-"
     [s390]="s390x-linux-gnu-"
@@ -41,7 +41,8 @@ install_toolchains() {
     if command -v apt &> /dev/null; then
         sudo apt update && sudo apt install -y \
             gcc-aarch64-linux-gnu gcc-x86-64-linux-gnu \
-            gcc-arm-linux-gnueabi gcc-mips64-linux-gnuabi64 \
+            #gcc-arm-linux-gnueabi gcc-mips64-linux-gnuabi64 \
+            gcc-arm-linux-gnueabi \
             gcc-powerpc64le-linux-gnu gcc-riscv64-linux-gnu \
             gcc-s390x-linux-gnu gcc-x86-64-linux-gnu
     elif command -v dnf &> /dev/null; then
