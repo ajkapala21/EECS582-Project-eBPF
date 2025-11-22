@@ -71,7 +71,7 @@ int main(int argc, char **argv)
 	signal(SIGINT, sigint_handler);
 	signal(SIGTERM, sigint_handler);
 restart:
-	skel = SCX_OPS_OPEN(simple_ops, scx_simple);
+	skel = SCX_OPS_OPEN(simple_ops, scx_cfsish);
 
 	while ((opt = getopt(argc, argv, "fvh")) != -1) {
 		switch (opt) {
@@ -87,8 +87,8 @@ restart:
 		}
 	}
 
-	SCX_OPS_LOAD(skel, simple_ops, scx_simple, uei);
-	link = SCX_OPS_ATTACH(skel, simple_ops, scx_simple);
+	SCX_OPS_LOAD(skel, simple_ops, scx_cfsish, uei);
+	link = SCX_OPS_ATTACH(skel, simple_ops, scx_cfsish);
 
 	while (!exit_req && !UEI_EXITED(skel, uei)) {
 		__u64 stats[3];
