@@ -17,7 +17,7 @@ INCLUDE_TARGET=$(realpath "$2") # target directory, e.g., /path/to/scx/sched/inc
 pushd ${LINUX_REPO}
 HASH=$(git rev-parse HEAD)
 SHORT_SHA=${HASH:0:12} # full SHA of the commit truncated to 12 chars
-LINUX_VER=$(git describe --tags --abbrev=0 --match="v*")
+LINUX_VER=$(git describe --tags --abbrev=0 --match="v*" 2>/dev/null || echo "v0")
 
 # List of architectures and their corresponding cross-compilers
 declare -A ARCHS
