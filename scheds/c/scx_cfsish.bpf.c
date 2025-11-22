@@ -55,6 +55,7 @@ static void stat_inc(u32 idx)
 
 s32 BPF_STRUCT_OPS(simple_select_cpu, struct task_struct *p, s32 prev_cpu, u64 wake_flags)
 {
+	pr_info_ratelimited("simple_select_cpu hook called\n");
 	bool is_idle = false;
 	s32 cpu;
 
