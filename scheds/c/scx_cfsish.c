@@ -11,7 +11,7 @@
 #include <libgen.h>
 #include <bpf/bpf.h>
 #include <scx/common.h>
-#include "scx_simple.bpf.skel.h"
+#include "scx_cfsish.bpf.skel.h"
 
 const char help_fmt[] =
 "A simple sched_ext scheduler.\n"
@@ -39,7 +39,7 @@ static void sigint_handler(int simple)
 	exit_req = 1;
 }
 
-static void read_stats(struct scx_simple *skel, __u64 *stats)
+static void read_stats(struct scx_cfsish *skel, __u64 *stats)
 {
 	int nr_cpus = libbpf_num_possible_cpus();
 	assert(nr_cpus > 0);
@@ -62,7 +62,7 @@ static void read_stats(struct scx_simple *skel, __u64 *stats)
 
 int main(int argc, char **argv)
 {
-	struct scx_simple *skel;
+	struct scx_cfsish *skel;
 	struct bpf_link *link;
 	__u32 opt;
 	__u64 ecode;
@@ -101,7 +101,7 @@ restart:
 
 	bpf_link__destroy(link);
 	ecode = UEI_REPORT(skel, uei);
-	scx_simple__destroy(skel);
+	scx_cfsish__destroy(skel);
 
 	if (UEI_ECODE_RESTART(ecode))
 		goto restart;

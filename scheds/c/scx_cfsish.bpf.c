@@ -156,4 +156,4 @@ SCX_OPS_DEFINE(simple_ops,
 	       .enable			= (void *)simple_enable,
 	       .init			= (void *)simple_init,
 	       .exit			= (void *)simple_exit,
-	       .name			= "simple");
+	       .name			= "helper");
