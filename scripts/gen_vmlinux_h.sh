@@ -22,12 +22,12 @@ LINUX_VER=$(git describe --tags --abbrev=0 --match="v*" 2>/dev/null || echo "v0"
 # List of architectures and their corresponding cross-compilers
 declare -A ARCHS
 ARCHS=(
-    [arm]="arm-linux-gnueabi-"
-    [arm64]="aarch64-linux-gnu-"
+    #[arm]="arm-linux-gnueabi-"
+    #[arm64]="aarch64-linux-gnu-"
     #[mips]="mips64-linux-gnu-"
-    [powerpc]="powerpc64le-linux-gnu-"
-    [riscv]="riscv64-linux-gnu-"
-    [s390]="s390x-linux-gnu-"
+    #[powerpc]="powerpc64le-linux-gnu-"
+    #[riscv]="riscv64-linux-gnu-"
+    #[s390]="s390x-linux-gnu-"
     [x86]="x86_64-linux-gnu-"
 )
 if grep ^ID=fedora /etc/os-release &> /dev/null; then
