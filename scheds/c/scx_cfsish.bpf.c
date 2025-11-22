@@ -42,8 +42,9 @@ struct {
 	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
 	__uint(key_size, sizeof(u32));
 	__uint(value_size, sizeof(u64));
-	__uint(max_entries, 2);			/* [local, global] */
+	__uint(max_entries, 3);			/* [local, global] */
 } stats SEC(".maps");
+
 
 static void stat_inc(u32 idx)
 {
@@ -57,7 +58,11 @@ s32 BPF_STRUCT_OPS(simple_select_cpu, struct task_struct *p, s32 prev_cpu, u64 w
 	bool is_idle = false;
 	s32 cpu;
 
-	scx_bpf_hello_world();
+	u64 res = scx_bpf_hello_world();
+	if(res == 5){
+		stat_inc(2);
+	}
+
 
 	cpu = scx_bpf_select_cpu_dfl(p, prev_cpu, wake_flags, &is_idle);
 	if (is_idle) {
@@ -71,8 +76,6 @@ s32 BPF_STRUCT_OPS(simple_select_cpu, struct task_struct *p, s32 prev_cpu, u64 w
 void BPF_STRUCT_OPS(simple_enqueue, struct task_struct *p, u64 enq_flags)
 {
 	stat_inc(1);	/* count global queueing */
-
-	scx_bpf_hello_world();
 
 	if (fifo_sched) {
 		scx_bpf_dsq_insert(p, SHARED_DSQ, SCX_SLICE_DFL, enq_flags);
