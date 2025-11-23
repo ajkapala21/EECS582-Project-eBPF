@@ -14,6 +14,7 @@
 #include <scx/common.bpf.h>
 #include <scx/bpf_arena_common.bpf.h>
 #include <lib/rbtree.h>
+#include <lib/rbtree.bpf.c>
 
 char _license[] SEC("license") = "GPL";
 
