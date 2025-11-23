@@ -10,7 +10,7 @@ else
   OBJ_DIR := $(CURDIR)
 endif
 
-LIB_SRCS := sdt_alloc sdt_task
+LIB_SRCS := sdt_alloc sdt_task rbtree
 LIB_OBJS := $(addprefix $(OBJ_DIR)/,$(LIB_SRCS:=.bpf.o))
 
 LIB_TARGET := $(OBJ_DIR)/lib.bpf.o
