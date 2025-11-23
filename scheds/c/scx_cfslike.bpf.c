@@ -74,6 +74,7 @@ s32 BPF_STRUCT_OPS_SLEEPABLE(cfslike_init) // return 0 on succes
 {
     u32 cpu;
 
+    #pragma unroll
     // initializes the cpu_rq struct for each cpu
     for (cpu = 0; cpu < MAX_CPUS; cpu++) {
         struct cpu_rq init_rq = {};
