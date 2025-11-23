@@ -76,6 +76,9 @@ s32 BPF_STRUCT_OPS_SLEEPABLE(cfslike_init) // return 0 on succes
 
     // initializes the cpu_rq struct for each cpu
     for (cpu = 0; cpu < scx_bpf_nr_cpu_ids(); cpu++) {
+        struct cpu_rq zero = {};
+        bpf_map_update_elem(&cpu_map, &cpu, &zero, BPF_ANY);
+
         struct cpu_rq *rq = bpf_map_lookup_elem(&cpu_map, &cpu);
         if (!rq)
             return -EINVAL;
