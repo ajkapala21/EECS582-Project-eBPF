@@ -27,7 +27,7 @@ UEI_DEFINE(uei);
 
 // load is used for load balancing across cpus and min vruntime is used to intialize new tasks
 struct cpu_rq {
-    u64 *rbtree;
+    u64 rbtree;
     u64 total_weight;
     u64 min_vruntime;
 };
@@ -125,7 +125,7 @@ void BPF_STRUCT_OPS(cfslike_enqueue, struct task_struct *p, u64 enq_flags)
     }
 
     // insert into this cpu's rbTree
-    rb_insert((rbtree_t *)rq->rbtree, ti->vruntime, p);
+    rb_insert((rbtree_t *)rq->rbtree, ti->vruntime, (u64)p);
 }
 
 void BPF_STRUCT_OPS(cfslike_dispatch, s32 cpu, struct task_struct *prev)
@@ -138,7 +138,7 @@ void BPF_STRUCT_OPS(cfslike_dispatch, s32 cpu, struct task_struct *prev)
 
     int ret = rb_pop((rbtree_t *)rq->rbtree, &key, &value);
     if (ret == 0) {
-        scx_bpf_dsq_insert((task_struct *)value, SCX_DSQ_LOCAL, DEFAULT_SLICE_NS, 0);
+        scx_bpf_dsq_insert((struct task_struct *)value, SCX_DSQ_LOCAL, DEFAULT_SLICE_NS, 0);
     }
     stat_inc(0);
 }
