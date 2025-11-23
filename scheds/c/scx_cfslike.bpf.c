@@ -72,25 +72,6 @@ static void stat_inc(u32 idx)
 
 s32 BPF_STRUCT_OPS_SLEEPABLE(cfslike_init) // return 0 on succes
 {
-    u32 cpu;
-
-    #pragma unroll
-    // initializes the cpu_rq struct for each cpu
-    for (cpu = 0; cpu < MAX_CPUS; cpu++) {
-        struct cpu_rq init_rq = {};
-        
-        u64 rb_ptr = (u64)rb_create(RB_ALLOC, RB_DUPLICATE);
-        if (!rb_ptr)
-            return -ENOMEM;
-        
-        init_rq.rbtree = rb_ptr;
-        init_rq.total_weight = 0;
-        init_rq.min_vruntime = 0;
-
-        // update the map in place
-        bpf_map_update_elem(&cpu_map, &cpu, &init_rq, BPF_ANY);
-    }
-
     return 0;
 }
 
@@ -106,7 +87,20 @@ void BPF_STRUCT_OPS(cfslike_enqueue, struct task_struct *p, u64 enq_flags)
     u32 pid = p->pid;
     struct cpu_rq *rq = bpf_map_lookup_elem(&cpu_map, &cpu);
     if (!rq){
-        return;
+        struct cpu_rq init_rq = {};
+        
+        u64 rb_ptr = (u64)rb_create(RB_ALLOC, RB_DUPLICATE);
+        if (!rb_ptr)
+            return -ENOMEM;
+        
+        init_rq.rbtree = rb_ptr;
+        init_rq.total_weight = 0;
+        init_rq.min_vruntime = 0;
+
+        // update the map in place
+        bpf_map_update_elem(&cpu_map, &cpu, &init_rq, BPF_ANY);
+
+        rq = bpf_map_lookup_elem(&cpu_map, &cpu);
     }
 
     struct task_info *ti = bpf_map_lookup_elem(&task_info_map, &pid);
