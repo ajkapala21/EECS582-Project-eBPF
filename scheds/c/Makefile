@@ -58,6 +58,17 @@ $(OBJ_DIR)/scx_sdt.bpf.skel.h: $(OBJ_DIR)/scx_sdt.bpf.o $(LIB_BPF_OBJ)
 	$(BPFTOOL) gen skeleton $(OBJ_DIR)/scx_sdt.l3o name scx_sdt > $@
 	rm -f $(OBJ_DIR)/scx_sdt.l1o $(OBJ_DIR)/scx_sdt.l2o $(OBJ_DIR)/scx_sdt.l3o
 
+$(OBJ_DIR)/scx_cfslike.bpf.skel.h: $(OBJ_DIR)/scx_cfslike.bpf.o $(LIB_BPF_OBJ)
+	@echo "Generating library skeleton: $@"
+	@mkdir -p $(dir $@)
+	$(BPFTOOL) gen object $(OBJ_DIR)/scx_cfslike.l1o $(OBJ_DIR)/scx_cfslike.bpf.o $(LIB_BPF_OBJ)
+	$(BPFTOOL) gen object $(OBJ_DIR)/scx_cfslike.l2o $(OBJ_DIR)/scx_cfslike.l1o
+	$(BPFTOOL) gen object $(OBJ_DIR)/scx_cfslike.l3o $(OBJ_DIR)/scx_cfslike.l2o
+	$(BPFTOOL) gen skeleton $(OBJ_DIR)/scx_cfslike.l3o name scx_cfslike > $@
+	rm -f $(OBJ_DIR)/scx_cfslike.l1o $(OBJ_DIR)/scx_cfslike.l2o $(OBJ_DIR)/scx_cfslike.l3o
+
+
+
 $(OBJ_DIR)/%.bpf.o: $(SRC_DIR)/%.bpf.c
 	@echo "Compiling BPF: $< -> $@"
 	@mkdir -p $(dir $@)
