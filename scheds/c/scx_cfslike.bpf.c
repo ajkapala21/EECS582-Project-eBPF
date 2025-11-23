@@ -91,7 +91,7 @@ void BPF_STRUCT_OPS(cfslike_enqueue, struct task_struct *p, u64 enq_flags)
         
         u64 rb_ptr = (u64)rb_create(RB_ALLOC, RB_DUPLICATE);
         if (!rb_ptr)
-            return -ENOMEM;
+            return;
         
         init_rq.rbtree = rb_ptr;
         init_rq.total_weight = 0;
