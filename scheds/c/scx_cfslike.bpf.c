@@ -55,6 +55,20 @@ struct {
     __uint(max_entries, 65536);
 } task_info_map SEC(".maps");
 
+struct {
+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
+	__uint(key_size, sizeof(u32));
+	__uint(value_size, sizeof(u64));
+	__uint(max_entries, 2);			/* [local, global] */
+} stats SEC(".maps");
+
+static void stat_inc(u32 idx)
+{
+	u64 *cnt_p = bpf_map_lookup_elem(&stats, &idx);
+	if (cnt_p)
+		(*cnt_p)++;
+}
+
 s32 BPF_STRUCT_OPS_SLEEPABLE(cfslike_init) // return 0 on succes
 {
     u32 cpu;
@@ -128,6 +142,7 @@ void BPF_STRUCT_OPS(cfslike_dispatch, s32 cpu, struct task_struct *prev)
     if (ret == 0) {
         scx_bpf_dsq_insert(value, SCX_DSQ_LOCAL, DEFAULT_SLICE_NS, 0);
     }
+    stat_inc(0);
 }
 
 void BPF_STRUCT_OPS(cfslike_running, struct task_struct *p)
@@ -157,6 +172,7 @@ void BPF_STRUCT_OPS(cfslike_stopping, struct task_struct *p, bool runnable)
 
     // need to update this to change 100 to a real nice value/weight
     info->vruntime += (bpf_ktime_get_ns() - info->start) * 100 / info->weight;
+    stat_inc(1);
 }
 
 void BPF_STRUCT_OPS(cfslike_enable, struct task_struct *p) // called when a task is about to start running on a cpu for first time under this scheduler
