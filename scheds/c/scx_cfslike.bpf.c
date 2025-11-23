@@ -76,20 +76,18 @@ s32 BPF_STRUCT_OPS_SLEEPABLE(cfslike_init) // return 0 on succes
 
     // initializes the cpu_rq struct for each cpu
     for (cpu = 0; cpu < scx_bpf_nr_cpu_ids(); cpu++) {
-        struct cpu_rq zero = {};
-        bpf_map_update_elem(&cpu_map, &cpu, &zero, BPF_ANY);
-
-        struct cpu_rq *rq = bpf_map_lookup_elem(&cpu_map, &cpu);
-        if (!rq)
-            return -EINVAL;
-
+        struct cpu_rq init_rq = {};
+        
         u64 rb_ptr = (u64)rb_create(RB_ALLOC, RB_DUPLICATE);
         if (!rb_ptr)
             return -ENOMEM;
+        
+        init_rq.rbtree = rb_ptr;
+        init_rq.total_weight = 0;
+        init_rq.min_vruntime = 0;
 
-        rq->rbtree = rb_ptr;
-        rq->total_weight = 0;
-        rq->min_vruntime = 0;
+        // update the map in place
+        bpf_map_update_elem(&cpu_map, &cpu, &init_rq, BPF_ANY);
     }
 
     return 0;
