@@ -27,7 +27,7 @@ UEI_DEFINE(uei);
 
 // load is used for load balancing across cpus and min vruntime is used to intialize new tasks
 struct cpu_rq {
-    rbtree_t *rbtree;
+    u64 *rbtree;
     u64 total_weight;
     u64 min_vruntime;
 };
@@ -117,7 +117,7 @@ void BPF_STRUCT_OPS(cfslike_enqueue, struct task_struct *p, u64 enq_flags)
 
         bpf_map_update_elem(&task_info_map, &pid, &new_info, BPF_ANY);
 
-        cpu_rq->total_weight += new_info.weight;
+        rq->total_weight += new_info.weight;
         ti = bpf_map_lookup_elem(&task_info_map, &pid);
     }
     if(!ti){
@@ -125,7 +125,7 @@ void BPF_STRUCT_OPS(cfslike_enqueue, struct task_struct *p, u64 enq_flags)
     }
 
     // insert into this cpu's rbTree
-    rb_insert(cpu_rq->rbtree, ti->vruntime, p);
+    rb_insert(rq->rbtree, ti->vruntime, p);
 }
 
 void BPF_STRUCT_OPS(cfslike_dispatch, s32 cpu, struct task_struct *prev)
@@ -156,14 +156,15 @@ void BPF_STRUCT_OPS(cfslike_running, struct task_struct *p)
     struct task_info *info = bpf_map_lookup_elem(&task_info_map, &pid);
     if (!info) return;
 
-    if (info->vruntime > cpu_rq->min_vruntime) {
-        cpu_rq->min_vruntime = info->vruntime;
+    if (info->vruntime > rq->min_vruntime) {
+        rq->min_vruntime = info->vruntime;
     }
     info->start = bpf_ktime_get_ns();
 }
 
 void BPF_STRUCT_OPS(cfslike_stopping, struct task_struct *p, bool runnable)
 {
+    u32 pid = p->pid;
 	// update this tasks vruntime
     struct task_info *info = bpf_map_lookup_elem(&task_info_map, &pid);
     if (!info) return;
@@ -186,7 +187,7 @@ void BPF_STRUCT_OPS(cfslike_enable, struct task_struct *p) // called when a task
     struct task_info *info = bpf_map_lookup_elem(&task_info_map, &pid);
     if (!info) return;
 
-    info->vruntime = cpu_rq->min_vruntime;
+    info->vruntime = rq->min_vruntime;
 }
 
 void BPF_STRUCT_OPS(cfslike_exit, struct scx_exit_info *ei)
