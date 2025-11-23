@@ -204,4 +204,5 @@ SCX_OPS_DEFINE(cfslike_ops,
 	       .enable			= (void *)cfslike_enable,
 	       .init			= (void *)cfslike_init,
 	       .exit			= (void *)cfslike_exit,
+           .cpu_acquire     = (void *)cfslike_cpu_acquire,
 	       .name			= "cfslike");
