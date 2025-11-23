@@ -80,22 +80,6 @@ s32 BPF_STRUCT_OPS(cfslike_select_cpu, struct task_struct *p, s32 prev_cpu, u64 
     return prev_cpu;
 }
 
-void BPF_STRUCT_OPS_SLEEPABLE(cfslike_cpu_acquire, s32 cpu, struct scx_cpu_acquire_args *args)
-{
-    struct cpu_rq init_rq = {};
-        
-    u64 rb_ptr = (u64)rb_create(RB_ALLOC, RB_DUPLICATE);
-    if (!rb_ptr)
-        return;
-    
-    init_rq.rbtree = rb_ptr;
-    init_rq.total_weight = 0;
-    init_rq.min_vruntime = 0;
-
-    // update the map in place
-    bpf_map_update_elem(&cpu_map, &cpu, &init_rq, BPF_ANY);
-}
-
 void BPF_STRUCT_OPS_SLEEPABLE(cfslike_cpu_online, s32 cpu)
 {
     struct cpu_rq init_rq = {};
@@ -220,5 +204,5 @@ SCX_OPS_DEFINE(cfslike_ops,
 	       .enable			= (void *)cfslike_enable,
 	       .init			= (void *)cfslike_init,
 	       .exit			= (void *)cfslike_exit,
-           .cpu_acquire     = (void *)cfslike_cpu_acquire,
+           .cpu_online     = (void *)cfslike_cpu_online,
 	       .name			= "cfslike");
