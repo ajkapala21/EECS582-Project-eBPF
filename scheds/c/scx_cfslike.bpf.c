@@ -27,10 +27,10 @@ UEI_DEFINE(uei);
 
 // load is used for load balancing across cpus and min vruntime is used to intialize new tasks
 struct cpu_rq {
-    u64 rbtree;
+    rbtree_t *rbtree;
     u64 total_weight;
     u64 min_vruntime;
-}
+};
 
 // map from cpu -> cpu_rq info
 struct {
@@ -85,7 +85,7 @@ s32 BPF_STRUCT_OPS_SLEEPABLE(cfslike_init) // return 0 on succes
 
         rq->rbtree = rb_ptr;
         rq->total_weight = 0;
-        rq-> min_vruntime = 0;
+        rq->min_vruntime = 0;
     }
 
     return 0;
@@ -114,7 +114,6 @@ void BPF_STRUCT_OPS(cfslike_enqueue, struct task_struct *p, u64 enq_flags)
         int nice = BPF_CORE_READ(p, static_prio) - 120;
         //new_info.weight = nice_to_weight(nice);
         new_info.weight = nice;
-        new_info.slice = DEFAULT_SLICE_NS;
 
         bpf_map_update_elem(&task_info_map, &pid, &new_info, BPF_ANY);
 
@@ -135,7 +134,6 @@ void BPF_STRUCT_OPS(cfslike_dispatch, s32 cpu, struct task_struct *prev)
     struct cpu_rq *cpu_rq = bpf_map_lookup_elem(&cpu_map, &cpu);
     if (!cpu_rq) return;
 
-    u64 pid = 0;
     u64 key, value;
 
     int ret = rb_pop(cpu_rq->rbtree, &key, &value);
