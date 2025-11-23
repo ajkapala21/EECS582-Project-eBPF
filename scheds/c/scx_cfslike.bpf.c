@@ -36,7 +36,7 @@ struct cpu_rq {
 struct {
     __uint(type, BPF_MAP_TYPE_ARRAY);
     __uint(key_size, sizeof(u32));
-    __uint(value_size, sizeof(cpu_rq));
+    __uint(value_size, sizeof(struct cpu_rq));
     __uint(max_entries, MAX_CPUS);
 } cpu_map SEC(".maps");
 
@@ -79,7 +79,7 @@ s32 BPF_STRUCT_OPS_SLEEPABLE(cfslike_init) // return 0 on succes
         if (!rq)
             return -EINVAL;
 
-        u64 rb_ptr = rb_create(RB_ALLOC, RB_DUPLICATE);
+        u64 rb_ptr = (u64)rb_create(RB_ALLOC, RB_DUPLICATE);
         if (!rb_ptr)
             return -ENOMEM;
 
@@ -125,20 +125,20 @@ void BPF_STRUCT_OPS(cfslike_enqueue, struct task_struct *p, u64 enq_flags)
     }
 
     // insert into this cpu's rbTree
-    rb_insert(rq->rbtree, ti->vruntime, p);
+    rb_insert((rbtree_t *)rq->rbtree, ti->vruntime, p);
 }
 
 void BPF_STRUCT_OPS(cfslike_dispatch, s32 cpu, struct task_struct *prev)
 {
 	// look at this cpus rbtree and grab first task
-    struct cpu_rq *cpu_rq = bpf_map_lookup_elem(&cpu_map, &cpu);
-    if (!cpu_rq) return;
+    struct cpu_rq *rq = bpf_map_lookup_elem(&cpu_map, &cpu);
+    if (!rq) return;
 
     u64 key, value;
 
-    int ret = rb_pop(cpu_rq->rbtree, &key, &value);
+    int ret = rb_pop((rbtree_t *)rq->rbtree, &key, &value);
     if (ret == 0) {
-        scx_bpf_dsq_insert(value, SCX_DSQ_LOCAL, DEFAULT_SLICE_NS, 0);
+        scx_bpf_dsq_insert((task_struct *)value, SCX_DSQ_LOCAL, DEFAULT_SLICE_NS, 0);
     }
     stat_inc(0);
 }
