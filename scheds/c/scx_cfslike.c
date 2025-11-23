@@ -11,7 +11,7 @@
 #include <libgen.h>
 #include <bpf/bpf.h>
 #include <scx/common.h>
-#include "scx_cfsish.bpf.skel.h"
+#include "scx_cfslike.bpf.skel.h"
 
 const char help_fmt[] =
 "A simple sched_ext scheduler.\n"
@@ -39,7 +39,7 @@ static void sigint_handler(int simple)
 	exit_req = 1;
 }
 
-static void read_stats(struct scx_cfsish *skel, __u64 *stats)
+static void read_stats(struct scx_cfslike *skel, __u64 *stats)
 {
 	int nr_cpus = libbpf_num_possible_cpus();
 	assert(nr_cpus > 0);
@@ -62,7 +62,7 @@ static void read_stats(struct scx_cfsish *skel, __u64 *stats)
 
 int main(int argc, char **argv)
 {
-	struct scx_cfsish *skel;
+	struct scx_cfslike *skel;
 	struct bpf_link *link;
 	__u32 opt;
 	__u64 ecode;
@@ -71,7 +71,7 @@ int main(int argc, char **argv)
 	signal(SIGINT, sigint_handler);
 	signal(SIGTERM, sigint_handler);
 restart:
-	skel = SCX_OPS_OPEN(cfslike_ops, scx_cfsish);
+	skel = SCX_OPS_OPEN(cfslike_ops, scx_cfslike);
 
 	while ((opt = getopt(argc, argv, "fvh")) != -1) {
 		switch (opt) {
@@ -87,8 +87,8 @@ restart:
 		}
 	}
 
-	SCX_OPS_LOAD(skel, cfslike_ops, scx_cfsish, uei);
-	link = SCX_OPS_ATTACH(skel, cfslike_ops, scx_cfsish);
+	SCX_OPS_LOAD(skel, cfslike_ops, scx_cfslike, uei);
+	link = SCX_OPS_ATTACH(skel, cfslike_ops, scx_cfslike);
 
 	while (!exit_req && !UEI_EXITED(skel, uei)) {
 		__u64 stats[2];
@@ -101,7 +101,7 @@ restart:
 
 	bpf_link__destroy(link);
 	ecode = UEI_REPORT(skel, uei);
-	scx_cfsish__destroy(skel);
+	scx_cfslike__destroy(skel);
 
 	if (UEI_ECODE_RESTART(ecode))
 		goto restart;
