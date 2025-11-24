@@ -49,8 +49,6 @@ struct task_info {
 };
 
 struct cpu_rq {
-    struct bpf_spin_lock lock;
-    struct bpf_rb_root rbtree __contains(struct task_info, rb_node);
     u64 total_weight;
     u64 min_vruntime;
 };
@@ -63,6 +61,9 @@ struct {
   __uint(value_size, sizeof(struct cpu_rq));
   __uint(max_entries, MAX_CPUS);
 } cpu_rqs SEC(".maps");
+
+private(CGV_TREE) struct bpf_spin_lock rbtree_lock[MAX_CPUS];
+private(CGV_TREE) struct bpf_rb_root cgv_tree[MAX_CPUS] __contains(task_info, rb_node);
 
 // task info map
 struct {

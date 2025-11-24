@@ -40,7 +40,7 @@ struct cpu_rq {
 struct {
   __uint(type, BPF_MAP_TYPE_ARRAY);
   __uint(key_size, sizeof(u32));
-  __uint(value_size, sizeof(struct cpu_rq));
+  __type(value, struct cpu_rq);
   __uint(max_entries, MAX_CPUS);
 } cpu_map SEC(".maps");
 
