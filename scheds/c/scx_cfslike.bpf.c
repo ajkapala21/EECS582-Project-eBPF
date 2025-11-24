@@ -73,7 +73,7 @@ static void stat_inc(u32 idx)
 
 static void stats_set(u64 time)
 {
-    u64 *min_vruntime = bpf_map_lookup_elem(&stats, 3);
+    u64 *min_vruntime = bpf_map_lookup_elem(&stats, &3);
     if(min_vruntime){
         if(time > (*min_vruntime)){
             (*min_vruntime) = time;
