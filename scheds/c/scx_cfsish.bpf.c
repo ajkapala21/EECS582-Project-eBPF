@@ -54,7 +54,6 @@ struct cpu_rq {
 };
 
 // array of my cpu_rqs
-//private(CGV_TREE) struct cpu_rq cpu_rqs[MAX_CPUS];
 struct {
   __uint(type, BPF_MAP_TYPE_ARRAY);
   __uint(key_size, sizeof(u32));

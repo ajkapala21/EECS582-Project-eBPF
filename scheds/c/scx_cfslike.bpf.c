@@ -30,6 +30,7 @@ struct task_info {
 };
 
 struct cpu_rq {
+    struct bpf_spin_lock lock;
     u64 total_weight;
     u64 min_vruntime;
 };
@@ -43,16 +44,12 @@ struct {
 } cpu_rqs SEC(".maps");
 
 // sadly have to setup per CPU rb trees and locks like this to statisfy verifier
-private(CGV_TREE) struct bpf_spin_lock rbtree_lock0;
 private(CGV_TREE) struct bpf_rb_root rbtree0 __contains(task_info, rb_node);
 
-private(CGV_TREE) struct bpf_spin_lock rbtree_lock1;
 private(CGV_TREE) struct bpf_rb_root rbtree1 __contains(task_info, rb_node);
 
-private(CGV_TREE) struct bpf_spin_lock rbtree_lock2;
 private(CGV_TREE) struct bpf_rb_root rbtree2 __contains(task_info, rb_node);
 
-private(CGV_TREE) struct bpf_spin_lock rbtree_lock3;
 private(CGV_TREE) struct bpf_rb_root rbtree3 __contains(task_info, rb_node);
 
 // task info map
@@ -95,39 +92,6 @@ static bool node_less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
 	ti_b = container_of(b, struct task_info, rb_node);
 
 	return ti_a->vruntime < ti_b->vruntime;
-}
-
-
-static __always_inline void lock_helper(u32 cpu)
-{
-    if (cpu == 0){
-        bpf_spin_lock(&rbtree_lock0);
-    }
-    if (cpu == 1){
-        bpf_spin_lock(&rbtree_lock1);
-    }
-    if (cpu == 2){
-        bpf_spin_lock(&rbtree_lock2);
-    }
-    else{
-        bpf_spin_lock(&rbtree_lock3);
-    }
-}
-
-static __always_inline void unlock_helper(u32 cpu)
-{
-    if (cpu == 0){
-        bpf_spin_unlock(&rbtree_lock0);
-    }
-    if (cpu == 1){
-        bpf_spin_unlock(&rbtree_lock1);
-    }
-    if (cpu == 2){
-        bpf_spin_unlock(&rbtree_lock2);
-    }
-    else{
-        bpf_spin_unlock(&rbtree_lock3);
-    }
 }
 
 static __always_inline void add_helper(u32 cpu, struct bpf_rb_node *node)
@@ -213,10 +177,10 @@ void BPF_STRUCT_OPS(cfslike_enqueue, struct task_struct *p, u64 enq_flags)
     }
 
     // insert into this cpu's rbTree
-    lock_helper(cpu);
+    bpf_spin_lock(&rq->lock);
     add_helper(cpu, &ti->rb_node);
     rq->total_weight += ti->weight;
-    unlock_helper(cpu);
+    bpf_spin_unlock(&rq->lock);
 }
 
 void BPF_STRUCT_OPS(cfslike_dispatch, s32 cpu, struct task_struct *prev)
@@ -230,17 +194,17 @@ void BPF_STRUCT_OPS(cfslike_dispatch, s32 cpu, struct task_struct *prev)
         return;
     }
 
-    lock_helper(cpu);
+    bpf_spin_lock(&rq->lock);
 
 	rb_node = first_helper(cpu);
 	if (!rb_node) {
-		unlock_helper(cpu);
+		bpf_spin_unlock(&rq->lock);
         // no nodes in RBTree
 		return;
 	}
 
 	rb_node = remove_helper(cpu, rb_node);
-	unlock_helper(cpu);
+	bpf_spin_unlock(&rq->lock);
 
 	if (!rb_node) {
 		/*
