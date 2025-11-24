@@ -56,7 +56,13 @@ struct cpu_rq {
 };
 
 // array of my cpu_rqs
-private(CGV_TREE) struct cpu_rq cpu_rqs[MAX_CPUS];
+//private(CGV_TREE) struct cpu_rq cpu_rqs[MAX_CPUS];
+struct {
+  __uint(type, BPF_MAP_TYPE_ARRAY);
+  __uint(key_size, sizeof(u32));
+  __uint(value_size, sizeof(struct cpu_rq));
+  __uint(max_entries, MAX_CPUS);
+} cpu_rqs SEC(".maps");
 
 // task info map
 struct {
