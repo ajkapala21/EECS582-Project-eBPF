@@ -71,6 +71,16 @@ static void stat_inc(u32 idx)
 		(*cnt_p)++;
 }
 
+static void stats_set(u64 time)
+{
+    u64 *min_vruntime = bpf_map_lookup_elem(&stats, 3);
+    if(min_vruntime){
+        if(time > (*min_vruntime)){
+            (*min_vruntime) = time;
+        }
+    }
+}
+
 static bool node_less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
 {
 	struct task_info *ti_a, *ti_b;
@@ -191,6 +201,7 @@ void BPF_STRUCT_OPS(cfslike_running, struct task_struct *p)
 
     if (info->vruntime > rq->min_vruntime) {
         rq->min_vruntime = info->vruntime;
+        stats_set(info->vruntime);
     }
     info->start = bpf_ktime_get_ns();
 }
