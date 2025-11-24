@@ -16,8 +16,8 @@ ifeq ($(LIB_OBJ_DIR),)
   LIB_BPF_OBJ := ../../lib/lib.bpf.o
 endif
 
-C_SCHEDS := scx_simple scx_qmap scx_central scx_userland scx_nest scx_flatcg scx_pair scx_prev scx_cfsish
-C_SCHEDS_LIB := scx_sdt scx_cfslike
+C_SCHEDS := scx_simple scx_qmap scx_central scx_userland scx_nest scx_flatcg scx_pair scx_prev scx_cfsish scx_cfslike
+C_SCHEDS_LIB := scx_sdt
 
 ALL_SCHEDS := $(addprefix $(OBJ_DIR)/,$(C_SCHEDS) $(C_SCHEDS_LIB))
 
@@ -57,17 +57,6 @@ $(OBJ_DIR)/scx_sdt.bpf.skel.h: $(OBJ_DIR)/scx_sdt.bpf.o $(LIB_BPF_OBJ)
 	$(BPFTOOL) gen object $(OBJ_DIR)/scx_sdt.l3o $(OBJ_DIR)/scx_sdt.l2o
 	$(BPFTOOL) gen skeleton $(OBJ_DIR)/scx_sdt.l3o name scx_sdt > $@
 	rm -f $(OBJ_DIR)/scx_sdt.l1o $(OBJ_DIR)/scx_sdt.l2o $(OBJ_DIR)/scx_sdt.l3o
-
-$(OBJ_DIR)/scx_cfslike.bpf.skel.h: $(OBJ_DIR)/scx_cfslike.bpf.o $(LIB_BPF_OBJ)
-	@echo "Generating library skeleton: $@"
-	@mkdir -p $(dir $@)
-	$(BPFTOOL) gen object $(OBJ_DIR)/scx_cfslike.l1o $(OBJ_DIR)/scx_cfslike.bpf.o $(LIB_BPF_OBJ)
-	$(BPFTOOL) gen object $(OBJ_DIR)/scx_cfslike.l2o $(OBJ_DIR)/scx_cfslike.l1o
-	$(BPFTOOL) gen object $(OBJ_DIR)/scx_cfslike.l3o $(OBJ_DIR)/scx_cfslike.l2o
-	$(BPFTOOL) gen skeleton $(OBJ_DIR)/scx_cfslike.l3o name scx_cfslike > $@
-	rm -f $(OBJ_DIR)/scx_cfslike.l1o $(OBJ_DIR)/scx_cfslike.l2o $(OBJ_DIR)/scx_cfslike.l3o
-
-
 
 $(OBJ_DIR)/%.bpf.o: $(SRC_DIR)/%.bpf.c
 	@echo "Compiling BPF: $< -> $@"

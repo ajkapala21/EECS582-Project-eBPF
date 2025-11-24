@@ -12,7 +12,6 @@
     Can also make time slice dynamic
  */
 #include <scx/common.bpf.h>
-#include <lib/rbtree.h>
 
 char _license[] SEC("license") = "GPL";
 
@@ -27,7 +26,8 @@ UEI_DEFINE(uei);
 
 // load is used for load balancing across cpus and min vruntime is used to intialize new tasks
 struct cpu_rq {
-    u64 rbtree;
+    struct bpf_spin_lock lock;
+    struct bpf_rb_root rbtree __contains(struct task_info, rb_node);
     u64 total_weight;
     u64 min_vruntime;
 };
@@ -40,17 +40,19 @@ struct {
     __uint(max_entries, MAX_CPUS);
 } cpu_map SEC(".maps");
 
+
 struct task_info {
+    struct bpf_rb_node rb_node;
     u64 vruntime;
     u32 weight;
     u64 start;
-    u64 end;
+    u32 pid;
 };
 
 // task info map
 struct {
     __uint(type, BPF_MAP_TYPE_HASH);
-    __uint(key_size, sizeof(u64));
+    __uint(key_size, sizeof(u32));
     __uint(value_size, sizeof(struct task_info));
     __uint(max_entries, 65536);
 } task_info_map SEC(".maps");
@@ -59,7 +61,7 @@ struct {
 	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
 	__uint(key_size, sizeof(u32));
 	__uint(value_size, sizeof(u64));
-	__uint(max_entries, 2);			/* [local, global] */
+	__uint(max_entries, 2);
 } stats SEC(".maps");
 
 static void stat_inc(u32 idx)
@@ -69,30 +71,38 @@ static void stat_inc(u32 idx)
 		(*cnt_p)++;
 }
 
+static bool node_less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
+{
+	struct task_info *ti_a, *ti_b;
+
+	ti_a = container_of(a, struct task_info, rb_node);
+	ti_b = container_of(b, struct task_info, rb_node);
+
+	return ti_a->vruntime < ti_b->vruntime;
+}
+
+
 s32 BPF_STRUCT_OPS_SLEEPABLE(cfslike_init) // return 0 on succes
 {
+    u32 cpu;
+    for(cpu = 0; cpu < scx_bpf_nr_cpu_ids() && cpu < MAX_CPUS; cpu++){
+        struct cpu_rq *rq = bpf_map_lookup_elem(&cpu_map, &cpu);
+        if (!rq)
+            return -EINVAL;  // verifier usually knows this can't happen
+
+        // initialize
+        rq->total_weight = 0;
+        rq->min_vruntime = 0;
+        rq->rbtree.rb_root = NULL;
+        bpf_spin_lock_init(&rq->lock);
+    }
+
     return 0;
 }
 
 s32 BPF_STRUCT_OPS(cfslike_select_cpu, struct task_struct *p, s32 prev_cpu, u64 wake_flags)
 {
     return prev_cpu;
-}
-
-void BPF_STRUCT_OPS_SLEEPABLE(cfslike_cpu_online, s32 cpu)
-{
-    struct cpu_rq init_rq = {};
-        
-    u64 rb_ptr = (u64)rb_create(RB_ALLOC, RB_DUPLICATE);
-    if (!rb_ptr)
-        return;
-    
-    init_rq.rbtree = rb_ptr;
-    init_rq.total_weight = 0;
-    init_rq.min_vruntime = 0;
-
-    // update the map in place
-    bpf_map_update_elem(&cpu_map, &cpu, &init_rq, BPF_ANY);
 }
 
 void BPF_STRUCT_OPS(cfslike_enqueue, struct task_struct *p, u64 enq_flags)
@@ -113,10 +123,9 @@ void BPF_STRUCT_OPS(cfslike_enqueue, struct task_struct *p, u64 enq_flags)
         int nice = BPF_CORE_READ(p, static_prio) - 120;
         //new_info.weight = nice_to_weight(nice);
         new_info.weight = nice;
+        new_info.pid = pid;
 
         bpf_map_update_elem(&task_info_map, &pid, &new_info, BPF_ANY);
-
-        rq->total_weight += new_info.weight;
         ti = bpf_map_lookup_elem(&task_info_map, &pid);
     }
     if(!ti){
@@ -124,21 +133,51 @@ void BPF_STRUCT_OPS(cfslike_enqueue, struct task_struct *p, u64 enq_flags)
     }
 
     // insert into this cpu's rbTree
-    rb_insert((rbtree_t *)rq->rbtree, ti->vruntime, (u64)p);
+    bpf_spin_lock(&rq->lock);
+    bpf_rbtree_add(&rq->rbtree, &ti->rb_node, node_less);
+    rq->total_weight += ti->weight;
+    bpf_spin_unlock(&rq->lock);
 }
 
 void BPF_STRUCT_OPS(cfslike_dispatch, s32 cpu, struct task_struct *prev)
 {
+    struct bpf_rb_node *rb_node;
+	struct task_info *ti;
+
 	// look at this cpus rbtree and grab first task
     struct cpu_rq *rq = bpf_map_lookup_elem(&cpu_map, &cpu);
     if (!rq) return;
 
-    u64 key, value;
+    bpf_spin_lock(&rq->lock);
 
-    int ret = rb_pop((rbtree_t *)rq->rbtree, &key, &value);
-    if (ret == 0) {
-        scx_bpf_dsq_insert((struct task_struct *)value, SCX_DSQ_LOCAL, DEFAULT_SLICE_NS, 0);
-    }
+	rb_node = bpf_rbtree_first(&rq->rbtree);
+	if (!rb_node) {
+		bpf_spin_unlock(&rq->lock);
+        // no nodes in RBTree
+		return;
+	}
+
+	rb_node = bpf_rbtree_remove(&rq->rbtree, rb_node);
+	bpf_spin_unlock(&rq->lock);
+
+	if (!rb_node) {
+		/*
+		 * This should never happen. bpf_rbtree_first() was called
+		 * above while the tree lock was held, so the node should
+		 * always be present.
+		 */
+		scx_bpf_error("node could not be removed");
+		return true;
+	}
+
+	ti = container_of(rb_node, struct task_info, rb_node);
+   
+    struct task_struct *p = bpf_task_from_pid(pid);
+    if (!p)
+        return;  // task died, ignore and continue
+
+    scx_bpf_dsq_insert(p, SCX_DSQ_LOCAL, DEFAULT_SLICE_NS, 0);
+    
     stat_inc(0);
 }
 
@@ -203,5 +242,4 @@ SCX_OPS_DEFINE(cfslike_ops,
 	       .enable			= (void *)cfslike_enable,
 	       .init			= (void *)cfslike_init,
 	       .exit			= (void *)cfslike_exit,
-           .cpu_online     = (void *)cfslike_cpu_online,
 	       .name			= "cfslike");
