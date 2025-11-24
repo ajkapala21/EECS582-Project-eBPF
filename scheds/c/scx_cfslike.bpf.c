@@ -42,7 +42,7 @@ struct {
   __uint(key_size, sizeof(u32));
   __uint(value_size, sizeof(struct cpu_rq));
   __uint(max_entries, MAX_CPUS);
-} cpu_rqs SEC(".maps");
+} cpu_map SEC(".maps");
 
 // task info map
 struct {
