@@ -21,17 +21,6 @@ char _license[] SEC("license") = "GPL";
 
 UEI_DEFINE(uei);
 
-
-// per-CPU RBTree pointer
-
-// load is used for load balancing across cpus and min vruntime is used to intialize new tasks
-struct cpu_rq {
-    struct bpf_spin_lock lock;
-    struct bpf_rb_root rbtree __contains(struct task_info, rb_node);
-    u64 total_weight;
-    u64 min_vruntime;
-};
-
 struct task_info {
     struct bpf_rb_node rb_node;
     u64 vruntime;
@@ -39,6 +28,16 @@ struct task_info {
     u64 start;
     u32 pid;
 };
+
+struct cpu_rq {
+    struct bpf_spin_lock lock;
+    struct bpf_rb_root rbtree __contains(struct task_info, rb_node);
+    u64 total_weight;
+    u64 min_vruntime;
+};
+
+// array of my cpu_rqs
+private(PERCPU_RQ) struct cpu_rq cpu_rqs[MAX_CPUS];
 
 // task info map
 struct {
@@ -81,8 +80,7 @@ static bool node_less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
 
 	return ti_a->vruntime < ti_b->vruntime;
 }
-// array of my cpu_rqs
-private(PERCPU_RQ) struct cpu_rq cpu_rqs[MAX_CPUS];
+
 
 s32 BPF_STRUCT_OPS_SLEEPABLE(cfslike_init) // return 0 on succes
 {
