@@ -37,7 +37,7 @@ struct cpu_rq {
 };
 
 // array of my cpu_rqs
-private(PERCPU_RQ) struct cpu_rq cpu_rqs[MAX_CPUS];
+private(CGV_TREE) struct cpu_rq cpu_rqs[MAX_CPUS];
 
 // task info map
 struct {

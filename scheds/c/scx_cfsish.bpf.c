@@ -38,6 +38,8 @@ UEI_DEFINE(uei);
  */
 #define SHARED_DSQ 0
 
+#define MAX_CPUS 256
+
 struct task_info {
     struct bpf_rb_node rb_node;
     u64 vruntime;
@@ -54,7 +56,7 @@ struct cpu_rq {
 };
 
 // array of my cpu_rqs
-private(PERCPU_RQ) struct cpu_rq cpu_rqs[MAX_CPUS];
+private(CGV_TREE) struct cpu_rq cpu_rqs[MAX_CPUS];
 
 // task info map
 struct {
