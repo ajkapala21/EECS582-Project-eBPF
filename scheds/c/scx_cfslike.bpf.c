@@ -30,8 +30,6 @@ struct task_info {
 };
 
 struct cpu_rq {
-    struct bpf_spin_lock lock;
-    struct bpf_rb_root rbtree __contains(struct task_info, rb_node);
     u64 total_weight;
     u64 min_vruntime;
 };
@@ -40,9 +38,13 @@ struct cpu_rq {
 struct {
   __uint(type, BPF_MAP_TYPE_ARRAY);
   __uint(key_size, sizeof(u32));
-  __type(value, struct cpu_rq);
+  __uint(value_size, sizeof(struct cpu_rq));
   __uint(max_entries, MAX_CPUS);
-} cpu_map SEC(".maps");
+} cpu_rqs SEC(".maps");
+
+// array of my cpu_rqs
+private(CGV_TREE) struct bpf_spin_lock rbtree_lock[MAX_CPUS];
+private(CGV_TREE) struct bpf_rb_root rbtree[MAX_CPUS] __contains(task_info, rb_node);
 
 // task info map
 struct {
@@ -89,6 +91,11 @@ static bool node_less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
 
 s32 BPF_STRUCT_OPS_SLEEPABLE(cfslike_init) // return 0 on succes
 {
+    for (u32 cpu = 0; cpu < scx_bpf_nr_cpu_ids() && cpu < MAX_CPUS; cpu++) {
+        struct cpu_rq *rq = &cpu_rqs[cpu];
+        rq->total_weight = 0;
+        rq->min_vruntime = 0;
+    }
     return 0;
 }
 
@@ -102,10 +109,7 @@ void BPF_STRUCT_OPS(cfslike_enqueue, struct task_struct *p, u64 enq_flags)
     //initialize task map if needed
     u32 cpu = bpf_get_smp_processor_id();
     u32 pid = p->pid;
-    struct cpu_rq *rq = bpf_map_lookup_elem(&cpu_map, &cpu);
-    if (!rq){
-        return;
-    }
+    struct cpu_rq *rq = &cpu_rqs[cpu];
 
     struct task_info new_info = {};
     new_info.vruntime = rq->min_vruntime;
@@ -122,10 +126,10 @@ void BPF_STRUCT_OPS(cfslike_enqueue, struct task_struct *p, u64 enq_flags)
     }
 
     // insert into this cpu's rbTree
-    bpf_spin_lock(&rq->lock);
-    bpf_rbtree_add(&rq->rbtree, &ti->rb_node, node_less);
+    bpf_spin_lock(&rbtree_lock[cpu]);
+    bpf_rbtree_add(&rbtree[cpu], &ti->rb_node, node_less);
     rq->total_weight += ti->weight;
-    bpf_spin_unlock(&rq->lock);
+    bpf_spin_unlock(&rbtree_lock[cpu]);
 }
 
 void BPF_STRUCT_OPS(cfslike_dispatch, s32 cpu, struct task_struct *prev)
@@ -134,22 +138,19 @@ void BPF_STRUCT_OPS(cfslike_dispatch, s32 cpu, struct task_struct *prev)
 	struct task_info *ti;
 
 	// look at this cpus rbtree and grab first task
-    struct cpu_rq *rq = bpf_map_lookup_elem(&cpu_map, &cpu);
-    if (!rq){
-        return;
-    }
+    struct cpu_rq *rq = &cpu_rqs[cpu];
 
-    bpf_spin_lock(&rq->lock);
+    bpf_spin_lock(&rbtree_lock[cpu]);
 
-	rb_node = bpf_rbtree_first(&rq->rbtree);
+	rb_node = bpf_rbtree_first(&rbtree[cpu]);
 	if (!rb_node) {
-		bpf_spin_unlock(&rq->lock);
+		bpf_spin_unlock(&rbtree_lock[cpu]);
         // no nodes in RBTree
 		return;
 	}
 
-	rb_node = bpf_rbtree_remove(&rq->rbtree, rb_node);
-	bpf_spin_unlock(&rq->lock);
+	rb_node = bpf_rbtree_remove(&rbtree[cpu], rb_node);
+	bpf_spin_unlock(&rbtree_lock[cpu]);
 
 	if (!rb_node) {
 		/*
@@ -177,10 +178,7 @@ void BPF_STRUCT_OPS(cfslike_running, struct task_struct *p)
 	// update this cpus min vruntime if necessary
     u32 cpu = bpf_get_smp_processor_id();
     u32 pid = p->pid;
-    struct cpu_rq *rq = bpf_map_lookup_elem(&cpu_map, &cpu);
-    if (!rq){
-        return;
-    }
+    struct cpu_rq *rq = &cpu_rqs[cpu];
 
     struct task_info *info = bpf_map_lookup_elem(&task_info_map, &pid);
     if (!info) return;
@@ -208,10 +206,7 @@ void BPF_STRUCT_OPS(cfslike_enable, struct task_struct *p) // called when a task
 {
     u32 cpu = bpf_get_smp_processor_id();
     u32 pid = p->pid;
-    struct cpu_rq *rq = bpf_map_lookup_elem(&cpu_map, &cpu);
-    if (!rq){
-        return;
-    }
+    struct cpu_rq *rq = &cpu_rqs[cpu];
 
 	// update vruntime to this cpus min vruntime
     struct task_info *info = bpf_map_lookup_elem(&task_info_map, &pid);
