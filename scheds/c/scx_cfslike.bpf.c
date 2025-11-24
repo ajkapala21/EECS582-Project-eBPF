@@ -93,8 +93,6 @@ s32 BPF_STRUCT_OPS_SLEEPABLE(cfslike_init) // return 0 on succes
         // initialize
         rq->total_weight = 0;
         rq->min_vruntime = 0;
-        rq->rbtree.rb_root = NULL;
-        bpf_spin_lock_init(&rq->lock);
     }
 
     return 0;
@@ -115,19 +113,16 @@ void BPF_STRUCT_OPS(cfslike_enqueue, struct task_struct *p, u64 enq_flags)
         return;
     }
 
+    struct task_info new_info = {};
+    new_info.vruntime = rq->min_vruntime;
+
+    int nice = BPF_CORE_READ(p, static_prio) - 120;
+    //new_info.weight = nice_to_weight(nice);
+    new_info.weight = nice;
+    new_info.pid = pid;
+
+    bpf_map_update_elem(&task_info_map, &pid, &new_info, BPF_ANY);
     struct task_info *ti = bpf_map_lookup_elem(&task_info_map, &pid);
-    if(!ti){
-        struct task_info new_info = {};
-        new_info.vruntime = rq->min_vruntime;
-
-        int nice = BPF_CORE_READ(p, static_prio) - 120;
-        //new_info.weight = nice_to_weight(nice);
-        new_info.weight = nice;
-        new_info.pid = pid;
-
-        bpf_map_update_elem(&task_info_map, &pid, &new_info, BPF_ANY);
-        ti = bpf_map_lookup_elem(&task_info_map, &pid);
-    }
     if(!ti){
         return;
     }
@@ -167,12 +162,12 @@ void BPF_STRUCT_OPS(cfslike_dispatch, s32 cpu, struct task_struct *prev)
 		 * always be present.
 		 */
 		scx_bpf_error("node could not be removed");
-		return true;
+		return;
 	}
 
 	ti = container_of(rb_node, struct task_info, rb_node);
    
-    struct task_struct *p = bpf_task_from_pid(pid);
+    struct task_struct *p = bpf_task_from_pid(ti->pid);
     if (!p)
         return;  // task died, ignore and continue
 
