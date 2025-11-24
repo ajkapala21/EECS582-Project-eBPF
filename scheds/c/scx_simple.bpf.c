@@ -42,7 +42,7 @@ struct {
 	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
 	__uint(key_size, sizeof(u32));
 	__uint(value_size, sizeof(u64));
-	__uint(max_entries, 3);			/* [local, global] */
+	__uint(max_entries, 2);			/* [local, global] */
 } stats SEC(".maps");
 
 static void stat_inc(u32 idx)

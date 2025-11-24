@@ -61,7 +61,7 @@ struct {
 	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
 	__uint(key_size, sizeof(u32));
 	__uint(value_size, sizeof(u64));
-	__uint(max_entries, 2);
+	__uint(max_entries, 3);
 } stats SEC(".maps");
 
 static void stat_inc(u32 idx)
@@ -94,17 +94,6 @@ static bool node_less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
 
 s32 BPF_STRUCT_OPS_SLEEPABLE(cfslike_init) // return 0 on succes
 {
-    u32 cpu;
-    for(cpu = 0; cpu < scx_bpf_nr_cpu_ids() && cpu < MAX_CPUS; cpu++){
-        struct cpu_rq *rq = bpf_map_lookup_elem(&cpu_map, &cpu);
-        if (!rq)
-            return -EINVAL;  // verifier usually knows this can't happen
-
-        // initialize
-        rq->total_weight = 0;
-        rq->min_vruntime = 0;
-    }
-
     return 0;
 }
 
@@ -120,6 +109,8 @@ void BPF_STRUCT_OPS(cfslike_enqueue, struct task_struct *p, u64 enq_flags)
     u32 pid = p->pid;
     struct cpu_rq *rq = bpf_map_lookup_elem(&cpu_map, &cpu);
     if (!rq){
+
+
         return;
     }
 

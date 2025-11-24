@@ -88,7 +88,7 @@ restart:
 	link = SCX_OPS_ATTACH(skel, cfslike_ops, scx_cfslike);
 
 	while (!exit_req && !UEI_EXITED(skel, uei)) {
-		__u64 stats[2];
+		__u64 stats[3];
 
 		read_stats(skel, stats);
 		printf("local=%llu global=%llu minVRunTime=%llu\n", stats[0], stats[1], stats[2]);
