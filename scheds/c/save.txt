@@ -298,3 +298,1764 @@ clean:
 	rm -f $(OBJ_DIR)/*.bpf.o $(OBJ_DIR)/*.bpf.skel.h $(OBJ_DIR)/*.l1o $(OBJ_DIR)/*.l2o $(OBJ_DIR)/*.l3o $(ALL_SCHEDS)
 
 .PHONY: all install clean
+
+sudo ./build/scheds/c/scx_cfslike
+libbpf: BTF loading error: -ENOENT
+libbpf: -- BEGIN BTF LOAD LOG ---
+magic: 0xeb9f
+version: 1
+flags: 0x0
+hdr_len: 24
+type_off: 0
+type_len: 22156
+str_off: 22156
+str_len: 16388
+btf_total_size: 38568
+[1] PTR (anon) type_id=3
+[2] INT int size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
+[3] ARRAY (anon) type_id=2 index_type_id=4 nr_elems=1
+[4] INT __ARRAY_SIZE_TYPE__ size=4 bits_offset=0 nr_bits=32 encoding=(none)
+[5] PTR (anon) type_id=6
+[6] ARRAY (anon) type_id=2 index_type_id=4 nr_elems=4
+[7] PTR (anon) type_id=8
+[8] ARRAY (anon) type_id=2 index_type_id=4 nr_elems=64
+[9] PTR (anon) type_id=10
+[10] ARRAY (anon) type_id=2 index_type_id=4 nr_elems=65536
+[11] STRUCT (anon) size=32 vlen=4
+	type type_id=1 bits_offset=0
+	key_size type_id=5 bits_offset=64
+	value_size type_id=7 bits_offset=128
+	max_entries type_id=9 bits_offset=192
+[12] VAR task_info_map type_id=11 linkage=1
+[13] PTR (anon) type_id=14
+[14] ARRAY (anon) type_id=2 index_type_id=4 nr_elems=6
+[15] PTR (anon) type_id=16
+[16] ARRAY (anon) type_id=2 index_type_id=4 nr_elems=8
+[17] PTR (anon) type_id=18
+[18] ARRAY (anon) type_id=2 index_type_id=4 nr_elems=3
+[19] STRUCT (anon) size=32 vlen=4
+	type type_id=13 bits_offset=0
+	key_size type_id=5 bits_offset=64
+	value_size type_id=15 bits_offset=128
+	max_entries type_id=17 bits_offset=192
+[20] VAR stats type_id=19 linkage=1
+[21] PTR (anon) type_id=22
+[22] INT unsigned long long size=8 bits_offset=0 nr_bits=64 encoding=(none)
+[23] FUNC_PROTO (anon) return=24 args=(21 ctx)
+[24] TYPEDEF s32 type_id=25
+[25] TYPEDEF __s32 type_id=2
+[26] FUNC cfslike_init type_id=23
+[27] FUNC_PROTO (anon) return=28 args=(void)
+[28] TYPEDEF u32 type_id=29
+[29] TYPEDEF __u32 type_id=30
+[30] INT unsigned int size=4 bits_offset=0 nr_bits=32 encoding=(none)
+[31] FUNC scx_bpf_nr_cpu_ids type_id=27
+[32] FUNC_PROTO (anon) return=24 args=(21 ctx)
+[33] FUNC cfslike_select_cpu type_id=32
+[34] FUNC_PROTO (anon) return=0 args=(21 ctx)
+[35] FUNC cfslike_enqueue type_id=34
+[36] STRUCT task_struct size=5488 vlen=242
+	thread_info type_id=37 bitfield_size=0 bits_offset=0
+	__state type_id=30 bitfield_size=0 bits_offset=192
+	saved_state type_id=30 bitfield_size=0 bits_offset=224
+	stack type_id=39 bitfield_size=0 bits_offset=256
+	usage type_id=40 bitfield_size=0 bits_offset=320
+	flags type_id=30 bitfield_size=0 bits_offset=352
+	ptrace type_id=30 bitfield_size=0 bits_offset=384
+	on_cpu type_id=2 bitfield_size=0 bits_offset=416
+	wake_entry type_id=44 bitfield_size=0 bits_offset=448
+	wakee_flips type_id=30 bitfield_size=0 bits_offset=576
+	wakee_flip_decay_ts type_id=38 bitfield_size=0 bits_offset=640
+	last_wakee type_id=51 bitfield_size=0 bits_offset=704
+	recent_used_cpu type_id=2 bitfield_size=0 bits_offset=768
+	wake_cpu type_id=2 bitfield_size=0 bits_offset=800
+	on_rq type_id=2 bitfield_size=0 bits_offset=832
+	prio type_id=2 bitfield_size=0 bits_offset=864
+	static_prio type_id=2 bitfield_size=0 bits_offset=896
+	normal_prio type_id=2 bitfield_size=0 bits_offset=928
+	rt_priority type_id=30 bitfield_size=0 bits_offset=960
+	se type_id=52 bitfield_size=0 bits_offset=1024
+	rt type_id=68 bitfield_size=0 bits_offset=3072
+	dl type_id=70 bitfield_size=0 bits_offset=3456
+	dl_server type_id=85 bitfield_size=0 bits_offset=5376
+	scx type_id=86 bitfield_size=0 bits_offset=5440
+	sched_class type_id=96 bitfield_size=0 bits_offset=7040
+	sched_task_group type_id=98 bitfield_size=0 bits_offset=7104
+	stats type_id=99 bitfield_size=0 bits_offset=7168
+	btrace_seq type_id=30 bitfield_size=0 bits_offset=9216
+	policy type_id=30 bitfield_size=0 bits_offset=9248
+	max_allowed_capacity type_id=38 bitfield_size=0 bits_offset=9280
+	nr_cpus_allowed type_id=2 bitfield_size=0 bits_offset=9344
+	cpus_ptr type_id=100 bitfield_size=0 bits_offset=9408
+	user_cpus_ptr type_id=103 bitfield_size=0 bits_offset=9472
+	cpus_mask type_id=102 bitfield_size=0 bits_offset=9536
+	migration_pending type_id=39 bitfield_size=0 bits_offset=17728
+	migration_disabled type_id=50 bitfield_size=0 bits_offset=17792
+	migration_flags type_id=50 bitfield_size=0 bits_offset=17808
+	rcu_read_lock_nesting type_id=2 bitfield_size=0 bits_offset=17824
+	rcu_read_unlock_special type_id=106 bitfield_size=0 bits_offset=17856
+	rcu_node_entry type_id=58 bitfield_size=0 bits_offset=17920
+	rcu_blocked_node type_id=108 bitfield_size=0 bits_offset=18048
+	rcu_tasks_nvcsw type_id=38 bitfield_size=0 bits_offset=18112
+	rcu_tasks_holdout type_id=79 bitfield_size=0 bits_offset=18176
+	rcu_tasks_idx type_id=79 bitfield_size=0 bits_offset=18184
+	rcu_tasks_idle_cpu type_id=2 bitfield_size=0 bits_offset=18208
+	rcu_tasks_holdout_list type_id=58 bitfield_size=0 bits_offset=18240
+	rcu_tasks_exit_cpu type_id=2 bitfield_size=0 bits_offset=18368
+	rcu_tasks_exit_list type_id=58 bitfield_size=0 bits_offset=18432
+	trc_reader_nesting type_id=2 bitfield_size=0 bits_offset=18560
+	trc_ipi_to_cpu type_id=2 bitfield_size=0 bits_offset=18592
+	trc_reader_special type_id=106 bitfield_size=0 bits_offset=18624
+	trc_holdout_list type_id=58 bitfield_size=0 bits_offset=18688
+	trc_blkd_node type_id=58 bitfield_size=0 bits_offset=18816
+	trc_blkd_cpu type_id=2 bitfield_size=0 bits_offset=18944
+	sched_info type_id=109 bitfield_size=0 bits_offset=19008
+	tasks type_id=58 bitfield_size=0 bits_offset=19392
+	pushable_tasks type_id=110 bitfield_size=0 bits_offset=19520
+	pushable_dl_tasks type_id=54 bitfield_size=0 bits_offset=19840
+	mm type_id=111 bitfield_size=0 bits_offset=20032
+	active_mm type_id=111 bitfield_size=0 bits_offset=20096
+	faults_disabled_mapping type_id=112 bitfield_size=0 bits_offset=20160
+	exit_state type_id=2 bitfield_size=0 bits_offset=20224
+	exit_code type_id=2 bitfield_size=0 bits_offset=20256
+	exit_signal type_id=2 bitfield_size=0 bits_offset=20288
+	pdeath_signal type_id=2 bitfield_size=0 bits_offset=20320
+	jobctl type_id=38 bitfield_size=0 bits_offset=20352
+	personality type_id=30 bitfield_size=0 bits_offset=20416
+	sched_reset_on_fork type_id=30 bitfield_size=1 bits_offset=20448
+	sched_contributes_to_load type_id=30 bitfield_size=1 bits_offset=20449
+	sched_migrated type_id=30 bitfield_size=1 bits_offset=20450
+	sched_task_hot type_id=30 bitfield_size=1 bits_offset=20451
+	sched_remote_wakeup type_id=30 bitfield_size=1 bits_offset=20480
+	sched_rt_mutex type_id=30 bitfield_size=1 bits_offset=20481
+	in_execve type_id=30 bitfield_size=1 bits_offset=20482
+	in_iowait type_id=30 bitfield_size=1 bits_offset=20483
+	restore_sigmask type_id=30 bitfield_size=1 bits_offset=20484
+	no_cgroup_migration type_id=30 bitfield_size=1 bits_offset=20485
+	frozen type_id=30 bitfield_size=1 bits_offset=20486
+	use_memdelay type_id=30 bitfield_size=1 bits_offset=20487
+	in_eventfd type_id=30 bitfield_size=1 bits_offset=20488
+	pasid_activated type_id=30 bitfield_size=1 bits_offset=20489
+	reported_split_lock type_id=30 bitfield_size=1 bits_offset=20490
+	in_thrashing type_id=30 bitfield_size=1 bits_offset=20491
+	in_nf_duplicate type_id=30 bitfield_size=1 bits_offset=20492
+	atomic_flags type_id=38 bitfield_size=0 bits_offset=20544
+	restart_block type_id=113 bitfield_size=0 bits_offset=20608
+	pid type_id=130 bitfield_size=0 bits_offset=21056
+	tgid type_id=130 bitfield_size=0 bits_offset=21088
+	stack_canary type_id=38 bitfield_size=0 bits_offset=21120
+	real_parent type_id=51 bitfield_size=0 bits_offset=21184
+	parent type_id=51 bitfield_size=0 bits_offset=21248
+	children type_id=58 bitfield_size=0 bits_offset=21312
+	sibling type_id=58 bitfield_size=0 bits_offset=21440
+	group_leader type_id=51 bitfield_size=0 bits_offset=21568
+	ptraced type_id=58 bitfield_size=0 bits_offset=21632
+	ptrace_entry type_id=58 bitfield_size=0 bits_offset=21760
+	thread_pid type_id=132 bitfield_size=0 bits_offset=21888
+	pid_links type_id=136 bitfield_size=0 bits_offset=21952
+	thread_node type_id=58 bitfield_size=0 bits_offset=22464
+	vfork_done type_id=137 bitfield_size=0 bits_offset=22592
+	set_child_tid type_id=138 bitfield_size=0 bits_offset=22656
+	clear_child_tid type_id=138 bitfield_size=0 bits_offset=22720
+	worker_private type_id=39 bitfield_size=0 bits_offset=22784
+	utime type_id=56 bitfield_size=0 bits_offset=22848
+	stime type_id=56 bitfield_size=0 bits_offset=22912
+	gtime type_id=56 bitfield_size=0 bits_offset=22976
+	prev_cputime type_id=139 bitfield_size=0 bits_offset=23040
+	nvcsw type_id=38 bitfield_size=0 bits_offset=23232
+	nivcsw type_id=38 bitfield_size=0 bits_offset=23296
+	start_time type_id=56 bitfield_size=0 bits_offset=23360
+	start_boottime type_id=56 bitfield_size=0 bits_offset=23424
+	min_flt type_id=38 bitfield_size=0 bits_offset=23488
+	maj_flt type_id=38 bitfield_size=0 bits_offset=23552
+	posix_cputimers type_id=147 bitfield_size=0 bits_offset=23616
+	posix_cputimers_work type_id=153 bitfield_size=0 bits_offset=24256
+	ptracer_cred type_id=160 bitfield_size=0 bits_offset=24704
+	real_cred type_id=160 bitfield_size=0 bits_offset=24768
+	cred type_id=160 bitfield_size=0 bits_offset=24832
+	cached_requested_key type_id=173 bitfield_size=0 bits_offset=24896
+	comm type_id=180 bitfield_size=0 bits_offset=24960
+	nameidata type_id=181 bitfield_size=0 bits_offset=25088
+	sysvsem type_id=182 bitfield_size=0 bits_offset=25152
+	sysvshm type_id=184 bitfield_size=0 bits_offset=25216
+	fs type_id=185 bitfield_size=0 bits_offset=25344
+	files type_id=186 bitfield_size=0 bits_offset=25408
+	io_uring type_id=187 bitfield_size=0 bits_offset=25472
+	nsproxy type_id=188 bitfield_size=0 bits_offset=25536
+	signal type_id=189 bitfield_size=0 bits_offset=25600
+	sighand type_id=190 bitfield_size=0 bits_offset=25664
+	blocked type_id=191 bitfield_size=0 bits_offset=25728
+	real_blocked type_id=191 bitfield_size=0 bits_offset=25792
+	saved_sigmask type_id=191 bitfield_size=0 bits_offset=25856
+	pending type_id=194 bitfield_size=0 bits_offset=25920
+	sas_ss_sp type_id=38 bitfield_size=0 bits_offset=26112
+	sas_ss_size type_id=195 bitfield_size=0 bits_offset=26176
+	sas_ss_flags type_id=30 bitfield_size=0 bits_offset=26240
+	task_works type_id=155 bitfield_size=0 bits_offset=26304
+	audit_context type_id=198 bitfield_size=0 bits_offset=26368
+	loginuid type_id=163 bitfield_size=0 bits_offset=26432
+	sessionid type_id=30 bitfield_size=0 bits_offset=26464
+	seccomp type_id=199 bitfield_size=0 bits_offset=26496
+	syscall_dispatch type_id=201 bitfield_size=0 bits_offset=26624
+	parent_exec_id type_id=56 bitfield_size=0 bits_offset=26880
+	self_exec_id type_id=56 bitfield_size=0 bits_offset=26944
+	alloc_lock type_id=203 bitfield_size=0 bits_offset=27008
+	pi_lock type_id=140 bitfield_size=0 bits_offset=27040
+	wake_q type_id=206 bitfield_size=0 bits_offset=27072
+	pi_waiters type_id=150 bitfield_size=0 bits_offset=27136
+	pi_top_task type_id=51 bitfield_size=0 bits_offset=27264
+	pi_blocked_on type_id=208 bitfield_size=0 bits_offset=27328
+	blocked_on type_id=209 bitfield_size=0 bits_offset=27392
+	journal_info type_id=39 bitfield_size=0 bits_offset=27456
+	bio_list type_id=210 bitfield_size=0 bits_offset=27520
+	plug type_id=211 bitfield_size=0 bits_offset=27584
+	reclaim_state type_id=212 bitfield_size=0 bits_offset=27648
+	io_context type_id=213 bitfield_size=0 bits_offset=27712
+	capture_control type_id=214 bitfield_size=0 bits_offset=27776
+	ptrace_message type_id=38 bitfield_size=0 bits_offset=27840
+	last_siginfo type_id=215 bitfield_size=0 bits_offset=27904
+	ioac type_id=217 bitfield_size=0 bits_offset=27968
+	acct_rss_mem1 type_id=56 bitfield_size=0 bits_offset=28416
+	acct_vm_mem1 type_id=56 bitfield_size=0 bits_offset=28480
+	acct_timexpd type_id=56 bitfield_size=0 bits_offset=28544
+	mems_allowed type_id=218 bitfield_size=0 bits_offset=28608
+	mems_allowed_seq type_id=220 bitfield_size=0 bits_offset=28672
+	cpuset_mem_spread_rotor type_id=2 bitfield_size=0 bits_offset=28704
+	cgroups type_id=224 bitfield_size=0 bits_offset=28736
+	cg_list type_id=58 bitfield_size=0 bits_offset=28800
+	robust_list type_id=225 bitfield_size=0 bits_offset=28928
+	compat_robust_list type_id=226 bitfield_size=0 bits_offset=28992
+	pi_state_list type_id=58 bitfield_size=0 bits_offset=29056
+	pi_state_cache type_id=227 bitfield_size=0 bits_offset=29184
+	futex_exit_mutex type_id=158 bitfield_size=0 bits_offset=29248
+	futex_state type_id=30 bitfield_size=0 bits_offset=29504
+	perf_recursion type_id=228 bitfield_size=0 bits_offset=29536
+	perf_event_ctxp type_id=229 bitfield_size=0 bits_offset=29568
+	perf_event_mutex type_id=158 bitfield_size=0 bits_offset=29632
+	perf_event_list type_id=58 bitfield_size=0 bits_offset=29888
+	perf_ctx_data type_id=230 bitfield_size=0 bits_offset=30016
+	mempolicy type_id=231 bitfield_size=0 bits_offset=30080
+	il_prev type_id=232 bitfield_size=0 bits_offset=30144
+	il_weight type_id=79 bitfield_size=0 bits_offset=30160
+	pref_node_fork type_id=232 bitfield_size=0 bits_offset=30176
+	numa_scan_seq type_id=2 bitfield_size=0 bits_offset=30208
+	numa_scan_period type_id=30 bitfield_size=0 bits_offset=30240
+	numa_scan_period_max type_id=30 bitfield_size=0 bits_offset=30272
+	numa_preferred_nid type_id=2 bitfield_size=0 bits_offset=30304
+	numa_migrate_retry type_id=38 bitfield_size=0 bits_offset=30336
+	node_stamp type_id=56 bitfield_size=0 bits_offset=30400
+	last_task_numa_placement type_id=56 bitfield_size=0 bits_offset=30464
+	last_sum_exec_runtime type_id=56 bitfield_size=0 bits_offset=30528
+	numa_work type_id=154 bitfield_size=0 bits_offset=30592
+	numa_group type_id=233 bitfield_size=0 bits_offset=30720
+	numa_faults type_id=234 bitfield_size=0 bits_offset=30784
+	total_numa_faults type_id=38 bitfield_size=0 bits_offset=30848
+	numa_faults_locality type_id=235 bitfield_size=0 bits_offset=30912
+	numa_pages_migrated type_id=38 bitfield_size=0 bits_offset=31104
+	rseq type_id=236 bitfield_size=0 bits_offset=31168
+	rseq_len type_id=28 bitfield_size=0 bits_offset=31232
+	rseq_sig type_id=28 bitfield_size=0 bits_offset=31264
+	rseq_event_mask type_id=38 bitfield_size=0 bits_offset=31296
+	mm_cid type_id=2 bitfield_size=0 bits_offset=31360
+	last_mm_cid type_id=2 bitfield_size=0 bits_offset=31392
+	migrate_from_cpu type_id=2 bitfield_size=0 bits_offset=31424
+	mm_cid_active type_id=2 bitfield_size=0 bits_offset=31456
+	cid_work type_id=154 bitfield_size=0 bits_offset=31488
+	tlb_ubc type_id=237 bitfield_size=0 bits_offset=31616
+	splice_pipe type_id=239 bitfield_size=0 bits_offset=39936
+	task_frag type_id=240 bitfield_size=0 bits_offset=40000
+	delays type_id=242 bitfield_size=0 bits_offset=40128
+	nr_dirtied type_id=2 bitfield_size=0 bits_offset=40192
+	nr_dirtied_pause type_id=2 bitfield_size=0 bits_offset=40224
+	dirty_paused_when type_id=38 bitfield_size=0 bits_offset=40256
+	timer_slack_ns type_id=56 bitfield_size=0 bits_offset=40320
+	default_timer_slack_ns type_id=56 bitfield_size=0 bits_offset=40384
+	trace_recursion type_id=38 bitfield_size=0 bits_offset=40448
+	throttle_disk type_id=243 bitfield_size=0 bits_offset=40512
+	utask type_id=244 bitfield_size=0 bits_offset=40576
+	kmap_ctrl type_id=245 bitfield_size=0 bits_offset=40640
+	rcu type_id=154 bitfield_size=0 bits_offset=40640
+	rcu_users type_id=40 bitfield_size=0 bits_offset=40768
+	pagefault_disabled type_id=2 bitfield_size=0 bits_offset=40800
+	oom_reaper_list type_id=51 bitfield_size=0 bits_offset=40832
+	oom_reaper_timer type_id=246 bitfield_size=0 bits_offset=40896
+	stack_vm_area type_id=250 bitfield_size=0 bits_offset=41216
+	stack_refcount type_id=40 bitfield_size=0 bits_offset=41280
+	security type_id=39 bitfield_size=0 bits_offset=41344
+	bpf_storage type_id=251 bitfield_size=0 bits_offset=41408
+	bpf_ctx type_id=252 bitfield_size=0 bits_offset=41472
+	bpf_net_context type_id=253 bitfield_size=0 bits_offset=41536
+	mce_vaddr type_id=39 bitfield_size=0 bits_offset=41600
+	mce_kflags type_id=57 bitfield_size=0 bits_offset=41664
+	mce_addr type_id=56 bitfield_size=0 bits_offset=41728
+	mce_ripv type_id=57 bitfield_size=1 bits_offset=41792
+	mce_whole_page type_id=57 bitfield_size=1 bits_offset=41793
+	__mce_reserved type_id=57 bitfield_size=62 bits_offset=41794
+	mce_kill_me type_id=154 bitfield_size=0 bits_offset=41856
+	mce_count type_id=2 bitfield_size=0 bits_offset=41984
+	kretprobe_instances type_id=254 bitfield_size=0 bits_offset=42048
+	rethooks type_id=254 bitfield_size=0 bits_offset=42112
+	l1d_flush_kill type_id=154 bitfield_size=0 bits_offset=42176
+	thread type_id=255 bitfield_size=0 bits_offset=42304
+[37] STRUCT thread_info size=24 vlen=4
+	flags type_id=38 bits_offset=0
+	syscall_work type_id=38 bits_offset=64
+	status type_id=28 bits_offset=128
+	cpu type_id=28 bits_offset=160
+[38] INT unsigned long size=8 bits_offset=0 nr_bits=64 encoding=(none)
+[39] PTR (anon) type_id=0
+[40] TYPEDEF refcount_t type_id=41
+[41] STRUCT refcount_struct size=4 vlen=1
+	refs type_id=42 bits_offset=0
+[42] TYPEDEF atomic_t type_id=43
+[43] STRUCT (anon) size=4 vlen=1
+	counter type_id=2 bits_offset=0
+[44] STRUCT __call_single_node size=16 vlen=4
+	llist type_id=45 bits_offset=0
+	(anon) type_id=47 bits_offset=64
+	src type_id=48 bits_offset=96
+	dst type_id=48 bits_offset=112
+[45] STRUCT llist_node size=8 vlen=1
+	next type_id=46 bits_offset=0
+[46] PTR (anon) type_id=45
+[47] UNION (anon) size=4 vlen=2
+	u_flags type_id=30 bits_offset=0
+	a_flags type_id=42 bits_offset=0
+[48] TYPEDEF u16 type_id=49
+[49] TYPEDEF __u16 type_id=50
+[50] INT unsigned short size=2 bits_offset=0 nr_bits=16 encoding=(none)
+[51] PTR (anon) type_id=36
+[52] STRUCT sched_entity size=256 vlen=23
+	load type_id=53 bits_offset=0
+	run_node type_id=54 bits_offset=128
+	deadline type_id=56 bits_offset=320
+	min_vruntime type_id=56 bits_offset=384
+	min_slice type_id=56 bits_offset=448
+	group_node type_id=58 bits_offset=512
+	on_rq type_id=60 bits_offset=640
+	sched_delayed type_id=60 bits_offset=648
+	rel_deadline type_id=60 bits_offset=656
+	custom_slice type_id=60 bits_offset=664
+	exec_start type_id=56 bits_offset=704
+	sum_exec_runtime type_id=56 bits_offset=768
+	prev_sum_exec_runtime type_id=56 bits_offset=832
+	vruntime type_id=56 bits_offset=896
+	(anon) type_id=61 bits_offset=960
+	slice type_id=56 bits_offset=1024
+	nr_migrations type_id=56 bits_offset=1088
+	depth type_id=2 bits_offset=1152
+	parent type_id=65 bits_offset=1216
+	cfs_rq type_id=66 bits_offset=1280
+	my_q type_id=66 bits_offset=1344
+	runnable_weight type_id=38 bits_offset=1408
+	avg type_id=67 bits_offset=1536
+[53] STRUCT load_weight size=16 vlen=2
+	weight type_id=38 bits_offset=0
+	inv_weight type_id=28 bits_offset=64
+[54] STRUCT rb_node size=24 vlen=3
+	__rb_parent_color type_id=38 bits_offset=0
+	rb_right type_id=55 bits_offset=64
+	rb_left type_id=55 bits_offset=128
+[55] PTR (anon) type_id=54
+[56] TYPEDEF u64 type_id=57
+[57] TYPEDEF __u64 type_id=22
+[58] STRUCT list_head size=16 vlen=2
+	next type_id=59 bits_offset=0
+	prev type_id=59 bits_offset=64
+[59] PTR (anon) type_id=58
+[60] INT unsigned char size=1 bits_offset=0 nr_bits=8 encoding=(none)
+[61] UNION (anon) size=8 vlen=2
+	vlag type_id=62 bits_offset=0
+	vprot type_id=56 bits_offset=0
+[62] TYPEDEF s64 type_id=63
+[63] TYPEDEF __s64 type_id=64
+[64] INT long long size=8 bits_offset=0 nr_bits=64 encoding=SIGNED
+[65] PTR (anon) type_id=52
+[66] PTR (anon) type_id=543
+[67] STRUCT sched_avg size=64 vlen=9
+	last_update_time type_id=56 bits_offset=0
+	load_sum type_id=56 bits_offset=64
+	runnable_sum type_id=56 bits_offset=128
+	util_sum type_id=28 bits_offset=192
+	period_contrib type_id=28 bits_offset=224
+	load_avg type_id=38 bits_offset=256
+	runnable_avg type_id=38 bits_offset=320
+	util_avg type_id=38 bits_offset=384
+	util_est type_id=30 bits_offset=448
+[68] STRUCT sched_rt_entity size=48 vlen=7
+	run_list type_id=58 bits_offset=0
+	timeout type_id=38 bits_offset=128
+	watchdog_stamp type_id=38 bits_offset=192
+	time_slice type_id=30 bits_offset=256
+	on_rq type_id=50 bits_offset=288
+	on_list type_id=50 bits_offset=304
+	back type_id=69 bits_offset=320
+[69] PTR (anon) type_id=68
+[70] STRUCT sched_dl_entity size=240 vlen=23
+	rb_node type_id=54 bitfield_size=0 bits_offset=0
+	dl_runtime type_id=56 bitfield_size=0 bits_offset=192
+	dl_deadline type_id=56 bitfield_size=0 bits_offset=256
+	dl_period type_id=56 bitfield_size=0 bits_offset=320
+	dl_bw type_id=56 bitfield_size=0 bits_offset=384
+	dl_density type_id=56 bitfield_size=0 bits_offset=448
+	runtime type_id=62 bitfield_size=0 bits_offset=512
+	deadline type_id=56 bitfield_size=0 bits_offset=576
+	flags type_id=30 bitfield_size=0 bits_offset=640
+	dl_throttled type_id=30 bitfield_size=1 bits_offset=672
+	dl_yielded type_id=30 bitfield_size=1 bits_offset=673
+	dl_non_contending type_id=30 bitfield_size=1 bits_offset=674
+	dl_overrun type_id=30 bitfield_size=1 bits_offset=675
+	dl_server type_id=30 bitfield_size=1 bits_offset=676
+	dl_server_active type_id=30 bitfield_size=1 bits_offset=677
+	dl_defer type_id=30 bitfield_size=1 bits_offset=678
+	dl_defer_armed type_id=30 bitfield_size=1 bits_offset=679
+	dl_defer_running type_id=30 bitfield_size=1 bits_offset=680
+	dl_timer type_id=71 bitfield_size=0 bits_offset=704
+	inactive_timer type_id=71 bitfield_size=0 bits_offset=1216
+	rq type_id=81 bitfield_size=0 bits_offset=1728
+	server_pick_task type_id=82 bitfield_size=0 bits_offset=1792
+	pi_se type_id=85 bitfield_size=0 bits_offset=1856
+[71] STRUCT hrtimer size=64 vlen=8
+	node type_id=72 bits_offset=0
+	_softexpires type_id=73 bits_offset=256
+	function type_id=74 bits_offset=320
+	base type_id=78 bits_offset=384
+	state type_id=79 bits_offset=448
+	is_rel type_id=79 bits_offset=456
+	is_soft type_id=79 bits_offset=464
+	is_hard type_id=79 bits_offset=472
+[72] STRUCT timerqueue_node size=32 vlen=2
+	node type_id=54 bits_offset=0
+	expires type_id=73 bits_offset=192
+[73] TYPEDEF ktime_t type_id=62
+[74] PTR (anon) type_id=75
+[75] FUNC_PROTO (anon) return=76 args=(77 (anon))
+[76] ENUM hrtimer_restart size=4 vlen=2
+	HRTIMER_NORESTART val=0
+	HRTIMER_RESTART val=1
+[77] PTR (anon) type_id=71
+[78] PTR (anon) type_id=555
+[79] TYPEDEF u8 type_id=80
+[80] TYPEDEF __u8 type_id=60
+[81] PTR (anon) type_id=545
+[82] TYPEDEF dl_server_pick_f type_id=83
+[83] PTR (anon) type_id=84
+[84] FUNC_PROTO (anon) return=51 args=(85 (anon))
+[85] PTR (anon) type_id=70
+[86] STRUCT sched_ext_entity size=200 vlen=22
+	dsq type_id=87 bits_offset=0
+	dsq_list type_id=88 bits_offset=64
+	dsq_priq type_id=54 bits_offset=256
+	dsq_seq type_id=28 bits_offset=448
+	dsq_flags type_id=28 bits_offset=480
+	flags type_id=28 bits_offset=512
+	weight type_id=28 bits_offset=544
+	sticky_cpu type_id=24 bits_offset=576
+	holding_cpu type_id=24 bits_offset=608
+	selected_cpu type_id=24 bits_offset=640
+	kf_mask type_id=28 bits_offset=672
+	kf_tasks type_id=89 bits_offset=704
+	ops_state type_id=90 bits_offset=832
+	runnable_node type_id=58 bits_offset=896
+	runnable_at type_id=38 bits_offset=1024
+	ddsp_dsq_id type_id=56 bits_offset=1088
+	ddsp_enq_flags type_id=56 bits_offset=1152
+	slice type_id=56 bits_offset=1216
+	dsq_vtime type_id=56 bits_offset=1280
+	disallow type_id=93 bits_offset=1344
+	cgrp_moving_from type_id=95 bits_offset=1408
+	tasks_node type_id=58 bits_offset=1472
+[87] PTR (anon) type_id=575
+[88] STRUCT scx_dsq_list_node size=24 vlen=3
+	node type_id=58 bits_offset=0
+	flags type_id=28 bits_offset=128
+	priv type_id=28 bits_offset=160
+[89] ARRAY (anon) type_id=51 index_type_id=4 nr_elems=2
+[90] TYPEDEF atomic_long_t type_id=91
+[91] TYPEDEF atomic64_t type_id=92
+[92] STRUCT (anon) size=8 vlen=1
+	counter type_id=62 bits_offset=0
+[93] TYPEDEF bool type_id=94
+[94] INT _Bool size=1 bits_offset=0 nr_bits=8 encoding=BOOL
+[95] PTR (anon) type_id=426
+[96] PTR (anon) type_id=97
+[97] CONST (anon) type_id=594
+[98] PTR (anon) type_id=546
+[99] STRUCT sched_statistics size=256 vlen=28
+	wait_start type_id=56 bits_offset=0
+	wait_max type_id=56 bits_offset=64
+	wait_count type_id=56 bits_offset=128
+	wait_sum type_id=56 bits_offset=192
+	iowait_count type_id=56 bits_offset=256
+	iowait_sum type_id=56 bits_offset=320
+	sleep_start type_id=56 bits_offset=384
+	sleep_max type_id=56 bits_offset=448
+	sum_sleep_runtime type_id=62 bits_offset=512
+	block_start type_id=56 bits_offset=576
+	block_max type_id=56 bits_offset=640
+	sum_block_runtime type_id=62 bits_offset=704
+	exec_max type_id=62 bits_offset=768
+	slice_max type_id=56 bits_offset=832
+	nr_migrations_cold type_id=56 bits_offset=896
+	nr_failed_migrations_affine type_id=56 bits_offset=960
+	nr_failed_migrations_running type_id=56 bits_offset=1024
+	nr_failed_migrations_hot type_id=56 bits_offset=1088
+	nr_forced_migrations type_id=56 bits_offset=1152
+	nr_wakeups type_id=56 bits_offset=1216
+	nr_wakeups_sync type_id=56 bits_offset=1280
+	nr_wakeups_migrate type_id=56 bits_offset=1344
+	nr_wakeups_local type_id=56 bits_offset=1408
+	nr_wakeups_remote type_id=56 bits_offset=1472
+	nr_wakeups_affine type_id=56 bits_offset=1536
+	nr_wakeups_affine_attempts type_id=56 bits_offset=1600
+	nr_wakeups_passive type_id=56 bits_offset=1664
+	nr_wakeups_idle type_id=56 bits_offset=1728
+[100] PTR (anon) type_id=101
+[101] CONST (anon) type_id=102
+[102] TYPEDEF cpumask_t type_id=104
+[103] PTR (anon) type_id=102
+[104] STRUCT cpumask size=1024 vlen=1
+	bits type_id=105 bits_offset=0
+[105] ARRAY (anon) type_id=38 index_type_id=4 nr_elems=128
+[106] UNION rcu_special size=4 vlen=2
+	b type_id=107 bits_offset=0
+	s type_id=28 bits_offset=0
+[107] STRUCT (anon) size=4 vlen=4
+	blocked type_id=79 bits_offset=0
+	need_qs type_id=79 bits_offset=8
+	exp_hint type_id=79 bits_offset=16
+	need_mb type_id=79 bits_offset=24
+[108] PTR (anon) type_id=595
+[109] STRUCT sched_info size=48 vlen=6
+	pcount type_id=38 bits_offset=0
+	run_delay type_id=22 bits_offset=64
+	max_run_delay type_id=22 bits_offset=128
+	min_run_delay type_id=22 bits_offset=192
+	last_arrival type_id=22 bits_offset=256
+	last_queued type_id=22 bits_offset=320
+[110] STRUCT plist_node size=40 vlen=3
+	prio type_id=2 bits_offset=0
+	prio_list type_id=58 bits_offset=64
+	node_list type_id=58 bits_offset=192
+[111] PTR (anon) type_id=560
+[112] PTR (anon) type_id=544
+[113] STRUCT restart_block size=56 vlen=3
+	arch_data type_id=38 bits_offset=0
+	fn type_id=114 bits_offset=64
+	(anon) type_id=118 bits_offset=128
+[114] PTR (anon) type_id=115
+[115] FUNC_PROTO (anon) return=116 args=(117 (anon))
+[116] INT long size=8 bits_offset=0 nr_bits=64 encoding=SIGNED
+[117] PTR (anon) type_id=113
+[118] UNION (anon) size=40 vlen=3
+	futex type_id=119 bits_offset=0
+	nanosleep type_id=121 bits_offset=0
+	poll type_id=128 bits_offset=0
+[119] STRUCT (anon) size=40 vlen=6
+	uaddr type_id=120 bits_offset=0
+	val type_id=28 bits_offset=64
+	flags type_id=28 bits_offset=96
+	bitset type_id=28 bits_offset=128
+	time type_id=56 bits_offset=192
+	uaddr2 type_id=120 bits_offset=256
+[120] PTR (anon) type_id=28
+[121] STRUCT (anon) size=24 vlen=4
+	clockid type_id=122 bits_offset=0
+	type type_id=124 bits_offset=32
+	(anon) type_id=125 bits_offset=64
+	expires type_id=56 bits_offset=128
+[122] TYPEDEF clockid_t type_id=123
+[123] TYPEDEF __kernel_clockid_t type_id=2
+[124] ENUM timespec_type size=4 vlen=3
+	TT_NONE val=0
+	TT_NATIVE val=1
+	TT_COMPAT val=2
+[125] UNION (anon) size=8 vlen=2
+	rmtp type_id=126 bits_offset=0
+	compat_rmtp type_id=127 bits_offset=0
+[126] PTR (anon) type_id=596
+[127] PTR (anon) type_id=597
+[128] STRUCT (anon) size=32 vlen=5
+	ufds type_id=129 bits_offset=0
+	nfds type_id=2 bits_offset=64
+	has_timeout type_id=2 bits_offset=96
+	tv_sec type_id=38 bits_offset=128
+	tv_nsec type_id=38 bits_offset=192
+[129] PTR (anon) type_id=598
+[130] TYPEDEF pid_t type_id=131
+[131] TYPEDEF __kernel_pid_t type_id=2
+[132] PTR (anon) type_id=565
+[133] STRUCT hlist_node size=16 vlen=2
+	next type_id=134 bits_offset=0
+	pprev type_id=135 bits_offset=64
+[134] PTR (anon) type_id=133
+[135] PTR (anon) type_id=134
+[136] ARRAY (anon) type_id=133 index_type_id=4 nr_elems=4
+[137] PTR (anon) type_id=553
+[138] PTR (anon) type_id=2
+[139] STRUCT prev_cputime size=24 vlen=3
+	utime type_id=56 bits_offset=0
+	stime type_id=56 bits_offset=64
+	lock type_id=140 bits_offset=128
+[140] TYPEDEF raw_spinlock_t type_id=141
+[141] STRUCT raw_spinlock size=4 vlen=1
+	raw_lock type_id=142 bits_offset=0
+[142] TYPEDEF arch_spinlock_t type_id=143
+[143] STRUCT qspinlock size=4 vlen=1
+	(anon) type_id=144 bits_offset=0
+[144] UNION (anon) size=4 vlen=3
+	val type_id=42 bits_offset=0
+	(anon) type_id=145 bits_offset=0
+	(anon) type_id=146 bits_offset=0
+[145] STRUCT (anon) size=2 vlen=2
+	locked type_id=79 bits_offset=0
+	pending type_id=79 bits_offset=8
+[146] STRUCT (anon) size=4 vlen=2
+	locked_pending type_id=48 bits_offset=0
+	tail type_id=48 bits_offset=16
+[147] STRUCT posix_cputimers size=80 vlen=3
+	bases type_id=152 bits_offset=0
+	timers_active type_id=30 bits_offset=576
+	expiry_active type_id=30 bits_offset=608
+[148] STRUCT posix_cputimer_base size=24 vlen=2
+	nextevt type_id=56 bits_offset=0
+	tqhead type_id=149 bits_offset=64
+[149] STRUCT timerqueue_head size=16 vlen=1
+	rb_root type_id=150 bits_offset=0
+[150] STRUCT rb_root_cached size=16 vlen=2
+	rb_root type_id=151 bits_offset=0
+	rb_leftmost type_id=55 bits_offset=64
+[151] STRUCT rb_root size=8 vlen=1
+	rb_node type_id=55 bits_offset=0
+[152] ARRAY (anon) type_id=148 index_type_id=4 nr_elems=3
+[153] STRUCT posix_cputimers_work size=56 vlen=3
+	work type_id=154 bits_offset=0
+	mutex type_id=158 bits_offset=128
+	scheduled type_id=30 bits_offset=384
+[154] STRUCT callback_head size=16 vlen=2
+	next type_id=155 bits_offset=0
+	func type_id=156 bits_offset=64
+[155] PTR (anon) type_id=154
+[156] PTR (anon) type_id=157
+[157] FUNC_PROTO (anon) return=0 args=(155 (anon))
+[158] STRUCT mutex size=32 vlen=4
+	owner type_id=90 bits_offset=0
+	wait_lock type_id=140 bits_offset=64
+	osq type_id=159 bits_offset=96
+	wait_list type_id=58 bits_offset=128
+[159] STRUCT optimistic_spin_queue size=4 vlen=1
+	tail type_id=42 bits_offset=0
+[160] PTR (anon) type_id=161
+[161] CONST (anon) type_id=162
+[162] STRUCT cred size=184 vlen=26
+	usage type_id=90 bits_offset=0
+	uid type_id=163 bits_offset=64
+	gid type_id=167 bits_offset=96
+	suid type_id=163 bits_offset=128
+	sgid type_id=167 bits_offset=160
+	euid type_id=163 bits_offset=192
+	egid type_id=167 bits_offset=224
+	fsuid type_id=163 bits_offset=256
+	fsgid type_id=167 bits_offset=288
+	securebits type_id=30 bits_offset=320
+	cap_inheritable type_id=171 bits_offset=384
+	cap_permitted type_id=171 bits_offset=448
+	cap_effective type_id=171 bits_offset=512
+	cap_bset type_id=171 bits_offset=576
+	cap_ambient type_id=171 bits_offset=640
+	jit_keyring type_id=60 bits_offset=704
+	session_keyring type_id=173 bits_offset=768
+	process_keyring type_id=173 bits_offset=832
+	thread_keyring type_id=173 bits_offset=896
+	request_key_auth type_id=173 bits_offset=960
+	security type_id=39 bits_offset=1024
+	user type_id=174 bits_offset=1088
+	user_ns type_id=175 bits_offset=1152
+	ucounts type_id=176 bits_offset=1216
+	group_info type_id=177 bits_offset=1280
+	(anon) type_id=178 bits_offset=1344
+[163] TYPEDEF kuid_t type_id=164
+[164] STRUCT (anon) size=4 vlen=1
+	val type_id=165 bits_offset=0
+[165] TYPEDEF uid_t type_id=166
+[166] TYPEDEF __kernel_uid32_t type_id=30
+[167] TYPEDEF kgid_t type_id=168
+[168] STRUCT (anon) size=4 vlen=1
+	val type_id=169 bits_offset=0
+[169] TYPEDEF gid_t type_id=170
+[170] TYPEDEF __kernel_gid32_t type_id=30
+[171] TYPEDEF kernel_cap_t type_id=172
+[172] STRUCT (anon) size=8 vlen=1
+	val type_id=56 bits_offset=0
+[173] PTR (anon) type_id=556
+[174] PTR (anon) type_id=562
+[175] PTR (anon) type_id=550
+[176] PTR (anon) type_id=552
+[177] PTR (anon) type_id=563
+[178] UNION (anon) size=16 vlen=2
+	non_rcu type_id=2 bits_offset=0
+	rcu type_id=154 bits_offset=0
+[179] INT char size=1 bits_offset=0 nr_bits=8 encoding=SIGNED
+[180] ARRAY (anon) type_id=179 index_type_id=4 nr_elems=16
+[181] PTR (anon) type_id=599
+[182] STRUCT sysv_sem size=8 vlen=1
+	undo_list type_id=183 bits_offset=0
+[183] PTR (anon) type_id=600
+[184] STRUCT sysv_shm size=16 vlen=1
+	shm_clist type_id=58 bits_offset=0
+[185] PTR (anon) type_id=580
+[186] PTR (anon) type_id=601
+[187] PTR (anon) type_id=602
+[188] PTR (anon) type_id=551
+[189] PTR (anon) type_id=576
+[190] PTR (anon) type_id=578
+[191] TYPEDEF sigset_t type_id=192
+[192] STRUCT (anon) size=8 vlen=1
+	sig type_id=193 bits_offset=0
+[193] ARRAY (anon) type_id=38 index_type_id=4 nr_elems=1
+[194] STRUCT sigpending size=24 vlen=2
+	list type_id=58 bits_offset=0
+	signal type_id=191 bits_offset=128
+[195] TYPEDEF size_t type_id=196
+[196] TYPEDEF __kernel_size_t type_id=197
+[197] TYPEDEF __kernel_ulong_t type_id=38
+[198] PTR (anon) type_id=577
+[199] STRUCT seccomp size=16 vlen=3
+	mode type_id=2 bits_offset=0
+	filter_count type_id=42 bits_offset=32
+	filter type_id=200 bits_offset=64
+[200] PTR (anon) type_id=604
+[201] STRUCT syscall_user_dispatch size=32 vlen=4
+	selector type_id=202 bits_offset=0
+	offset type_id=38 bits_offset=64
+	len type_id=38 bits_offset=128
+	on_dispatch type_id=93 bits_offset=192
+[202] PTR (anon) type_id=179
+[203] TYPEDEF spinlock_t type_id=204
+[204] STRUCT spinlock size=4 vlen=1
+	(anon) type_id=205 bits_offset=0
+[205] UNION (anon) size=4 vlen=1
+	rlock type_id=141 bits_offset=0
+[206] STRUCT wake_q_node size=8 vlen=1
+	next type_id=207 bits_offset=0
+[207] PTR (anon) type_id=206
+[208] PTR (anon) type_id=605
+[209] PTR (anon) type_id=158
+[210] PTR (anon) type_id=583
+[211] PTR (anon) type_id=603
+[212] PTR (anon) type_id=606
+[213] PTR (anon) type_id=582
+[214] PTR (anon) type_id=607
+[215] PTR (anon) type_id=216
+[216] TYPEDEF kernel_siginfo_t type_id=564
+[217] STRUCT task_io_accounting size=56 vlen=7
+	rchar type_id=56 bits_offset=0
+	wchar type_id=56 bits_offset=64
+	syscr type_id=56 bits_offset=128
+	syscw type_id=56 bits_offset=192
+	read_bytes type_id=56 bits_offset=256
+	write_bytes type_id=56 bits_offset=320
+	cancelled_write_bytes type_id=56 bits_offset=384
+[218] TYPEDEF nodemask_t type_id=219
+[219] STRUCT (anon) size=8 vlen=1
+	bits type_id=193 bits_offset=0
+[220] TYPEDEF seqcount_spinlock_t type_id=221
+[221] STRUCT seqcount_spinlock size=4 vlen=1
+	seqcount type_id=222 bits_offset=0
+[222] TYPEDEF seqcount_t type_id=223
+[223] STRUCT seqcount size=4 vlen=1
+	sequence type_id=30 bits_offset=0
+[224] PTR (anon) type_id=579
+[225] PTR (anon) type_id=609
+[226] PTR (anon) type_id=610
+[227] PTR (anon) type_id=611
+[228] ARRAY (anon) type_id=79 index_type_id=4 nr_elems=4
+[229] PTR (anon) type_id=587
+[230] PTR (anon) type_id=612
+[231] PTR (anon) type_id=566
+[232] INT short size=2 bits_offset=0 nr_bits=16 encoding=SIGNED
+[233] PTR (anon) type_id=613
+[234] PTR (anon) type_id=38
+[235] ARRAY (anon) type_id=38 index_type_id=4 nr_elems=3
+[236] PTR (anon) type_id=614
+[237] STRUCT tlbflush_unmap_batch size=1040 vlen=3
+	arch type_id=238 bits_offset=0
+	flush_required type_id=93 bits_offset=8256
+	writable type_id=93 bits_offset=8264
+[238] STRUCT arch_tlbflush_unmap_batch size=1032 vlen=2
+	cpumask type_id=104 bits_offset=0
+	unmapped_pages type_id=93 bits_offset=8192
+[239] PTR (anon) type_id=559
+[240] STRUCT page_frag size=16 vlen=3
+	page type_id=241 bits_offset=0
+	offset type_id=29 bits_offset=64
+	size type_id=29 bits_offset=96
+[241] PTR (anon) type_id=548
+[242] PTR (anon) type_id=608
+[243] PTR (anon) type_id=581
+[244] PTR (anon) type_id=615
+[245] STRUCT kmap_ctrl size=0 vlen=0
+[246] STRUCT timer_list size=40 vlen=4
+	entry type_id=133 bits_offset=0
+	expires type_id=38 bits_offset=128
+	function type_id=247 bits_offset=192
+	flags type_id=28 bits_offset=256
+[247] PTR (anon) type_id=248
+[248] FUNC_PROTO (anon) return=0 args=(249 (anon))
+[249] PTR (anon) type_id=246
+[250] PTR (anon) type_id=568
+[251] PTR (anon) type_id=567
+[252] PTR (anon) type_id=616
+[253] PTR (anon) type_id=617
+[254] STRUCT llist_head size=8 vlen=1
+	first type_id=46 bits_offset=0
+[255] STRUCT thread_struct size=152 vlen=18
+	tls_array type_id=257 bitfield_size=0 bits_offset=0
+	sp type_id=38 bitfield_size=0 bits_offset=192
+	es type_id=50 bitfield_size=0 bits_offset=256
+	ds type_id=50 bitfield_size=0 bits_offset=272
+	fsindex type_id=50 bitfield_size=0 bits_offset=288
+	gsindex type_id=50 bitfield_size=0 bits_offset=304
+	fsbase type_id=38 bitfield_size=0 bits_offset=320
+	gsbase type_id=38 bitfield_size=0 bits_offset=384
+	ptrace_bps type_id=334 bitfield_size=0 bits_offset=448
+	virtual_dr6 type_id=38 bitfield_size=0 bits_offset=704
+	ptrace_dr7 type_id=38 bitfield_size=0 bits_offset=768
+	cr2 type_id=38 bitfield_size=0 bits_offset=832
+	trap_nr type_id=38 bitfield_size=0 bits_offset=896
+	error_code type_id=38 bitfield_size=0 bits_offset=960
+	io_bitmap type_id=335 bitfield_size=0 bits_offset=1024
+	iopl_emul type_id=38 bitfield_size=0 bits_offset=1088
+	iopl_warn type_id=30 bitfield_size=1 bits_offset=1152
+	pkru type_id=28 bitfield_size=0 bits_offset=1184
+[256] STRUCT desc_struct size=8 vlen=13
+	limit0 type_id=48 bitfield_size=0 bits_offset=0
+	base0 type_id=48 bitfield_size=0 bits_offset=16
+	base1 type_id=48 bitfield_size=8 bits_offset=32
+	type type_id=48 bitfield_size=4 bits_offset=40
+	s type_id=48 bitfield_size=1 bits_offset=44
+	dpl type_id=48 bitfield_size=2 bits_offset=45
+	p type_id=48 bitfield_size=1 bits_offset=47
+	limit1 type_id=48 bitfield_size=4 bits_offset=48
+	avl type_id=48 bitfield_size=1 bits_offset=52
+	l type_id=48 bitfield_size=1 bits_offset=53
+	d type_id=48 bitfield_size=1 bits_offset=54
+	g type_id=48 bitfield_size=1 bits_offset=55
+	base2 type_id=48 bitfield_size=8 bits_offset=56
+[257] ARRAY (anon) type_id=256 index_type_id=4 nr_elems=3
+[258] PTR (anon) type_id=259
+[259] STRUCT perf_event size=1128 vlen=77
+	event_entry type_id=58 bits_offset=0
+	sibling_list type_id=58 bits_offset=128
+	active_list type_id=58 bits_offset=256
+	group_node type_id=54 bits_offset=384
+	group_index type_id=56 bits_offset=576
+	migrate_entry type_id=58 bits_offset=640
+	hlist_entry type_id=133 bits_offset=768
+	active_entry type_id=58 bits_offset=896
+	nr_siblings type_id=2 bits_offset=1024
+	event_caps type_id=2 bits_offset=1056
+	group_caps type_id=2 bits_offset=1088
+	group_generation type_id=30 bits_offset=1120
+	group_leader type_id=258 bits_offset=1152
+	pmu type_id=260 bits_offset=1216
+	pmu_private type_id=39 bits_offset=1280
+	state type_id=261 bits_offset=1344
+	attach_state type_id=30 bits_offset=1376
+	count type_id=262 bits_offset=1408
+	child_count type_id=91 bits_offset=1472
+	total_time_enabled type_id=56 bits_offset=1536
+	total_time_running type_id=56 bits_offset=1600
+	tstamp type_id=56 bits_offset=1664
+	attr type_id=266 bits_offset=1728
+	header_size type_id=48 bits_offset=2816
+	id_header_size type_id=48 bits_offset=2832
+	read_size type_id=48 bits_offset=2848
+	hw type_id=273 bits_offset=2880
+	ctx type_id=229 bits_offset=4544
+	pmu_ctx type_id=291 bits_offset=4608
+	refcount type_id=90 bits_offset=4672
+	child_total_time_enabled type_id=91 bits_offset=4736
+	child_total_time_running type_id=91 bits_offset=4800
+	child_mutex type_id=158 bits_offset=4864
+	child_list type_id=58 bits_offset=5120
+	parent type_id=258 bits_offset=5248
+	oncpu type_id=2 bits_offset=5312
+	cpu type_id=2 bits_offset=5344
+	owner_entry type_id=58 bits_offset=5376
+	owner type_id=51 bits_offset=5504
+	mmap_mutex type_id=158 bits_offset=5568
+	mmap_count type_id=42 bits_offset=5824
+	rb type_id=292 bits_offset=5888
+	rb_entry type_id=58 bits_offset=5952
+	rcu_batches type_id=38 bits_offset=6080
+	rcu_pending type_id=2 bits_offset=6144
+	waitq type_id=293 bits_offset=6208
+	fasync type_id=295 bits_offset=6400
+	pending_wakeup type_id=30 bits_offset=6464
+	pending_kill type_id=30 bits_offset=6496
+	pending_disable type_id=30 bits_offset=6528
+	pending_addr type_id=38 bits_offset=6592
+	pending_irq type_id=296 bits_offset=6656
+	pending_disable_irq type_id=296 bits_offset=6912
+	pending_task type_id=154 bits_offset=7168
+	pending_work type_id=30 bits_offset=7296
+	event_limit type_id=42 bits_offset=7328
+	addr_filters type_id=301 bits_offset=7360
+	addr_filter_ranges type_id=302 bits_offset=7552
+	addr_filters_gen type_id=38 bits_offset=7616
+	aux_event type_id=258 bits_offset=7680
+	destroy type_id=303 bits_offset=7744
+	callback_head type_id=154 bits_offset=7808
+	ns type_id=305 bits_offset=7936
+	id type_id=56 bits_offset=8000
+	lost_samples type_id=91 bits_offset=8064
+	clock type_id=306 bits_offset=8128
+	overflow_handler type_id=308 bits_offset=8192
+	overflow_handler_context type_id=39 bits_offset=8256
+	prog type_id=330 bits_offset=8320
+	bpf_cookie type_id=56 bits_offset=8384
+	tp_event type_id=331 bits_offset=8448
+	filter type_id=332 bits_offset=8512
+	cgrp type_id=333 bits_offset=8576
+	security type_id=39 bits_offset=8640
+	sb_list type_id=58 bits_offset=8704
+	pmu_list type_id=58 bits_offset=8832
+	orig_type type_id=28 bits_offset=8960
+[260] PTR (anon) type_id=585
+[261] ENUM perf_event_state size=4 vlen=7
+	PERF_EVENT_STATE_DEAD val=-5
+	PERF_EVENT_STATE_REVOKED val=-4
+	PERF_EVENT_STATE_EXIT val=-3
+	PERF_EVENT_STATE_ERROR val=-2
+	PERF_EVENT_STATE_OFF val=-1
+	PERF_EVENT_STATE_INACTIVE val=0
+	PERF_EVENT_STATE_ACTIVE val=1
+[262] TYPEDEF local64_t type_id=263
+[263] STRUCT (anon) size=8 vlen=1
+	a type_id=264 bits_offset=0
+[264] TYPEDEF local_t type_id=265
+[265] STRUCT (anon) size=8 vlen=1
+	a type_id=90 bits_offset=0
+[266] STRUCT perf_event_attr size=136 vlen=60
+	type type_id=29 bitfield_size=0 bits_offset=0
+	size type_id=29 bitfield_size=0 bits_offset=32
+	config type_id=57 bitfield_size=0 bits_offset=64
+	(anon) type_id=267 bitfield_size=0 bits_offset=128
+	sample_type type_id=57 bitfield_size=0 bits_offset=192
+	read_format type_id=57 bitfield_size=0 bits_offset=256
+	disabled type_id=57 bitfield_size=1 bits_offset=320
+	inherit type_id=57 bitfield_size=1 bits_offset=321
+	pinned type_id=57 bitfield_size=1 bits_offset=322
+	exclusive type_id=57 bitfield_size=1 bits_offset=323
+	exclude_user type_id=57 bitfield_size=1 bits_offset=324
+	exclude_kernel type_id=57 bitfield_size=1 bits_offset=325
+	exclude_hv type_id=57 bitfield_size=1 bits_offset=326
+	exclude_idle type_id=57 bitfield_size=1 bits_offset=327
+	mmap type_id=57 bitfield_size=1 bits_offset=328
+	comm type_id=57 bitfield_size=1 bits_offset=329
+	freq type_id=57 bitfield_size=1 bits_offset=330
+	inherit_stat type_id=57 bitfield_size=1 bits_offset=331
+	enable_on_exec type_id=57 bitfield_size=1 bits_offset=332
+	task type_id=57 bitfield_size=1 bits_offset=333
+	watermark type_id=57 bitfield_size=1 bits_offset=334
+	precise_ip type_id=57 bitfield_size=2 bits_offset=335
+	mmap_data type_id=57 bitfield_size=1 bits_offset=337
+	sample_id_all type_id=57 bitfield_size=1 bits_offset=338
+	exclude_host type_id=57 bitfield_size=1 bits_offset=339
+	exclude_guest type_id=57 bitfield_size=1 bits_offset=340
+	exclude_callchain_kernel type_id=57 bitfield_size=1 bits_offset=341
+	exclude_callchain_user type_id=57 bitfield_size=1 bits_offset=342
+	mmap2 type_id=57 bitfield_size=1 bits_offset=343
+	comm_exec type_id=57 bitfield_size=1 bits_offset=344
+	use_clockid type_id=57 bitfield_size=1 bits_offset=345
+	context_switch type_id=57 bitfield_size=1 bits_offset=346
+	write_backward type_id=57 bitfield_size=1 bits_offset=347
+	namespaces type_id=57 bitfield_size=1 bits_offset=348
+	ksymbol type_id=57 bitfield_size=1 bits_offset=349
+	bpf_event type_id=57 bitfield_size=1 bits_offset=350
+	aux_output type_id=57 bitfield_size=1 bits_offset=351
+	cgroup type_id=57 bitfield_size=1 bits_offset=352
+	text_poke type_id=57 bitfield_size=1 bits_offset=353
+	build_id type_id=57 bitfield_size=1 bits_offset=354
+	inherit_thread type_id=57 bitfield_size=1 bits_offset=355
+	remove_on_exec type_id=57 bitfield_size=1 bits_offset=356
+	sigtrap type_id=57 bitfield_size=1 bits_offset=357
+	__reserved_1 type_id=57 bitfield_size=26 bits_offset=358
+	(anon) type_id=268 bitfield_size=0 bits_offset=384
+	bp_type type_id=29 bitfield_size=0 bits_offset=416
+	(anon) type_id=269 bitfield_size=0 bits_offset=448
+	(anon) type_id=270 bitfield_size=0 bits_offset=512
+	branch_sample_type type_id=57 bitfield_size=0 bits_offset=576
+	sample_regs_user type_id=57 bitfield_size=0 bits_offset=640
+	sample_stack_user type_id=29 bitfield_size=0 bits_offset=704
+	clockid type_id=25 bitfield_size=0 bits_offset=736
+	sample_regs_intr type_id=57 bitfield_size=0 bits_offset=768
+	aux_watermark type_id=29 bitfield_size=0 bits_offset=832
+	sample_max_stack type_id=49 bitfield_size=0 bits_offset=864
+	__reserved_2 type_id=49 bitfield_size=0 bits_offset=880
+	aux_sample_size type_id=29 bitfield_size=0 bits_offset=896
+	(anon) type_id=271 bitfield_size=0 bits_offset=928
+	sig_data type_id=57 bitfield_size=0 bits_offset=960
+	config3 type_id=57 bitfield_size=0 bits_offset=1024
+[267] UNION (anon) size=8 vlen=2
+	sample_period type_id=57 bits_offset=0
+	sample_freq type_id=57 bits_offset=0
+[268] UNION (anon) size=4 vlen=2
+	wakeup_events type_id=29 bits_offset=0
+	wakeup_watermark type_id=29 bits_offset=0
+[269] UNION (anon) size=8 vlen=4
+	bp_addr type_id=57 bits_offset=0
+	kprobe_func type_id=57 bits_offset=0
+	uprobe_path type_id=57 bits_offset=0
+	config1 type_id=57 bits_offset=0
+[270] UNION (anon) size=8 vlen=4
+	bp_len type_id=57 bits_offset=0
+	kprobe_addr type_id=57 bits_offset=0
+	probe_offset type_id=57 bits_offset=0
+	config2 type_id=57 bits_offset=0
+[271] UNION (anon) size=4 vlen=2
+	aux_action type_id=29 bits_offset=0
+	(anon) type_id=272 bits_offset=0
+[272] STRUCT (anon) size=4 vlen=4
+	aux_start_paused type_id=29 bitfield_size=1 bits_offset=0
+	aux_pause type_id=29 bitfield_size=1 bits_offset=1
+	aux_resume type_id=29 bitfield_size=1 bits_offset=2
+	__reserved_3 type_id=29 bitfield_size=29 bits_offset=3
+[273] STRUCT hw_perf_event size=208 vlen=12
+	(anon) type_id=274 bits_offset=0
+	target type_id=51 bits_offset=896
+	addr_filters type_id=39 bits_offset=960
+	addr_filters_gen type_id=38 bits_offset=1024
+	state type_id=2 bits_offset=1088
+	prev_count type_id=262 bits_offset=1152
+	sample_period type_id=56 bits_offset=1216
+	(anon) type_id=288 bits_offset=1280
+	interrupts_seq type_id=56 bits_offset=1408
+	interrupts type_id=56 bits_offset=1472
+	freq_time_stamp type_id=56 bits_offset=1536
+	freq_count_stamp type_id=56 bits_offset=1600
+[274] UNION (anon) size=112 vlen=7
+	(anon) type_id=275 bits_offset=0
+	(anon) type_id=277 bits_offset=0
+	(anon) type_id=278 bits_offset=0
+	(anon) type_id=279 bits_offset=0
+	(anon) type_id=280 bits_offset=0
+	(anon) type_id=281 bits_offset=0
+	(anon) type_id=287 bits_offset=0
+[275] STRUCT (anon) size=112 vlen=12
+	config type_id=56 bits_offset=0
+	config1 type_id=56 bits_offset=64
+	last_tag type_id=56 bits_offset=128
+	dyn_constraint type_id=56 bits_offset=192
+	config_base type_id=38 bits_offset=256
+	event_base type_id=38 bits_offset=320
+	event_base_rdpmc type_id=2 bits_offset=384
+	idx type_id=2 bits_offset=416
+	last_cpu type_id=2 bits_offset=448
+	flags type_id=2 bits_offset=480
+	extra_reg type_id=276 bits_offset=512
+	branch_reg type_id=276 bits_offset=704
+[276] STRUCT hw_perf_event_extra size=24 vlen=4
+	config type_id=56 bits_offset=0
+	reg type_id=30 bits_offset=64
+	alloc type_id=2 bits_offset=96
+	idx type_id=2 bits_offset=128
+[277] STRUCT (anon) size=16 vlen=2
+	aux_config type_id=56 bits_offset=0
+	aux_paused type_id=30 bits_offset=64
+[278] STRUCT (anon) size=64 vlen=1
+	hrtimer type_id=71 bits_offset=0
+[279] STRUCT (anon) size=16 vlen=1
+	tp_list type_id=58 bits_offset=0
+[280] STRUCT (anon) size=16 vlen=2
+	pwr_acc type_id=56 bits_offset=0
+	ptsc type_id=56 bits_offset=64
+[281] STRUCT (anon) size=40 vlen=2
+	info type_id=282 bits_offset=0
+	bp_list type_id=283 bits_offset=192
+[282] STRUCT arch_hw_breakpoint size=24 vlen=4
+	address type_id=38 bits_offset=0
+	mask type_id=38 bits_offset=64
+	len type_id=79 bits_offset=128
+	type type_id=79 bits_offset=136
+[283] STRUCT rhlist_head size=16 vlen=2
+	rhead type_id=284 bits_offset=0
+	next type_id=286 bits_offset=64
+[284] STRUCT rhash_head size=8 vlen=1
+	next type_id=285 bits_offset=0
+[285] PTR (anon) type_id=284
+[286] PTR (anon) type_id=283
+[287] STRUCT (anon) size=24 vlen=5
+	iommu_bank type_id=79 bits_offset=0
+	iommu_cntr type_id=79 bits_offset=8
+	padding type_id=48 bits_offset=16
+	conf type_id=56 bits_offset=64
+	conf1 type_id=56 bits_offset=128
+[288] UNION (anon) size=16 vlen=2
+	(anon) type_id=289 bits_offset=0
+	(anon) type_id=290 bits_offset=0
+[289] STRUCT (anon) size=16 vlen=2
+	last_period type_id=56 bits_offset=0
+	period_left type_id=262 bits_offset=64
+[290] STRUCT (anon) size=16 vlen=2
+	saved_metric type_id=56 bits_offset=0
+	saved_slots type_id=56 bits_offset=64
+[291] PTR (anon) type_id=586
+[292] PTR (anon) type_id=588
+[293] TYPEDEF wait_queue_head_t type_id=294
+[294] STRUCT wait_queue_head size=24 vlen=2
+	lock type_id=203 bits_offset=0
+	head type_id=58 bits_offset=64
+[295] PTR (anon) type_id=561
+[296] STRUCT irq_work size=32 vlen=3
+	node type_id=44 bits_offset=0
+	func type_id=297 bits_offset=128
+	irqwait type_id=300 bits_offset=192
+[297] PTR (anon) type_id=298
+[298] FUNC_PROTO (anon) return=0 args=(299 (anon))
+[299] PTR (anon) type_id=296
+[300] STRUCT rcuwait size=8 vlen=1
+	task type_id=51 bits_offset=0
+[301] STRUCT perf_addr_filters_head size=24 vlen=3
+	list type_id=58 bits_offset=0
+	lock type_id=140 bits_offset=128
+	nr_file_filters type_id=30 bits_offset=160
+[302] PTR (anon) type_id=589
+[303] PTR (anon) type_id=304
+[304] FUNC_PROTO (anon) return=0 args=(258 (anon))
+[305] PTR (anon) type_id=554
+[306] PTR (anon) type_id=307
+[307] FUNC_PROTO (anon) return=56 args=(void)
+[308] TYPEDEF perf_overflow_handler_t type_id=309
+[309] PTR (anon) type_id=310
+[310] FUNC_PROTO (anon) return=0 args=(258 (anon), 311 (anon), 324 (anon))
+[311] PTR (anon) type_id=312
+[312] STRUCT perf_sample_data size=256 vlen=26
+	sample_flags type_id=56 bits_offset=0
+	period type_id=56 bits_offset=64
+	dyn_size type_id=56 bits_offset=128
+	type type_id=56 bits_offset=192
+	tid_entry type_id=313 bits_offset=256
+	time type_id=56 bits_offset=320
+	id type_id=56 bits_offset=384
+	cpu_entry type_id=314 bits_offset=448
+	ip type_id=56 bits_offset=512
+	callchain type_id=315 bits_offset=576
+	raw type_id=316 bits_offset=640
+	br_stack type_id=317 bits_offset=704
+	br_stack_cntr type_id=318 bits_offset=768
+	weight type_id=319 bits_offset=832
+	data_src type_id=321 bits_offset=896
+	txn type_id=56 bits_offset=960
+	regs_user type_id=323 bits_offset=1024
+	regs_intr type_id=323 bits_offset=1152
+	stack_user_size type_id=56 bits_offset=1280
+	stream_id type_id=56 bits_offset=1344
+	cgroup type_id=56 bits_offset=1408
+	addr type_id=56 bits_offset=1472
+	phys_addr type_id=56 bits_offset=1536
+	data_page_size type_id=56 bits_offset=1600
+	code_page_size type_id=56 bits_offset=1664
+	aux_size type_id=56 bits_offset=1728
+[313] STRUCT (anon) size=8 vlen=2
+	pid type_id=28 bits_offset=0
+	tid type_id=28 bits_offset=32
+[314] STRUCT (anon) size=8 vlen=2
+	cpu type_id=28 bits_offset=0
+	reserved type_id=28 bits_offset=32
+[315] PTR (anon) type_id=590
+[316] PTR (anon) type_id=591
+[317] PTR (anon) type_id=592
+[318] PTR (anon) type_id=56
+[319] UNION perf_sample_weight size=8 vlen=2
+	full type_id=57 bits_offset=0
+	(anon) type_id=320 bits_offset=0
+[320] STRUCT (anon) size=8 vlen=3
+	var1_dw type_id=29 bits_offset=0
+	var2_w type_id=49 bits_offset=32
+	var3_w type_id=49 bits_offset=48
+[321] UNION perf_mem_data_src size=8 vlen=2
+	val type_id=57 bits_offset=0
+	(anon) type_id=322 bits_offset=0
+[322] STRUCT (anon) size=8 vlen=11
+	mem_op type_id=57 bitfield_size=5 bits_offset=0
+	mem_lvl type_id=57 bitfield_size=14 bits_offset=5
+	mem_snoop type_id=57 bitfield_size=5 bits_offset=19
+	mem_lock type_id=57 bitfield_size=2 bits_offset=24
+	mem_dtlb type_id=57 bitfield_size=7 bits_offset=26
+	mem_lvl_num type_id=57 bitfield_size=4 bits_offset=33
+	mem_remote type_id=57 bitfield_size=1 bits_offset=37
+	mem_snoopx type_id=57 bitfield_size=2 bits_offset=38
+	mem_blk type_id=57 bitfield_size=3 bits_offset=40
+	mem_hops type_id=57 bitfield_size=3 bits_offset=43
+	mem_rsvd type_id=57 bitfield_size=18 bits_offset=46
+[323] STRUCT perf_regs size=16 vlen=2
+	abi type_id=57 bits_offset=0
+	regs type_id=324 bits_offset=64
+[324] PTR (anon) type_id=325
+[325] STRUCT pt_regs size=168 vlen=21
+	r15 type_id=38 bits_offset=0
+	r14 type_id=38 bits_offset=64
+	r13 type_id=38 bits_offset=128
+	r12 type_id=38 bits_offset=192
+	bp type_id=38 bits_offset=256
+	bx type_id=38 bits_offset=320
+	r11 type_id=38 bits_offset=384
+	r10 type_id=38 bits_offset=448
+	r9 type_id=38 bits_offset=512
+	r8 type_id=38 bits_offset=576
+	ax type_id=38 bits_offset=640
+	cx type_id=38 bits_offset=704
+	dx type_id=38 bits_offset=768
+	si type_id=38 bits_offset=832
+	di type_id=38 bits_offset=896
+	orig_ax type_id=38 bits_offset=960
+	ip type_id=38 bits_offset=1024
+	(anon) type_id=326 bits_offset=1088
+	flags type_id=38 bits_offset=1152
+	sp type_id=38 bits_offset=1216
+	(anon) type_id=328 bits_offset=1280
+[326] UNION (anon) size=8 vlen=3
+	cs type_id=48 bits_offset=0
+	csx type_id=56 bits_offset=0
+	fred_cs type_id=327 bits_offset=0
+[327] STRUCT fred_cs size=8 vlen=3
+	cs type_id=56 bitfield_size=16 bits_offset=0
+	sl type_id=56 bitfield_size=2 bits_offset=16
+	wfe type_id=56 bitfield_size=1 bits_offset=18
+[328] UNION (anon) size=8 vlen=3
+	ss type_id=48 bits_offset=0
+	ssx type_id=56 bits_offset=0
+	fred_ss type_id=329 bits_offset=0
+[329] STRUCT fred_ss size=8 vlen=10
+	ss type_id=56 bitfield_size=16 bits_offset=0
+	sti type_id=56 bitfield_size=1 bits_offset=16
+	swevent type_id=56 bitfield_size=1 bits_offset=17
+	nmi type_id=56 bitfield_size=1 bits_offset=18
+	vector type_id=56 bitfield_size=8 bits_offset=32
+	type type_id=56 bitfield_size=4 bits_offset=48
+	enclave type_id=56 bitfield_size=1 bits_offset=56
+	lm type_id=56 bitfield_size=1 bits_offset=57
+	nested type_id=56 bitfield_size=1 bits_offset=58
+	insnlen type_id=56 bitfield_size=4 bits_offset=60
+[330] PTR (anon) type_id=558
+[331] PTR (anon) type_id=569
+[332] PTR (anon) type_id=584
+[333] PTR (anon) type_id=593
+[334] ARRAY (anon) type_id=258 index_type_id=4 nr_elems=4
+[335] PTR (anon) type_id=618
+[336] FUNC_PROTO (anon) return=2 args=(337 dummy_ksym, 340 dummy_ksym, 343 dummy_ksym, 39 dummy_ksym, 57 dummy_ksym)
+[337] PTR (anon) type_id=338
+[338] STRUCT bpf_rb_root size=16 vlen=1
+	__opaque type_id=339 bits_offset=0
+[339] ARRAY (anon) type_id=57 index_type_id=4 nr_elems=2
+[340] PTR (anon) type_id=341
+[341] STRUCT bpf_rb_node size=32 vlen=1
+	__opaque type_id=342 bits_offset=0
+[342] ARRAY (anon) type_id=57 index_type_id=4 nr_elems=4
+[343] PTR (anon) type_id=344
+[344] FUNC_PROTO (anon) return=93 args=(340 (anon), 345 (anon))
+[345] PTR (anon) type_id=346
+[346] CONST (anon) type_id=341
+[347] FUNC bpf_rbtree_add_impl type_id=336
+[348] FUNC_PROTO (anon) return=0 args=(21 ctx)
+[349] FUNC cfslike_dispatch type_id=348
+[350] FUNC_PROTO (anon) return=340 args=(337 dummy_ksym)
+[351] FUNC bpf_rbtree_first type_id=350
+[352] FUNC_PROTO (anon) return=340 args=(337 dummy_ksym, 340 dummy_ksym)
+[353] FUNC bpf_rbtree_remove type_id=352
+[354] FUNC_PROTO (anon) return=0 args=(202 dummy_ksym, 21 dummy_ksym, 28 dummy_ksym)
+[355] FUNC scx_bpf_error_bstr type_id=354
+[356] FUNC_PROTO (anon) return=51 args=(24 dummy_ksym)
+[357] FUNC bpf_task_from_pid type_id=356
+[358] FUNC_PROTO (anon) return=0 args=(51 dummy_ksym, 56 dummy_ksym, 56 dummy_ksym, 56 dummy_ksym)
+[359] FUNC scx_bpf_dsq_insert type_id=358
+[360] FUNC_PROTO (anon) return=0 args=(51 dummy_ksym, 56 dummy_ksym, 56 dummy_ksym, 56 dummy_ksym)
+[361] FUNC scx_bpf_dispatch___compat type_id=360
+[362] FUNC_PROTO (anon) return=0 args=(21 ctx)
+[363] FUNC cfslike_running type_id=362
+[364] FUNC_PROTO (anon) return=0 args=(21 ctx)
+[365] FUNC cfslike_stopping type_id=364
+[366] FUNC_PROTO (anon) return=0 args=(21 ctx)
+[367] FUNC cfslike_enable type_id=366
+[368] FUNC_PROTO (anon) return=0 args=(21 ctx)
+[369] FUNC cfslike_exit type_id=368
+[370] STRUCT scx_exit_info size=56 vlen=7
+	kind type_id=371 bits_offset=0
+	exit_code type_id=62 bits_offset=64
+	reason type_id=372 bits_offset=128
+	bt type_id=234 bits_offset=192
+	bt_len type_id=28 bits_offset=256
+	msg type_id=202 bits_offset=320
+	dump type_id=202 bits_offset=384
+[371] ENUM scx_exit_kind size=4 vlen=9
+	SCX_EXIT_NONE val=0
+	SCX_EXIT_DONE val=1
+	SCX_EXIT_UNREG val=64
+	SCX_EXIT_UNREG_BPF val=65
+	SCX_EXIT_UNREG_KERN val=66
+	SCX_EXIT_SYSRQ val=67
+	SCX_EXIT_ERROR val=1024
+	SCX_EXIT_ERROR_BPF val=1025
+	SCX_EXIT_ERROR_STALL val=1026
+[372] PTR (anon) type_id=373
+[373] CONST (anon) type_id=179
+[374] FUNC_PROTO (anon) return=93 args=(340 a, 345 b)
+[375] FUNC node_less type_id=374
+[376] ARRAY (anon) type_id=179 index_type_id=4 nr_elems=4
+[377] VAR _license type_id=376 linkage=1
+[378] STRUCT sched_ext_ops size=440 vlen=41
+	select_cpu type_id=379 bits_offset=0
+	enqueue type_id=381 bits_offset=64
+	dequeue type_id=381 bits_offset=128
+	dispatch type_id=383 bits_offset=192
+	tick type_id=385 bits_offset=256
+	runnable type_id=381 bits_offset=320
+	running type_id=385 bits_offset=384
+	stopping type_id=387 bits_offset=448
+	quiescent type_id=381 bits_offset=512
+	yield type_id=389 bits_offset=576
+	core_sched_before type_id=389 bits_offset=640
+	set_weight type_id=391 bits_offset=704
+	set_cpumask type_id=393 bits_offset=768
+	update_idle type_id=397 bits_offset=832
+	cpu_acquire type_id=399 bits_offset=896
+	cpu_release type_id=403 bits_offset=960
+	init_task type_id=408 bits_offset=1024
+	exit_task type_id=412 bits_offset=1088
+	enable type_id=385 bits_offset=1152
+	disable type_id=385 bits_offset=1216
+	dump type_id=416 bits_offset=1280
+	dump_cpu type_id=420 bits_offset=1344
+	dump_task type_id=422 bits_offset=1408
+	cgroup_init type_id=424 bits_offset=1472
+	cgroup_exit type_id=458 bits_offset=1536
+	cgroup_prep_move type_id=460 bits_offset=1600
+	cgroup_move type_id=462 bits_offset=1664
+	cgroup_cancel_move type_id=462 bits_offset=1728
+	cgroup_set_weight type_id=464 bits_offset=1792
+	cgroup_set_bandwidth type_id=466 bits_offset=1856
+	cpu_online type_id=468 bits_offset=1920
+	cpu_offline type_id=468 bits_offset=1984
+	init type_id=470 bits_offset=2048
+	exit type_id=472 bits_offset=2112
+	dispatch_max_batch type_id=28 bits_offset=2176
+	flags type_id=56 bits_offset=2240
+	timeout_ms type_id=28 bits_offset=2304
+	exit_dump_len type_id=28 bits_offset=2336
+	hotplug_seq type_id=56 bits_offset=2368
+	name type_id=475 bits_offset=2432
+	priv type_id=39 bits_offset=3456
+[379] PTR (anon) type_id=380
+[380] FUNC_PROTO (anon) return=24 args=(51 (anon), 24 (anon), 56 (anon))
+[381] PTR (anon) type_id=382
+[382] FUNC_PROTO (anon) return=0 args=(51 (anon), 56 (anon))
+[383] PTR (anon) type_id=384
+[384] FUNC_PROTO (anon) return=0 args=(24 (anon), 51 (anon))
+[385] PTR (anon) type_id=386
+[386] FUNC_PROTO (anon) return=0 args=(51 (anon))
+[387] PTR (anon) type_id=388
+[388] FUNC_PROTO (anon) return=0 args=(51 (anon), 93 (anon))
+[389] PTR (anon) type_id=390
+[390] FUNC_PROTO (anon) return=93 args=(51 (anon), 51 (anon))
+[391] PTR (anon) type_id=392
+[392] FUNC_PROTO (anon) return=0 args=(51 (anon), 28 (anon))
+[393] PTR (anon) type_id=394
+[394] FUNC_PROTO (anon) return=0 args=(51 (anon), 395 (anon))
+[395] PTR (anon) type_id=396
+[396] CONST (anon) type_id=104
+[397] PTR (anon) type_id=398
+[398] FUNC_PROTO (anon) return=0 args=(24 (anon), 93 (anon))
+[399] PTR (anon) type_id=400
+[400] FUNC_PROTO (anon) return=0 args=(24 (anon), 401 (anon))
+[401] PTR (anon) type_id=402
+[402] STRUCT scx_cpu_acquire_args size=0 vlen=0
+[403] PTR (anon) type_id=404
+[404] FUNC_PROTO (anon) return=0 args=(24 (anon), 405 (anon))
+[405] PTR (anon) type_id=406
+[406] STRUCT scx_cpu_release_args size=16 vlen=2
+	reason type_id=407 bits_offset=0
+	task type_id=51 bits_offset=64
+[407] ENUM scx_cpu_preempt_reason size=4 vlen=4
+	SCX_CPU_PREEMPT_RT val=0
+	SCX_CPU_PREEMPT_DL val=1
+	SCX_CPU_PREEMPT_STOP val=2
+	SCX_CPU_PREEMPT_UNKNOWN val=3
+[408] PTR (anon) type_id=409
+[409] FUNC_PROTO (anon) return=24 args=(51 (anon), 410 (anon))
+[410] PTR (anon) type_id=411
+[411] STRUCT scx_init_task_args size=16 vlen=2
+	fork type_id=93 bits_offset=0
+	cgroup type_id=95 bits_offset=64
+[412] PTR (anon) type_id=413
+[413] FUNC_PROTO (anon) return=0 args=(51 (anon), 414 (anon))
+[414] PTR (anon) type_id=415
+[415] STRUCT scx_exit_task_args size=1 vlen=1
+	cancelled type_id=93 bits_offset=0
+[416] PTR (anon) type_id=417
+[417] FUNC_PROTO (anon) return=0 args=(418 (anon))
+[418] PTR (anon) type_id=419
+[419] STRUCT scx_dump_ctx size=40 vlen=5
+	kind type_id=371 bits_offset=0
+	exit_code type_id=62 bits_offset=64
+	reason type_id=372 bits_offset=128
+	at_ns type_id=56 bits_offset=192
+	at_jiffies type_id=56 bits_offset=256
+[420] PTR (anon) type_id=421
+[421] FUNC_PROTO (anon) return=0 args=(418 (anon), 24 (anon), 93 (anon))
+[422] PTR (anon) type_id=423
+[423] FUNC_PROTO (anon) return=0 args=(418 (anon), 51 (anon))
+[424] PTR (anon) type_id=425
+[425] FUNC_PROTO (anon) return=24 args=(95 (anon), 456 (anon))
+[426] STRUCT cgroup size=1088 vlen=41
+	self type_id=427 bits_offset=0
+	flags type_id=38 bits_offset=1664
+	level type_id=2 bits_offset=1728
+	max_depth type_id=2 bits_offset=1760
+	nr_descendants type_id=2 bits_offset=1792
+	nr_dying_descendants type_id=2 bits_offset=1824
+	max_descendants type_id=2 bits_offset=1856
+	nr_populated_csets type_id=2 bits_offset=1888
+	nr_populated_domain_children type_id=2 bits_offset=1920
+	nr_populated_threaded_children type_id=2 bits_offset=1952
+	nr_threaded_children type_id=2 bits_offset=1984
+	kill_seq type_id=30 bits_offset=2016
+	kn type_id=440 bits_offset=2048
+	procs_file type_id=441 bits_offset=2112
+	events_file type_id=441 bits_offset=2560
+	psi_files type_id=442 bits_offset=3008
+	subtree_control type_id=48 bits_offset=3008
+	subtree_ss_mask type_id=48 bits_offset=3024
+	old_subtree_control type_id=48 bits_offset=3040
+	old_subtree_ss_mask type_id=48 bits_offset=3056
+	subsys type_id=443 bits_offset=3072
+	nr_dying_subsys type_id=444 bits_offset=3968
+	root type_id=445 bits_offset=4416
+	cset_links type_id=58 bits_offset=4480
+	e_csets type_id=446 bits_offset=4608
+	dom_cgrp type_id=95 bits_offset=6400
+	old_dom_cgrp type_id=95 bits_offset=6464
+	rstat_base_cpu type_id=447 bits_offset=6528
+	_pad_ type_id=448 bits_offset=6656
+	last_bstat type_id=450 bits_offset=6656
+	bstat type_id=450 bits_offset=6912
+	prev_cputime type_id=139 bits_offset=7168
+	pidlists type_id=58 bits_offset=7360
+	pidlist_mutex type_id=158 bits_offset=7488
+	offline_waitq type_id=293 bits_offset=7744
+	release_agent_work type_id=432 bits_offset=7936
+	psi type_id=452 bits_offset=8192
+	bpf type_id=453 bits_offset=8256
+	freezer type_id=454 bits_offset=8256
+	bpf_cgrp_storage type_id=251 bits_offset=8384
+	ancestors type_id=455 bits_offset=8448
+[427] STRUCT cgroup_subsys_state size=208 vlen=15
+	cgroup type_id=95 bits_offset=0
+	ss type_id=428 bits_offset=64
+	refcnt type_id=429 bits_offset=128
+	rstat_cpu type_id=431 bits_offset=256
+	sibling type_id=58 bits_offset=320
+	children type_id=58 bits_offset=448
+	id type_id=2 bits_offset=576
+	flags type_id=30 bits_offset=608
+	serial_nr type_id=56 bits_offset=640
+	online_cnt type_id=42 bits_offset=704
+	destroy_work type_id=432 bits_offset=768
+	destroy_rwork type_id=437 bits_offset=1024
+	parent type_id=439 bits_offset=1472
+	nr_descendants type_id=2 bits_offset=1536
+	rstat_flush_next type_id=439 bits_offset=1600
+[428] PTR (anon) type_id=573
+[429] STRUCT percpu_ref size=16 vlen=2
+	percpu_count_ptr type_id=38 bits_offset=0
+	data type_id=430 bits_offset=64
+[430] PTR (anon) type_id=549
+[431] PTR (anon) type_id=574
+[432] STRUCT work_struct size=32 vlen=3
+	data type_id=90 bits_offset=0
+	entry type_id=58 bits_offset=64
+	func type_id=433 bits_offset=192
+[433] TYPEDEF work_func_t type_id=434
+[434] PTR (anon) type_id=435
+[435] FUNC_PROTO (anon) return=0 args=(436 (anon))
+[436] PTR (anon) type_id=432
+[437] STRUCT rcu_work size=56 vlen=3
+	work type_id=432 bits_offset=0
+	rcu type_id=154 bits_offset=256
+	wq type_id=438 bits_offset=384
+[438] PTR (anon) type_id=557
+[439] PTR (anon) type_id=427
+[440] PTR (anon) type_id=547
+[441] STRUCT cgroup_file size=56 vlen=3
+	kn type_id=440 bits_offset=0
+	notified_at type_id=38 bits_offset=64
+	notify_timer type_id=246 bits_offset=128
+[442] ARRAY (anon) type_id=441 index_type_id=4 nr_elems=0
+[443] ARRAY (anon) type_id=439 index_type_id=4 nr_elems=14
+[444] ARRAY (anon) type_id=2 index_type_id=4 nr_elems=14
+[445] PTR (anon) type_id=571
+[446] ARRAY (anon) type_id=58 index_type_id=4 nr_elems=14
+[447] PTR (anon) type_id=570
+[448] STRUCT cacheline_padding size=0 vlen=1
+	x type_id=449 bits_offset=0
+[449] ARRAY (anon) type_id=179 index_type_id=4 nr_elems=0
+[450] STRUCT cgroup_base_stat size=32 vlen=2
+	cputime type_id=451 bits_offset=0
+	ntime type_id=56 bits_offset=192
+[451] STRUCT task_cputime size=24 vlen=3
+	stime type_id=56 bits_offset=0
+	utime type_id=56 bits_offset=64
+	sum_exec_runtime type_id=22 bits_offset=128
+[452] PTR (anon) type_id=572
+[453] STRUCT cgroup_bpf size=0 vlen=0
+[454] STRUCT cgroup_freezer_state size=12 vlen=4
+	freeze type_id=93 bits_offset=0
+	e_freeze type_id=93 bits_offset=8
+	nr_frozen_descendants type_id=2 bits_offset=32
+	nr_frozen_tasks type_id=2 bits_offset=64
+[455] ARRAY (anon) type_id=95 index_type_id=4 nr_elems=0
+[456] PTR (anon) type_id=457
+[457] STRUCT scx_cgroup_init_args size=32 vlen=4
+	weight type_id=28 bits_offset=0
+	bw_period_us type_id=56 bits_offset=64
+	bw_quota_us type_id=56 bits_offset=128
+	bw_burst_us type_id=56 bits_offset=192
+[458] PTR (anon) type_id=459
+[459] FUNC_PROTO (anon) return=0 args=(95 (anon))
+[460] PTR (anon) type_id=461
+[461] FUNC_PROTO (anon) return=24 args=(51 (anon), 95 (anon), 95 (anon))
+[462] PTR (anon) type_id=463
+[463] FUNC_PROTO (anon) return=0 args=(51 (anon), 95 (anon), 95 (anon))
+[464] PTR (anon) type_id=465
+[465] FUNC_PROTO (anon) return=0 args=(95 (anon), 28 (anon))
+[466] PTR (anon) type_id=467
+[467] FUNC_PROTO (anon) return=0 args=(95 (anon), 56 (anon), 56 (anon), 56 (anon))
+[468] PTR (anon) type_id=469
+[469] FUNC_PROTO (anon) return=0 args=(24 (anon))
+[470] PTR (anon) type_id=471
+[471] FUNC_PROTO (anon) return=24 args=(void)
+[472] PTR (anon) type_id=473
+[473] FUNC_PROTO (anon) return=0 args=(474 (anon))
+[474] PTR (anon) type_id=370
+[475] ARRAY (anon) type_id=179 index_type_id=4 nr_elems=128
+[476] VAR cfslike_ops type_id=378 linkage=1
+[477] CONST (anon) type_id=478
+[478] VOLATILE (anon) type_id=56
+[479] VAR __SCX_OPS_NAME_LEN type_id=477 linkage=1
+[480] VAR __SCX_SLICE_DFL type_id=477 linkage=1
+[481] VAR __SCX_SLICE_INF type_id=477 linkage=1
+[482] VAR __SCX_RQ_ONLINE type_id=477 linkage=1
+[483] VAR __SCX_RQ_CAN_STOP_TICK type_id=477 linkage=1
+[484] VAR __SCX_RQ_BAL_PENDING type_id=477 linkage=1
+[485] VAR __SCX_RQ_BAL_KEEP type_id=477 linkage=1
+[486] VAR __SCX_RQ_BYPASSING type_id=477 linkage=1
+[487] VAR __SCX_RQ_CLK_VALID type_id=477 linkage=1
+[488] VAR __SCX_RQ_IN_WAKEUP type_id=477 linkage=1
+[489] VAR __SCX_RQ_IN_BALANCE type_id=477 linkage=1
+[490] VAR __SCX_DSQ_FLAG_BUILTIN type_id=477 linkage=1
+[491] VAR __SCX_DSQ_FLAG_LOCAL_ON type_id=477 linkage=1
+[492] VAR __SCX_DSQ_INVALID type_id=477 linkage=1
+[493] VAR __SCX_DSQ_GLOBAL type_id=477 linkage=1
+[494] VAR __SCX_DSQ_LOCAL type_id=477 linkage=1
+[495] VAR __SCX_DSQ_LOCAL_ON type_id=477 linkage=1
+[496] VAR __SCX_DSQ_LOCAL_CPU_MASK type_id=477 linkage=1
+[497] VAR __SCX_TASK_QUEUED type_id=477 linkage=1
+[498] VAR __SCX_TASK_RESET_RUNNABLE_AT type_id=477 linkage=1
+[499] VAR __SCX_TASK_DEQD_FOR_SLEEP type_id=477 linkage=1
+[500] VAR __SCX_TASK_STATE_SHIFT type_id=477 linkage=1
+[501] VAR __SCX_TASK_STATE_BITS type_id=477 linkage=1
+[502] VAR __SCX_TASK_STATE_MASK type_id=477 linkage=1
+[503] VAR __SCX_TASK_CURSOR type_id=477 linkage=1
+[504] VAR __SCX_TASK_NONE type_id=477 linkage=1
+[505] VAR __SCX_TASK_INIT type_id=477 linkage=1
+[506] VAR __SCX_TASK_READY type_id=477 linkage=1
+[507] VAR __SCX_TASK_ENABLED type_id=477 linkage=1
+[508] VAR __SCX_TASK_NR_STATES type_id=477 linkage=1
+[509] VAR __SCX_TASK_DSQ_ON_PRIQ type_id=477 linkage=1
+[510] VAR __SCX_KICK_IDLE type_id=477 linkage=1
+[511] VAR __SCX_KICK_PREEMPT type_id=477 linkage=1
+[512] VAR __SCX_KICK_WAIT type_id=477 linkage=1
+[513] VAR __SCX_ENQ_WAKEUP type_id=477 linkage=1
+[514] VAR __SCX_ENQ_HEAD type_id=477 linkage=1
+[515] VAR __SCX_ENQ_PREEMPT type_id=477 linkage=1
+[516] VAR __SCX_ENQ_REENQ type_id=477 linkage=1
+[517] VAR __SCX_ENQ_LAST type_id=477 linkage=1
+[518] VAR __SCX_ENQ_CLEAR_OPSS type_id=477 linkage=1
+[519] VAR __SCX_ENQ_DSQ_PRIQ type_id=477 linkage=1
+[520] ARRAY (anon) type_id=179 index_type_id=4 nr_elems=1
+[521] VAR uei_dump type_id=620 linkage=1
+[522] CONST (anon) type_id=523
+[523] VOLATILE (anon) type_id=28
+[524] VAR uei_dump_len type_id=522 linkage=1
+[525] STRUCT user_exit_info size=1168 vlen=4
+	kind type_id=2 bits_offset=0
+	exit_code type_id=62 bits_offset=64
+	reason type_id=475 bits_offset=128
+	msg type_id=526 bits_offset=1152
+[526] ARRAY (anon) type_id=179 index_type_id=4 nr_elems=1024
+[527] VAR uei type_id=525 linkage=1
+[528] STRUCT cpu_rq size=40 vlen=4
+	lock type_id=529 bits_offset=0
+	rbtree type_id=338 bits_offset=64
+	total_weight type_id=56 bits_offset=192
+	min_vruntime type_id=56 bits_offset=256
+[529] STRUCT bpf_spin_lock size=4 vlen=1
+	val type_id=29 bits_offset=0
+[530] DECL_TAG contains:struct task_info:rb_node type=528 component_idx=1
+[531] ARRAY (anon) type_id=528 index_type_id=4 nr_elems=256
+[532] VAR cpu_rqs type_id=531 linkage=0
+[533] ARRAY (anon) type_id=179 index_type_id=4 nr_elems=101
+[534] VAR ____cfslike_dispatch.___fmt type_id=533 linkage=0
+[535] DATASEC .data size=1269 vlen=2
+	 type_id=527 offset=0 size=1168
+	 type_id=534 offset=1168 size=101
+[536] DATASEC .data.PERCPU_RQ size=10240 vlen=1
+	 type_id=532 offset=0 size=10240
+[537] DATASEC .data.uei_dump size=32768 vlen=1
+	 type_id=521 offset=0 size=32768
+[538] DATASEC .ksyms size=32 vlen=8
+	 type_id=619 offset=0 size=4
+	 type_id=619 offset=4 size=4
+	 type_id=619 offset=8 size=4
+	 type_id=619 offset=12 size=4
+	 type_id=619 offset=16 size=4
+	 type_id=619 offset=20 size=4
+	 type_id=619 offset=24 size=4
+	 type_id=619 offset=28 size=4
+[539] DATASEC .maps size=64 vlen=2
+	 type_id=12 offset=0 size=32
+	 type_id=20 offset=32 size=32
+[540] DATASEC .rodata size=332 vlen=42
+	 type_id=479 offset=0 size=8
+	 type_id=480 offset=8 size=8
+	 type_id=481 offset=16 size=8
+	 type_id=482 offset=24 size=8
+	 type_id=483 offset=32 size=8
+	 type_id=484 offset=40 size=8
+	 type_id=485 offset=48 size=8
+	 type_id=486 offset=56 size=8
+	 type_id=487 offset=64 size=8
+	 type_id=488 offset=72 size=8
+	 type_id=489 offset=80 size=8
+	 type_id=490 offset=88 size=8
+	 type_id=491 offset=96 size=8
+	 type_id=492 offset=104 size=8
+	 type_id=493 offset=112 size=8
+	 type_id=494 offset=120 size=8
+	 type_id=495 offset=128 size=8
+	 type_id=496 offset=136 size=8
+	 type_id=497 offset=144 size=8
+	 type_id=498 offset=152 size=8
+	 type_id=499 offset=160 size=8
+	 type_id=500 offset=168 size=8
+	 type_id=501 offset=176 size=8
+	 type_id=502 offset=184 size=8
+	 type_id=503 offset=192 size=8
+	 type_id=504 offset=200 size=8
+	 type_id=505 offset=208 size=8
+	 type_id=506 offset=216 size=8
+	 type_id=507 offset=224 size=8
+	 type_id=508 offset=232 size=8
+	 type_id=509 offset=240 size=8
+	 type_id=510 offset=248 size=8
+	 type_id=511 offset=256 size=8
+	 type_id=512 offset=264 size=8
+	 type_id=513 offset=272 size=8
+	 type_id=514 offset=280 size=8
+	 type_id=515 offset=288 size=8
+	 type_id=516 offset=296 size=8
+	 type_id=517 offset=304 size=8
+	 type_id=518 offset=312 size=8
+	 type_id=519 offset=320 size=8
+	 type_id=524 offset=328 size=4
+[541] DATASEC .struct_ops.link size=440 vlen=1
+	 type_id=476 offset=0 size=440
+[542] DATASEC license size=4 vlen=1
+	 type_id=377 offset=0 size=4
+[543] FWD cfs_rq struct
+[544] FWD address_space struct
+[545] FWD rq struct
+[546] FWD task_group struct
+[547] FWD kernfs_node struct
+[548] FWD page struct
+[549] FWD percpu_ref_data struct
+[550] FWD user_namespace struct
+[551] FWD nsproxy struct
+[552] FWD ucounts struct
+[553] FWD completion struct
+[554] FWD pid_namespace struct
+[555] FWD hrtimer_clock_base struct
+[556] FWD key struct
+[557] FWD workqueue_struct struct
+[558] FWD bpf_prog struct
+[559] FWD pipe_inode_info struct
+[560] FWD mm_struct struct
+[561] FWD fasync_struct struct
+[562] FWD user_struct struct
+[563] FWD group_info struct
+[564] FWD kernel_siginfo struct
+[565] FWD pid struct
+[566] FWD mempolicy struct
+[567] FWD bpf_local_storage struct
+[568] FWD vm_struct struct
+[569] FWD trace_event_call struct
+[570] FWD cgroup_rstat_base_cpu struct
+[571] FWD cgroup_root struct
+[572] FWD psi_group struct
+[573] FWD cgroup_subsys struct
+[574] FWD css_rstat_cpu struct
+[575] FWD scx_dispatch_q struct
+[576] FWD signal_struct struct
+[577] FWD audit_context struct
+[578] FWD sighand_struct struct
+[579] FWD css_set struct
+[580] FWD fs_struct struct
+[581] FWD gendisk struct
+[582] FWD io_context struct
+[583] FWD bio_list struct
+[584] FWD event_filter struct
+[585] FWD pmu struct
+[586] FWD perf_event_pmu_context struct
+[587] FWD perf_event_context struct
+[588] FWD perf_buffer struct
+[589] FWD perf_addr_filter_range struct
+[590] FWD perf_callchain_entry struct
+[591] FWD perf_raw_record struct
+[592] FWD perf_branch_stack struct
+[593] FWD perf_cgroup struct
+[594] FWD sched_class struct
+[595] FWD rcu_node struct
+[596] FWD __kernel_timespec struct
+[597] FWD old_timespec32 struct
+[598] FWD pollfd struct
+[599] FWD nameidata struct
+[600] FWD sem_undo_list struct
+[601] FWD files_struct struct
+[602] FWD io_uring_task struct
+[603] FWD blk_plug struct
+[604] FWD seccomp_filter struct
+[605] FWD rt_mutex_waiter struct
+[606] FWD reclaim_state struct
+[607] FWD capture_control struct
+[608] FWD task_delay_info struct
+[609] FWD robust_list_head struct
+[610] FWD compat_robust_list_head struct
+[611] FWD futex_pi_state struct
+[612] FWD perf_ctx_data struct
+[613] FWD numa_group struct
+[614] FWD rseq struct
+[615] FWD uprobe_task struct
+[616] FWD bpf_run_ctx struct
+[617] FWD bpf_net_context struct
+[618] FWD io_bitmap struct
+[619] VAR dummy_ksym type_id=2 linkage=1
+[620] ARRAY (anon) type_id=179 index_type_id=4 nr_elems=32768
+
+-- END BTF LOAD LOG --
+libbpf: Error loading .BTF into kernel: -ENOENT. BTF is mandatory, can't proceed.
+libbpf: failed to load BPF skeleton 'scx_cfslike': -ENOENT
+[SCX_BUG] /home/anthony/Project/EECS582-Project-eBPF/scheds/c/scx_cfslike.c:87 (No such file or directory)
+Failed to load skel
+anthony@anthony:~/Project/EECS582-Project-eBPF$ 
+
