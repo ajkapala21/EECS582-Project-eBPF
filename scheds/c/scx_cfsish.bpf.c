@@ -38,6 +38,32 @@ UEI_DEFINE(uei);
  */
 #define SHARED_DSQ 0
 
+struct task_info {
+    struct bpf_rb_node rb_node;
+    u64 vruntime;
+    u32 weight;
+    u64 start;
+    u32 pid;
+};
+
+struct cpu_rq {
+    struct bpf_spin_lock lock;
+    struct bpf_rb_root rbtree __contains(struct task_info, rb_node);
+    u64 total_weight;
+    u64 min_vruntime;
+};
+
+// array of my cpu_rqs
+private(PERCPU_RQ) struct cpu_rq cpu_rqs[MAX_CPUS];
+
+// task info map
+struct {
+    __uint(type, BPF_MAP_TYPE_HASH);
+    __uint(key_size, sizeof(u32));
+    __uint(value_size, sizeof(struct task_info));
+    __uint(max_entries, 65536);
+} task_info_map SEC(".maps");
+
 struct {
 	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
 	__uint(key_size, sizeof(u32));
