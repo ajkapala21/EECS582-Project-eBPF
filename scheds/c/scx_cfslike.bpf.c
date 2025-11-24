@@ -109,7 +109,7 @@ void BPF_STRUCT_OPS(cfslike_enqueue, struct task_struct *p, u64 enq_flags)
     //initialize task map if needed
     u32 cpu = bpf_get_smp_processor_id();
     u32 pid = p->pid;
-    struct cpu_rq *rq = bpf_map_lookup_elem(&cpu_map, &cpu);
+    struct cpu_rq *rq = bpf_map_lookup_elem(&cpu_rqs, &cpu);
     if (!rq){
         return;
     }
@@ -141,7 +141,7 @@ void BPF_STRUCT_OPS(cfslike_dispatch, s32 cpu, struct task_struct *prev)
 	struct task_info *ti;
 
 	// look at this cpus rbtree and grab first task
-    struct cpu_rq *rq = bpf_map_lookup_elem(&cpu_map, &cpu);
+    struct cpu_rq *rq = bpf_map_lookup_elem(&cpu_rqs, &cpu);
     if (!rq){
         return;
     }
@@ -184,7 +184,7 @@ void BPF_STRUCT_OPS(cfslike_running, struct task_struct *p)
 	// update this cpus min vruntime if necessary
     u32 cpu = bpf_get_smp_processor_id();
     u32 pid = p->pid;
-    struct cpu_rq *rq = bpf_map_lookup_elem(&cpu_map, &cpu);
+    struct cpu_rq *rq = bpf_map_lookup_elem(&cpu_rqs, &cpu);
     if (!rq){
         return;
     }
@@ -215,7 +215,7 @@ void BPF_STRUCT_OPS(cfslike_enable, struct task_struct *p) // called when a task
 {
     u32 cpu = bpf_get_smp_processor_id();
     u32 pid = p->pid;
-    struct cpu_rq *rq = bpf_map_lookup_elem(&cpu_map, &cpu);
+    struct cpu_rq *rq = bpf_map_lookup_elem(&cpu_rqs, &cpu);
     if (!rq){
         return;
     }
