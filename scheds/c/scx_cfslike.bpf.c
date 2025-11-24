@@ -90,7 +90,6 @@ s32 BPF_STRUCT_OPS_SLEEPABLE(cfslike_init) // return 0 on succes
         struct cpu_rq *rq = &cpu_rqs[cpu];
         rq->total_weight = 0;
         rq->min_vruntime = 0;
-        rq->start = 0;
     }
     return 0;
 }
