@@ -91,14 +91,6 @@ static bool node_less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
 
 s32 BPF_STRUCT_OPS_SLEEPABLE(cfslike_init) // return 0 on succes
 {
-    for (u32 cpu = 0; cpu < scx_bpf_nr_cpu_ids() && cpu < MAX_CPUS; cpu++) {
-        struct cpu_rq *rq = bpf_map_lookup_elem(&cpu_rqs, &cpu);
-        if (!rq){
-            continue;
-        }
-        rq->total_weight = 0;
-        rq->min_vruntime = 0;
-    }
     return 0;
 }
 
