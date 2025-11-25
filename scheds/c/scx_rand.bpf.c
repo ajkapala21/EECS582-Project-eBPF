@@ -144,4 +144,5 @@ SCX_OPS_DEFINE(rand_ops,
 	       .stopping		= (void *)rand_stopping,
 	       .enable			= (void *)rand_enable,
 	       .exit			= (void *)rand_exit,
+           .init			= (void *)rand_init,
 	       .name			= "rand");
