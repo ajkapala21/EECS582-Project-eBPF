@@ -12,7 +12,7 @@ char _license[] SEC("license") = "GPL";
 #define SAMPLE_COUNT 2000
 
 static u64 vtime_now;
-static u64 map_size = 0;
+static u32 map_size = 0;
 
 UEI_DEFINE(uei);
 
@@ -78,7 +78,7 @@ void BPF_STRUCT_OPS(rand_enqueue, struct task_struct *p, u64 enq_flags)
         vtime = vtime_now - SCX_SLICE_DFL;
 
     bpf_spin_lock(&map_lock);
-    u64 sz = map_size;
+    u32 sz = map_size;
     map_size++;
     bpf_spin_unlock(&map_lock);
 
