@@ -85,11 +85,11 @@ void BPF_STRUCT_OPS(rand_enqueue, struct task_struct *p, u64 enq_flags)
     struct task_ctx *ti = bpf_map_lookup_elem(&task_map, &sz);
     if (!ti) return;
 
-    bpf_spin_lock(&ti->lock);
+    bpf_spin_lock(&map_lock);
     ti->vruntime += vtime;
     ti->pid = pid;
     ti->valid = true;
-    bpf_spin_unlock(&ti->lock);
+    bpf_spin_unlock(&map_lock);
 }
 
 static long sample_cb(u64 idx, struct random_sample_ctx *rand_cxt)
