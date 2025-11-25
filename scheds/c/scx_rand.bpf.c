@@ -26,7 +26,7 @@ struct {
     __uint(type, BPF_MAP_TYPE_ARRAY);
     __uint(max_entries, MAX_TASKS);
     __type(key, u32);
-    __type(value, struct task_info);
+    __type(value, struct task_ctx);
 } task_map SEC(".maps");
 
 struct {
