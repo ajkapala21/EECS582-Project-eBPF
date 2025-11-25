@@ -15,6 +15,7 @@ static u64 vtime_now;
 static u32 map_size = 0;
 
 UEI_DEFINE(uei);
+#define SHARED_DSQ 0
 
 struct random_sample_ctx {
     u64 start_ns;
@@ -161,7 +162,8 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
         if (!task)
             return;
 
-        scx_bpf_dsq_insert(task, SCX_DSQ_LOCAL, SCX_SLICE_DFL, 0);
+        //scx_bpf_dsq_insert(task, SCX_DSQ_LOCAL, SCX_SLICE_DFL, 0);
+        scx_bpf_dsq_insert(task, SHARED_DSQ, SCX_SLICE_DFL, 0);
         bpf_task_release(task);
         bpf_printk("Successful Dispatch\n");
         stat_inc(2);
@@ -169,6 +171,7 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
     else{
         bpf_printk("Nothing decided: map_size = %llu\n", map_size);
     }
+    scx_bpf_dsq_move_to_local(SHARED_DSQ);
 }
 
 void BPF_STRUCT_OPS(rand_running, struct task_struct *p)
@@ -189,7 +192,7 @@ void BPF_STRUCT_OPS(rand_enable, struct task_struct *p)
 
 s32 BPF_STRUCT_OPS_SLEEPABLE(rand_init)
 {
-	return 0;
+	return scx_bpf_create_dsq(SHARED_DSQ, -1);
 }
 
 void BPF_STRUCT_OPS(rand_exit, struct scx_exit_info *ei)
