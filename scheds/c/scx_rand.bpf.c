@@ -182,7 +182,8 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
         }
     }
     if(map_size == 1){
-        struct task_ctx *ti = bpf_map_lookup_elem(&task_map, 0);
+        u32 key = 0;
+        struct task_ctx *ti = bpf_map_lookup_elem(&task_map, &key);
         if (!ti){
             bpf_printk("TI null\n");
             return;
