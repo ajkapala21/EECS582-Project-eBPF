@@ -138,7 +138,6 @@ void BPF_STRUCT_OPS(rand_exit, struct scx_exit_info *ei)
 
 SCX_OPS_DEFINE(rand_ops,
 	       .select_cpu		= (void *)rand_select_cpu,
-           .init_task		= (void *)rand_init_task,
 	       .enqueue			= (void *)rand_enqueue,
 	       .dispatch		= (void *)rand_dispatch,
 	       .running			= (void *)rand_running,
