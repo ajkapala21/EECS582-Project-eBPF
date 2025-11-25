@@ -92,7 +92,7 @@ void BPF_STRUCT_OPS(rand_enqueue, struct task_struct *p, u64 enq_flags)
     ti->valid = true;
     bpf_spin_unlock(&map_lock);
 
-    bpf_printk("Enqueue: map_size = %llu\n", map_size);
+    //bpf_printk("Enqueue: map_size = %llu\n", map_size);
 }
 
 static long sample_cb(u64 idx, struct random_sample_ctx *rand_cxt)
@@ -121,7 +121,7 @@ static long sample_cb(u64 idx, struct random_sample_ctx *rand_cxt)
 
 void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
 {
-    bpf_printk("Dispatch Started: map_size = %llu\n", map_size);
+    //bpf_printk("Dispatch Started: map_size = %llu\n", map_size);
 	// my custom rand logic to choose task
     struct random_sample_ctx s = {
         .start_ns = bpf_ktime_get_ns(),
@@ -135,10 +135,10 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
         
         // dispatch
         if (s.best_key >= 0) {
-            bpf_printk("Key Found\n");
+            //bpf_printk("Key Found\n");
             struct task_ctx *ti_dis = bpf_map_lookup_elem(&task_map, &s.best_key);
             if (!ti_dis) {
-                bpf_printk("TI_DIS null\n");
+                //bpf_printk("TI_DIS null\n");
                 return; 
             }
             bpf_spin_lock(&map_lock);
@@ -146,14 +146,14 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
             bpf_spin_unlock(&map_lock);
             struct task_ctx *ti_last = bpf_map_lookup_elem(&task_map, &key);
             if (!ti_last){
-                bpf_printk("TI_LAST null\n");
+                //bpf_printk("TI_LAST null\n");
                 return;
             }
             //invalidate first to ensure only one cpu can dispatch this task
             bpf_spin_lock(&map_lock);
             if(!ti_dis->valid || !ti_last->valid || key != map_size - 1){
                 bpf_spin_unlock(&map_lock);
-                bpf_printk("TI_DIS OR TI_LAST INVALID OR RACE DETECTED\n");
+                //bpf_printk("TI_DIS OR TI_LAST INVALID OR RACE DETECTED\n");
                 return;
             }
             // invalidate last task in array and decrement map size
@@ -169,31 +169,31 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
             //convert pid to task struct and dispatch that
             struct task_struct *task = bpf_task_from_pid(pid);
             if (!task){
-                bpf_printk("task struct null\n");
+                //bpf_printk("task struct null\n");
                 return;
             }
 
             scx_bpf_dsq_insert(task, SHARED_DSQ, SCX_SLICE_DFL, 0);
             bpf_task_release(task);
-            bpf_printk("Successful Dispatch\n");
+            //bpf_printk("Successful Dispatch\n");
             stat_inc(2);
         }
         else{
-            bpf_printk("Nothing decided: map_size = %llu\n", map_size);
+            //bpf_printk("Nothing decided: map_size = %llu\n", map_size);
         }
     }
     if(map_size == 1){
         u32 key = 0;
         struct task_ctx *ti = bpf_map_lookup_elem(&task_map, &key);
         if (!ti){
-            bpf_printk("TI null\n");
+            //bpf_printk("TI null\n");
             return;
         }
         //invalidate first to ensure only one cpu can dispatch this task
         bpf_spin_lock(&map_lock);
         if(!ti->valid || map_size != 1){
             bpf_spin_unlock(&map_lock);
-            bpf_printk("TI INVALID OR RACE DETECTED\n");
+            //bpf_printk("TI INVALID OR RACE DETECTED\n");
             return;
         }
         // invalidate the task in array and decrement map size
@@ -205,12 +205,12 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
 
         struct task_struct *task = bpf_task_from_pid(pid);
         if (!task){
-            bpf_printk("task struct null\n");
+            //bpf_printk("task struct null\n");
             return;
         }
         scx_bpf_dsq_insert(task, SHARED_DSQ, SCX_SLICE_DFL, 0);
         bpf_task_release(task);
-        bpf_printk("Successful Dispatch\n");
+        //bpf_printk("Successful Dispatch\n");
         stat_inc(2);
     }
     scx_bpf_dsq_move_to_local(SHARED_DSQ);
