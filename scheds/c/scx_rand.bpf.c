@@ -134,6 +134,7 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
     u32 pid;
     // dispatch
     if (s.best_key >= 0) {
+        bpf_printk("Key Found\n");
         struct task_ctx *ti_dis = bpf_map_lookup_elem(&task_map, &s.best_key);
             if (!ti_dis) return; // continue
         u32 key = map_size - 1;
