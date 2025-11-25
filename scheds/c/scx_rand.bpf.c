@@ -18,6 +18,7 @@ struct task_ctx {
 };
 
 #define SHARED_DSQ 0
+const volatile bool fifo_sched;
 
 private(rand) struct bpf_spin_lock global_lock;
 
@@ -59,9 +60,6 @@ s32 BPF_STRUCT_OPS(rand_select_cpu, struct task_struct *p, s32 prev_cpu, u64 wak
 void BPF_STRUCT_OPS(rand_enqueue, struct task_struct *p, u64 enq_flags)
 {
 	stat_inc(1);	/* count global queueing */
-    struct task_ctx *tctx;
-
-    tctx = bpf_task_storage_get(&task_ctx_map, p, 0, 0);
 
 	if (fifo_sched) {
 		scx_bpf_dsq_insert(p, SHARED_DSQ, SCX_SLICE_DFL, enq_flags);
@@ -146,6 +144,5 @@ SCX_OPS_DEFINE(rand_ops,
 	       .running			= (void *)rand_running,
 	       .stopping		= (void *)rand_stopping,
 	       .enable			= (void *)rand_enable,
-	       .init			= (void *)rand_init,
 	       .exit			= (void *)rand_exit,
 	       .name			= "rand");
