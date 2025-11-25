@@ -159,6 +159,7 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
 
         scx_bpf_dsq_insert(task, SCX_DSQ_LOCAL, SCX_SLICE_DFL, 0);
         bpf_task_release(task);
+         bpf_printk("Successful Dispatch\n");
     }
     else{
         bpf_printk("Nothing decided: map_size = %llu\n", map_size);
