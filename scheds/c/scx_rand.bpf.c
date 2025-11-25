@@ -133,7 +133,6 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
     if(map_size > 1){
         long ret = bpf_loop(SAMPLE_COUNT, sample_cb, &s, 0);
         
-        u32 pid;
         // dispatch
         if (s.best_key >= 0) {
             bpf_printk("Key Found\n");
@@ -161,7 +160,7 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
             map_size--;
             ti_last->valid = false;
 
-            pid = ti_dis->pid;
+            u32 pid = ti_dis->pid;
 
             // then move that tasks info to the index of our one about to be dispatched
             ti_dis->pid = ti_last->pid;
@@ -198,7 +197,7 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
         // invalidate the task in array and decrement map size
         map_size--;
         ti->valid = false;
-        pid = ti->pid;
+        u32 pid = ti->pid;
 
         bpf_spin_unlock(&map_lock);
 
