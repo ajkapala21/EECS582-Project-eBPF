@@ -7,12 +7,26 @@
 
 char _license[] SEC("license") = "GPL";
 
-const volatile bool fifo_sched;
+#define MAX_TASKS 65536
 
 static u64 vtime_now;
 UEI_DEFINE(uei);
 
+struct task_ctx {
+    u32 pid;
+    u64 vruntime;
+};
+
 #define SHARED_DSQ 0
+
+private(rand) struct bpf_spin_lock global_lock;
+
+struct {
+    __uint(type, BPF_MAP_TYPE_ARRAY);
+    __uint(max_entries, MAX_TASKS);
+    __type(key, u32);
+    __type(value, struct task_info);
+} task_map SEC(".maps");
 
 struct {
 	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
@@ -45,6 +59,9 @@ s32 BPF_STRUCT_OPS(rand_select_cpu, struct task_struct *p, s32 prev_cpu, u64 wak
 void BPF_STRUCT_OPS(rand_enqueue, struct task_struct *p, u64 enq_flags)
 {
 	stat_inc(1);	/* count global queueing */
+    struct task_ctx *tctx;
+
+    tctx = bpf_task_storage_get(&task_ctx_map, p, 0, 0);
 
 	if (fifo_sched) {
 		scx_bpf_dsq_insert(p, SHARED_DSQ, SCX_SLICE_DFL, enq_flags);
@@ -65,7 +82,13 @@ void BPF_STRUCT_OPS(rand_enqueue, struct task_struct *p, u64 enq_flags)
 
 void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
 {
-	scx_bpf_dsq_move_to_local(SHARED_DSQ);
+	// my custom rand logic
+
+    // dispatch
+
+    // remove task from rq array 
+
+    scx_bpf_dsq_move_to_local(SHARED_DSQ);
 }
 
 void BPF_STRUCT_OPS(rand_running, struct task_struct *p)
@@ -117,6 +140,7 @@ void BPF_STRUCT_OPS(rand_exit, struct scx_exit_info *ei)
 
 SCX_OPS_DEFINE(rand_ops,
 	       .select_cpu		= (void *)rand_select_cpu,
+           .init_task		= (void *)rand_init_task,
 	       .enqueue			= (void *)rand_enqueue,
 	       .dispatch		= (void *)rand_dispatch,
 	       .running			= (void *)rand_running,
