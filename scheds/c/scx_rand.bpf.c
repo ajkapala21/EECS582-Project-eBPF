@@ -90,6 +90,8 @@ void BPF_STRUCT_OPS(rand_enqueue, struct task_struct *p, u64 enq_flags)
     ti->pid = pid;
     ti->valid = true;
     bpf_spin_unlock(&map_lock);
+
+    bpf_printk("Enqueue: map_size = %llu\n", map_size);
 }
 
 static long sample_cb(u64 idx, struct random_sample_ctx *rand_cxt)
