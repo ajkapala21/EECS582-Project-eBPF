@@ -98,7 +98,9 @@ static long sample_cb(u64 idx, struct random_sample_ctx *rand_cxt)
 
     // use bpf_get_prandom_u32() inside callback
     u32 r = bpf_get_prandom_u32();
+    bpf_spin_lock(&map_lock);
     u32 key = r % map_size;
+    bpf_spin_unlock(&map_lock);
     struct task_ctx *ti = bpf_map_lookup_elem(&task_map, &key);
     if (!ti || !ti->valid) return 0; // continue
 
