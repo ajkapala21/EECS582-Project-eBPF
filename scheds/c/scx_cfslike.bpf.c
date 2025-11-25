@@ -97,6 +97,39 @@ static bool node_less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
 	return ti_a->vruntime < ti_b->vruntime;
 }
 
+
+static __always_inline void lock_helper(u32 cpu)
+{
+    if (cpu == 0){
+        bpf_spin_lock(&rbtree_lock0);
+    }
+    if (cpu == 1){
+        bpf_spin_lock(&rbtree_lock1);
+    }
+    if (cpu == 2){
+        bpf_spin_lock(&rbtree_lock2);
+    }
+    else{
+        bpf_spin_lock(&rbtree_lock3);
+    }
+}
+
+static __always_inline void unlock_helper(u32 cpu)
+{
+    if (cpu == 0){
+        bpf_spin_unlock(&rbtree_lock0);
+    }
+    if (cpu == 1){
+        bpf_spin_unlock(&rbtree_lock1);
+    }
+    if (cpu == 2){
+        bpf_spin_unlock(&rbtree_lock2);
+    }
+    else{
+        bpf_spin_unlock(&rbtree_lock3);
+    }
+}
+
 static __always_inline void add_helper(u32 cpu, struct bpf_rb_node *node)
 {
     if (cpu == 0){
