@@ -137,14 +137,21 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
     if (s.best_key >= 0) {
         bpf_printk("Key Found\n");
         struct task_ctx *ti_dis = bpf_map_lookup_elem(&task_map, &s.best_key);
-            if (!ti_dis) return; // continue
+        if (!ti_dis) {
+            bpf_printk("TI_DIS null\n");
+            return; 
+        }
         u32 key = map_size - 1;
         struct task_ctx *ti_last = bpf_map_lookup_elem(&task_map, &key);
-            if (!ti_last) return; // continue
+        if (!ti_last){
+            bpf_printk("TI_LAST null\n");
+            return;
+        }
         //invalidate first to ensure only one cpu can dispatch this task
         bpf_spin_lock(&map_lock);
         if(!ti_dis->valid || !ti_last->valid){
             bpf_spin_unlock(&map_lock);
+            bpf_printk("TI_DIS OR TI_LAST INVALID\n");
             return;
         }
         // invalidate last task in array and decrement map size
@@ -160,6 +167,7 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
         //convert pid to task struct and dispatch that
         struct task_struct *task = bpf_task_from_pid(pid);
         if (!task)
+            bpf_printk("task struct null\n");
             return;
 
         //scx_bpf_dsq_insert(task, SCX_DSQ_LOCAL, SCX_SLICE_DFL, 0);
