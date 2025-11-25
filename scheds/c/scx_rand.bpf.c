@@ -43,7 +43,7 @@ struct {
 	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
 	__uint(key_size, sizeof(u32));
 	__uint(value_size, sizeof(u64));
-	__uint(max_entries, 2);
+	__uint(max_entries, 3);
 } stats SEC(".maps");
 
 static void stat_inc(u32 idx)
@@ -161,7 +161,8 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
 
         scx_bpf_dsq_insert(task, SCX_DSQ_LOCAL, SCX_SLICE_DFL, 0);
         bpf_task_release(task);
-         bpf_printk("Successful Dispatch\n");
+        bpf_printk("Successful Dispatch\n");
+        stat_inc(2);
     }
     else{
         bpf_printk("Nothing decided: map_size = %llu\n", map_size);

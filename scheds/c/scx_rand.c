@@ -43,12 +43,12 @@ static void read_stats(struct scx_rand *skel, __u64 *stats)
 {
 	int nr_cpus = libbpf_num_possible_cpus();
 	assert(nr_cpus > 0);
-	__u64 cnts[2][nr_cpus];
+	__u64 cnts[3][nr_cpus];
 	__u32 idx;
 
-	memset(stats, 0, sizeof(stats[0]) * 2);
+	memset(stats, 0, sizeof(stats[0]) * 3);
 
-	for (idx = 0; idx < 2; idx++) {
+	for (idx = 0; idx < 3; idx++) {
 		int ret, cpu;
 
 		ret = bpf_map_lookup_elem(bpf_map__fd(skel->maps.stats),
@@ -88,10 +88,10 @@ restart:
 	link = SCX_OPS_ATTACH(skel, rand_ops, scx_rand);
 
 	while (!exit_req && !UEI_EXITED(skel, uei)) {
-		__u64 stats[2];
+		__u64 stats[3];
 
 		read_stats(skel, stats);
-		printf("local=%llu global=%llu\n", stats[0], stats[1]);
+		printf("local=%llu global=%llu dispatch=%llu\n", stats[0], stats[1], stats[2]);
 		fflush(stdout);
 		sleep(1);
 	}
