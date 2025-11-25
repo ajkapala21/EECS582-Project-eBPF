@@ -20,7 +20,7 @@ struct random_sample_ctx {
     u64 start_ns;
     u64 window_ns;
     u64 best_vtime;
-    int  best_pid;
+    int  best_key;
 };
 
 struct task_ctx {
@@ -106,7 +106,7 @@ static long sample_cb(u64 idx, struct random_sample_ctx *rand_cxt)
 
     if (ti->vruntime < s->best_vtime) {
         s->best_vtime = ti->vruntime;
-        s->best_pid = key;
+        s->best_key = key;
     }
 
     // Optional early exit if time exceeded:
@@ -123,15 +123,15 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
         .start_ns = bpf_ktime_get_ns(),
         .window_ns = SAMPLE_WINDOW_NS,
         .best_vtime = (u64)-1,
-        .best_pid = -1,
+        .best_key = -1,
     };
 
     long ret = bpf_loop(SAMPLE_COUNT, sample_cb, &s, 0);
     
     u32 pid;
     // dispatch
-    if (s.best_pid >= 0) {
-        struct task_ctx *ti_dis = bpf_map_lookup_elem(&task_map, &s.best_pid);
+    if (s.best_key >= 0) {
+        struct task_ctx *ti_dis = bpf_map_lookup_elem(&task_map, &s.best_key);
             if (!ti_dis) return; // continue
         u32 key = map_size - 1;
         struct task_ctx *ti_last = bpf_map_lookup_elem(&task_map, &key);
@@ -161,7 +161,7 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
         bpf_task_release(task);
     }
     else{
-        bpf_printk("Nothing decided\n");
+        bpf_printk("Nothing decided: map_size = %llu\n", map_size);
     }
 }
 
