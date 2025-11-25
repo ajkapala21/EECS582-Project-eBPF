@@ -89,7 +89,6 @@ void BPF_STRUCT_OPS(rand_enqueue, struct task_struct *p, u64 enq_flags)
     ti->vruntime += vtime;
     ti->pid = pid;
     ti->valid = true;
-    ti->selected = false;
     bpf_spin_unlock(&ti->lock);
 }
 
@@ -118,7 +117,7 @@ static long sample_cb(u64 idx, struct random_sample_ctx *rand_cxt)
 void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
 {
 	// my custom rand logic to choose task
-    struct sample_ctx s = {
+    struct random_sample_ctx s = {
         .start_ns = bpf_ktime_get_ns(),
         .window_ns = SAMPLE_WINDOW_NS,
         .best_vtime = (u64)-1,
@@ -132,7 +131,8 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
     if (s.best_pid >= 0) {
         struct task_ctx *ti_dis = bpf_map_lookup_elem(&task_map, &s.best_pid);
             if (!ti_dis) return; // continue
-        struct task_ctx *ti_last = bpf_map_lookup_elem(&task_map, map_size - 1);
+        u32 key = map_size - 1;
+        struct task_ctx *ti_last = bpf_map_lookup_elem(&task_map, &key);
             if (!ti_last) return; // continue
         //invalidate first to ensure only one cpu can dispatch this task
         bpf_spin_lock(&map_lock);
@@ -154,7 +154,7 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
         if (!task)
             return;
 
-        scx_bpf_dsq_insert(task, LOCAL_DSQ, SCX_SLICE_DFL, 0);
+        scx_bpf_dsq_insert(task, SCX_DSQ_LOCAL, SCX_SLICE_DFL, 0);
         bpf_task_release(task);
     }
 }
