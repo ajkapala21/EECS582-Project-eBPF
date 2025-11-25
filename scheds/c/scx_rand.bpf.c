@@ -8,19 +8,29 @@
 char _license[] SEC("license") = "GPL";
 
 #define MAX_TASKS 65536
+#define SAMPLE_WINDOW_NS 2000
+#define SAMPLE_COUNT 2000
 
 static u64 vtime_now;
+static u64 map_size = 0;
+
 UEI_DEFINE(uei);
 
-struct task_ctx {
-    u32 pid;
-    u64 vruntime;
+struct random_sample_ctx {
+    u64 start_ns;
+    u64 window_ns;
+    u64 best_vtime;
+    int  best_pid;
 };
 
-#define SHARED_DSQ 0
-const volatile bool fifo_sched;
+struct task_ctx {
+    struct bpf_spin_lock lock;
+    u32 pid;
+    u64 vruntime;
+    bool valid;
+};
 
-private(rand) struct bpf_spin_lock global_lock;
+private(rand) struct bpf_spin_lock map_lock;
 
 struct {
     __uint(type, BPF_MAP_TYPE_ARRAY);
@@ -61,63 +71,105 @@ void BPF_STRUCT_OPS(rand_enqueue, struct task_struct *p, u64 enq_flags)
 {
 	stat_inc(1);	/* count global queueing */
 
-	if (fifo_sched) {
-		scx_bpf_dsq_insert(p, SHARED_DSQ, SCX_SLICE_DFL, enq_flags);
-	} else {
-		u64 vtime = p->scx.dsq_vtime;
+    u64 vtime = p->scx.dsq_vtime;
+    u32 pid = p->pid;
 
-		/*
-		 * Limit the amount of budget that an idling task can accumulate
-		 * to one slice.
-		 */
-		if (time_before(vtime, vtime_now - SCX_SLICE_DFL))
-			vtime = vtime_now - SCX_SLICE_DFL;
+    if (time_before(vtime, vtime_now - SCX_SLICE_DFL))
+        vtime = vtime_now - SCX_SLICE_DFL;
 
-		scx_bpf_dsq_insert_vtime(p, SHARED_DSQ, SCX_SLICE_DFL, vtime,
-					 enq_flags);
-	}
+    bpf_spin_lock(&map_lock);
+    u64 sz = map_size;
+    map_size++;
+    bpf_spin_lock(&map_unlock);
+
+    struct task_info *ti = bpf_map_lookup_elem(&task_map, sz);
+    if (!ti) return;
+
+    bpf_spin_lock(&ti->lock);
+    ti->vruntime += vtime;
+    ti->pid = pid;
+    ti->valid = true;
+    ti->selected = false;
+    bpf_spin_unlock(&ti->lock);
+}
+
+static long sample_cb(u64 idx, struct random_sample_ctx rand_cxt)
+{
+    struct random_sample_ctx *s = (struct random_sample_ctx *)rand_cxt;
+
+    // use bpf_get_prandom_u32() inside callback
+    u32 r = bpf_get_prandom_u32();
+    u32 key = r % map_size;
+    struct task_info *ti = bpf_map_lookup_elem(&task_map, &key);
+    if (!ti || !ti->valid) return 0; // continue
+
+    if (ti->vruntime < s->best_vtime) {
+        s->best_vtime = ti->vruntime;
+        s->best_key = key;
+    }
+
+    // Optional early exit if time exceeded:
+    if (bpf_ktime_get_ns() - s->start_ns >= s->window_ns)
+        return 1; // bpf_loop will stop early if callback returns 1
+
+    return 0; // continue
 }
 
 void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
 {
-	// my custom rand logic
+	// my custom rand logic to choose task
+    struct sample_ctx s = {
+        .start_ns = bpf_ktime_get_ns(),
+        .window_ns = SAMPLE_WINDOW_NS,
+        .best_vtime = (u64)-1,
+        .best_pid = -1,
+    };
 
+    long ret = bpf_loop(SAMPLE_CNT, sample_cb, &s, 0);
+    
+    u32 pid;
     // dispatch
+    if (s.best_key >= 0) {
+        if(map_size > 1){
+            struct task_info *ti_dis = bpf_map_lookup_elem(&task_map, &key);
+                if (!ti_dis) return 0; // continue
+            struct task_info *ti_last = bpf_map_lookup_elem(&task_map, map_size - 1);
+                if (!ti_last) return 0; // continue
+            //invalidate first to ensure only one cpu can dispatch this task
+            bpf_spin_lock(&map_lock);
+            if(!ti_dis->valid || ti_last->valid){
+                return 0;
+            }
+            // invalidate last task in array and decrement map size
+            map_size--;
+            ti_last->valid = false;
 
-    // remove task from rq array 
+            pid = ti_dis->pid;
 
-    scx_bpf_dsq_move_to_local(SHARED_DSQ);
+            // then move that tasks info to the index of our one about to be dispatched
+            ti_dis->pid = ti_last->pid;
+            ti_dis->vruntime = ti_last->vruntime;
+            bpf_spin_unlock(&map_lock);
+        }
+        //convert pid to task struct and dispatch that
+        struct task_struct *task = bpf_task_from_pid(pid);
+        if (!task)
+            return;
+
+        scx_bpf_dsq_insert(task, LOCAL_DSQ, SCX_SLICE_DFL, 0);
+        bpf_task_release(task);
+    }
+    return 0;
 }
 
 void BPF_STRUCT_OPS(rand_running, struct task_struct *p)
 {
-	if (fifo_sched)
-		return;
-
-	/*
-	 * Global vtime always progresses forward as tasks start executing. The
-	 * test and update can be performed concurrently from multiple CPUs and
-	 * thus racy. Any error should be contained and temporary. Let's just
-	 * live with it.
-	 */
 	if (time_before(vtime_now, p->scx.dsq_vtime))
 		vtime_now = p->scx.dsq_vtime;
 }
 
 void BPF_STRUCT_OPS(rand_stopping, struct task_struct *p, bool runnable)
 {
-	if (fifo_sched)
-		return;
-
-	/*
-	 * Scale the execution time by the inverse of the weight and charge.
-	 *
-	 * Note that the default yield implementation yields by setting
-	 * @p->scx.slice to zero and the following would treat the yielding task
-	 * as if it has consumed all its slice. If this penalizes yielding tasks
-	 * too much, determine the execution time by taking explicit timestamps
-	 * instead of depending on @p->scx.slice.
-	 */
 	p->scx.dsq_vtime += (SCX_SLICE_DFL - p->scx.slice) * 100 / p->scx.weight;
 }
 
@@ -128,7 +180,7 @@ void BPF_STRUCT_OPS(rand_enable, struct task_struct *p)
 
 s32 BPF_STRUCT_OPS_SLEEPABLE(rand_init)
 {
-	return scx_bpf_create_dsq(SHARED_DSQ, -1);
+	return 0;
 }
 
 void BPF_STRUCT_OPS(rand_exit, struct scx_exit_info *ei)
