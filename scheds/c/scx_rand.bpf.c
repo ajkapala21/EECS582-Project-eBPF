@@ -142,7 +142,7 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
             if (!ti_last) return; // continue
         //invalidate first to ensure only one cpu can dispatch this task
         bpf_spin_lock(&map_lock);
-        if(!ti_dis->valid || ti_last->valid){
+        if(!ti_dis->valid || !ti_last->valid){
             bpf_spin_unlock(&map_lock);
             return;
         }
