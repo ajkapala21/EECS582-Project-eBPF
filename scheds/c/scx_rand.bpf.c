@@ -80,9 +80,9 @@ void BPF_STRUCT_OPS(rand_enqueue, struct task_struct *p, u64 enq_flags)
     bpf_spin_lock(&map_lock);
     u64 sz = map_size;
     map_size++;
-    bpf_spin_lock(&map_unlock);
+    bpf_spin_unlock(&map_lock);
 
-    struct task_info *ti = bpf_map_lookup_elem(&task_map, sz);
+    struct task_ctx *ti = bpf_map_lookup_elem(&task_map, &sz);
     if (!ti) return;
 
     bpf_spin_lock(&ti->lock);
@@ -93,19 +93,19 @@ void BPF_STRUCT_OPS(rand_enqueue, struct task_struct *p, u64 enq_flags)
     bpf_spin_unlock(&ti->lock);
 }
 
-static long sample_cb(u64 idx, struct random_sample_ctx rand_cxt)
+static long sample_cb(u64 idx, struct random_sample_ctx *rand_cxt)
 {
     struct random_sample_ctx *s = (struct random_sample_ctx *)rand_cxt;
 
     // use bpf_get_prandom_u32() inside callback
     u32 r = bpf_get_prandom_u32();
     u32 key = r % map_size;
-    struct task_info *ti = bpf_map_lookup_elem(&task_map, &key);
+    struct task_ctx *ti = bpf_map_lookup_elem(&task_map, &key);
     if (!ti || !ti->valid) return 0; // continue
 
     if (ti->vruntime < s->best_vtime) {
         s->best_vtime = ti->vruntime;
-        s->best_key = key;
+        s->best_pid = key;
     }
 
     // Optional early exit if time exceeded:
@@ -125,32 +125,30 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
         .best_pid = -1,
     };
 
-    long ret = bpf_loop(SAMPLE_CNT, sample_cb, &s, 0);
+    long ret = bpf_loop(SAMPLE_COUNT, sample_cb, &s, 0);
     
     u32 pid;
     // dispatch
-    if (s.best_key >= 0) {
-        if(map_size > 1){
-            struct task_info *ti_dis = bpf_map_lookup_elem(&task_map, &key);
-                if (!ti_dis) return 0; // continue
-            struct task_info *ti_last = bpf_map_lookup_elem(&task_map, map_size - 1);
-                if (!ti_last) return 0; // continue
-            //invalidate first to ensure only one cpu can dispatch this task
-            bpf_spin_lock(&map_lock);
-            if(!ti_dis->valid || ti_last->valid){
-                return 0;
-            }
-            // invalidate last task in array and decrement map size
-            map_size--;
-            ti_last->valid = false;
-
-            pid = ti_dis->pid;
-
-            // then move that tasks info to the index of our one about to be dispatched
-            ti_dis->pid = ti_last->pid;
-            ti_dis->vruntime = ti_last->vruntime;
-            bpf_spin_unlock(&map_lock);
+    if (s.best_pid >= 0) {
+        struct task_ctx *ti_dis = bpf_map_lookup_elem(&task_map, &s.best_pid);
+            if (!ti_dis) return; // continue
+        struct task_ctx *ti_last = bpf_map_lookup_elem(&task_map, map_size - 1);
+            if (!ti_last) return; // continue
+        //invalidate first to ensure only one cpu can dispatch this task
+        bpf_spin_lock(&map_lock);
+        if(!ti_dis->valid || ti_last->valid){
+            return;
         }
+        // invalidate last task in array and decrement map size
+        map_size--;
+        ti_last->valid = false;
+
+        pid = ti_dis->pid;
+
+        // then move that tasks info to the index of our one about to be dispatched
+        ti_dis->pid = ti_last->pid;
+        ti_dis->vruntime = ti_last->vruntime;
+        bpf_spin_unlock(&map_lock);
         //convert pid to task struct and dispatch that
         struct task_struct *task = bpf_task_from_pid(pid);
         if (!task)
@@ -159,7 +157,6 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
         scx_bpf_dsq_insert(task, LOCAL_DSQ, SCX_SLICE_DFL, 0);
         bpf_task_release(task);
     }
-    return 0;
 }
 
 void BPF_STRUCT_OPS(rand_running, struct task_struct *p)
