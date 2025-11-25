@@ -151,9 +151,9 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
             }
             //invalidate first to ensure only one cpu can dispatch this task
             bpf_spin_lock(&map_lock);
-            if(!ti_dis->valid || !ti_last->valid){
+            if(!ti_dis->valid || !ti_last->valid || key != map_size - 1){
                 bpf_spin_unlock(&map_lock);
-                bpf_printk("TI_DIS OR TI_LAST INVALID\n");
+                bpf_printk("TI_DIS OR TI_LAST INVALID OR RACE DETECTED\n");
                 return;
             }
             // invalidate last task in array and decrement map size
@@ -191,9 +191,9 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
         }
         //invalidate first to ensure only one cpu can dispatch this task
         bpf_spin_lock(&map_lock);
-        if(!ti->valid){
+        if(!ti->valid || map_size != 1){
             bpf_spin_unlock(&map_lock);
-            bpf_printk("TI INVALID\n");
+            bpf_printk("TI INVALID OR RACE DETECTED\n");
             return;
         }
         // invalidate the task in array and decrement map size
