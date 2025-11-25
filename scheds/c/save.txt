@@ -2059,3 +2059,36 @@ libbpf: failed to load BPF skeleton 'scx_cfslike': -ENOENT
 Failed to load skel
 anthony@anthony:~/Project/EECS582-Project-eBPF$ 
 
+
+[sudo: authenticate] Password: 
+local=0 global=3 dispatch=0
+local=144287 global=36965 dispatch=36963
+local=301761 global=70656 dispatch=70656
+local=458041 global=103771 dispatch=103771
+local=614878 global=136322 dispatch=136322
+local=771735 global=169506 dispatch=169506
+local=931210 global=202847 dispatch=202847
+local=1088618 global=235441 dispatch=235441
+local=1249544 global=268038 dispatch=268038
+local=1401536 global=304676 dispatch=304676
+local=1559259 global=337851 dispatch=337848
+local=1721440 global=369861 dispatch=369861
+local=1876588 global=407301 dispatch=407301
+local=2030988 global=444002 dispatch=444002
+local=2184581 global=477987 dispatch=477987
+local=2342481 global=510633 dispatch=510633
+local=2501158 global=542492 dispatch=542492
+^CEXIT: unregistered from user space
+
+
+local=1 global=0
+local=3739 global=923
+local=4326 global=1018
+local=4691 global=1120
+local=5148 global=1211
+local=5477 global=1262
+local=5769 global=1309
+local=5988 global=1360
+
+
+
