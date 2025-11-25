@@ -43,17 +43,17 @@ struct {
 } cpu_rqs SEC(".maps");
 
 // sadly have to setup per CPU rb trees and locks like this to statisfy verifier
-private(CGV_TREE) struct bpf_spin_lock rbtree_lock0;
-private(CGV_TREE) struct bpf_rb_root rbtree0 __contains(task_info, rb_node);
+private(CGV_TREE_0) struct bpf_spin_lock rbtree_lock0;
+private(CGV_TREE_0) struct bpf_rb_root rbtree0 __contains(task_info, rb_node);
 
-private(CGV_TREE) struct bpf_spin_lock rbtree_lock1;
-private(CGV_TREE) struct bpf_rb_root rbtree1 __contains(task_info, rb_node);
+private(CGV_TREE_1) struct bpf_spin_lock rbtree_lock1;
+private(CGV_TREE_1) struct bpf_rb_root rbtree1 __contains(task_info, rb_node);
 
-private(CGV_TREE) struct bpf_spin_lock rbtree_lock2;
-private(CGV_TREE) struct bpf_rb_root rbtree2 __contains(task_info, rb_node);
+private(CGV_TREE_2) struct bpf_spin_lock rbtree_lock2;
+private(CGV_TREE_2) struct bpf_rb_root rbtree2 __contains(task_info, rb_node);
 
-private(CGV_TREE) struct bpf_spin_lock rbtree_lock3;
-private(CGV_TREE) struct bpf_rb_root rbtree3 __contains(task_info, rb_node);
+private(CGV_TREE_3) struct bpf_spin_lock rbtree_lock3;
+private(CGV_TREE_3) struct bpf_rb_root rbtree3 __contains(task_info, rb_node);
 
 // task info map
 struct {
