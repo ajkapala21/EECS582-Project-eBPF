@@ -137,6 +137,7 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
         //invalidate first to ensure only one cpu can dispatch this task
         bpf_spin_lock(&map_lock);
         if(!ti_dis->valid || ti_last->valid){
+            bpf_spin_unlock(&map_lock);
             return;
         }
         // invalidate last task in array and decrement map size
