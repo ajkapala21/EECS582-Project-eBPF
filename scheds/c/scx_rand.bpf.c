@@ -121,7 +121,7 @@ static long sample_cb(u64 idx, struct random_sample_ctx *rand_cxt)
 
 void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
 {
-    bpf_printk("Dispatch Started\n");
+    bpf_printk("Dispatch Started: map_size = %llu\n", map_size);
 	// my custom rand logic to choose task
     struct random_sample_ctx s = {
         .start_ns = bpf_ktime_get_ns(),
