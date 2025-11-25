@@ -173,7 +173,6 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
                 bpf_printk("task struct null\n");
                 return;
 
-            //scx_bpf_dsq_insert(task, SCX_DSQ_LOCAL, SCX_SLICE_DFL, 0);
             scx_bpf_dsq_insert(task, SHARED_DSQ, SCX_SLICE_DFL, 0);
             bpf_task_release(task);
             bpf_printk("Successful Dispatch\n");
@@ -182,6 +181,33 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
         else{
             bpf_printk("Nothing decided: map_size = %llu\n", map_size);
         }
+    }
+    if(map_size == 1){
+        struct task_ctx *ti = bpf_map_lookup_elem(&task_map, 0);
+        if (!ti){
+            bpf_printk("TI null\n");
+            return;
+        }
+        //invalidate first to ensure only one cpu can dispatch this task
+        bpf_spin_lock(&map_lock);
+        if(!ti->valid){
+            bpf_spin_unlock(&map_lock);
+            bpf_printk("TI INVALID\n");
+            return;
+        }
+        // invalidate the task in array and decrement map size
+        map_size--;
+        ti->valid = false;
+        pid = ti->pid;
+
+        bpf_spin_unlock(&map_lock);
+
+        struct task_struct *task = bpf_task_from_pid(pid);
+        if (!task)
+            bpf_printk("task struct null\n");
+            return;
+        scx_bpf_dsq_insert(task, SHARED_DSQ, SCX_SLICE_DFL, 0);
+        bpf_task_release(task);
     }
     scx_bpf_dsq_move_to_local(SHARED_DSQ);
 }
