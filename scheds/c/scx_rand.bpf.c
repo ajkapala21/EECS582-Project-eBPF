@@ -208,6 +208,8 @@ void BPF_STRUCT_OPS(rand_dispatch, s32 cpu, struct task_struct *prev)
             return;
         scx_bpf_dsq_insert(task, SHARED_DSQ, SCX_SLICE_DFL, 0);
         bpf_task_release(task);
+        bpf_printk("Successful Dispatch\n");
+        stat_inc(2);
     }
     scx_bpf_dsq_move_to_local(SHARED_DSQ);
 }
