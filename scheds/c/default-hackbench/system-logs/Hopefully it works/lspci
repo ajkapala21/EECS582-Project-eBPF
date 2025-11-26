@@ -1,0 +1,64 @@
+Slot:	00:00.0
+Class:	Host bridge [0600]
+Vendor:	Intel Corporation [8086]
+Device:	440FX - 82441FX PMC [Natoma] [1237]
+SVendor:	Red Hat, Inc. [1af4]
+SDevice:	Qemu virtual machine [1100]
+Rev:	02
+ProgIf:	00
+
+Slot:	00:01.0
+Class:	ISA bridge [0601]
+Vendor:	Intel Corporation [8086]
+Device:	82371SB PIIX3 ISA [Natoma/Triton II] [7000]
+SVendor:	Red Hat, Inc. [1af4]
+SDevice:	Qemu virtual machine [1100]
+ProgIf:	00
+
+Slot:	00:01.1
+Class:	IDE interface [0101]
+Vendor:	Intel Corporation [8086]
+Device:	82371SB PIIX3 IDE [Natoma/Triton II] [7010]
+SVendor:	Red Hat, Inc. [1af4]
+SDevice:	Qemu virtual machine [1100]
+ProgIf:	80
+Driver:	ata_piix
+
+Slot:	00:01.3
+Class:	Bridge [0680]
+Vendor:	Intel Corporation [8086]
+Device:	82371AB/EB/MB PIIX4 ACPI [7113]
+SVendor:	Red Hat, Inc. [1af4]
+SDevice:	Qemu virtual machine [1100]
+Rev:	03
+ProgIf:	00
+
+Slot:	00:02.0
+Class:	VGA compatible controller [0300]
+Vendor:	Red Hat, Inc. [1af4]
+Device:	Virtio 1.0 GPU [1050]
+SVendor:	Red Hat, Inc. [1af4]
+SDevice:	QEMU [1100]
+Rev:	01
+ProgIf:	00
+Driver:	virtio-pci
+
+Slot:	00:03.0
+Class:	Ethernet controller [0200]
+Vendor:	Red Hat, Inc. [1af4]
+Device:	Virtio network device [1000]
+SVendor:	Red Hat, Inc. [1af4]
+SDevice:	Device [0001]
+ProgIf:	00
+Driver:	virtio-pci
+
+Slot:	00:04.0
+Class:	USB controller [0c03]
+Vendor:	Red Hat, Inc. [1b36]
+Device:	QEMU XHCI Host Controller [000d]
+SVendor:	Red Hat, Inc. [1af4]
+SDevice:	Device [1100]
+Rev:	01
+ProgIf:	30
+Driver:	xhci_hcd
+
