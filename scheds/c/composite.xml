@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--Phoronix Test Suite v10.8.5-->
+<PhoronixTestSuite>
+  <Generated>
+    <Title>Default hackbench</Title>
+    <LastModified>2025-11-26 21:39:45</LastModified>
+    <TestClient>Phoronix Test Suite v10.8.5</TestClient>
+    <Description>KVM testing on Ubuntu 25.10 via the Phoronix Test Suite.</Description>
+  </Generated>
+  <System>
+    <Identifier>Hopefully it works</Identifier>
+    <Hardware>Processor: Intel Core i7-12700K (4 Cores), Motherboard: QEMU Standard PC (i440FX + PIIX 1996) (1.15.0-1 BIOS), Chipset: Intel 440FX 82441FX PMC, Memory: 1 x 8GB RAM QEMU, Disk: 64GB QEMU HDD, Graphics: Red Hat Virtio 1.0 GPU, Monitor: QEMU Monitor, Network: Red Hat Virtio device</Hardware>
+    <Software>OS: Ubuntu 25.10, Kernel: 6.17.7-project (x86_64), Desktop: GNOME Shell 49.0, Display Server: Wayland, OpenGL: 4.5 Mesa 25.2.3-1ubuntu1 (LLVM 20.1.8 256 bits), Compiler: GCC 15.2.0 + Clang 20.1.8 + LLVM 20.1.8, File-System: ext4, Screen Resolution: 1252x1346, System Layer: KVM</Software>
+    <User>anthony</User>
+    <TimeStamp>2025-11-26 21:36:37</TimeStamp>
+    <TestClientVersion>10.8.5</TestClientVersion>
+    <Notes></Notes>
+    <JSON>{"compiler-configuration":"--build=x86_64-linux-gnu --disable-vtable-verify --disable-werror --enable-bootstrap --enable-cet --enable-checking=release --enable-clocale=gnu --enable-default-pie --enable-gnu-unique-object --enable-languages=c,ada,c++,go,d,fortran,objc,obj-c++,m2,rust,cobol,algol68 --enable-libphobos-checking=release --enable-libstdcxx-backtrace --enable-libstdcxx-debug --enable-libstdcxx-time=yes --enable-link-serialization=2 --enable-multiarch --enable-multilib --enable-nls --enable-objc-gc=auto --enable-offload-defaulted --enable-offload-targets=nvptx-none=\/build\/gcc-15-deiAlw\/gcc-15-15.2.0\/debian\/tmp-nvptx\/usr,amdgcn-amdhsa=\/build\/gcc-15-deiAlw\/gcc-15-15.2.0\/debian\/tmp-gcn\/usr --enable-plugin --enable-shared --enable-threads=posix --host=x86_64-linux-gnu --program-prefix=x86_64-linux-gnu- --target=x86_64-linux-gnu --with-abi=m64 --with-arch-32=i686 --with-build-config=bootstrap-lto-lean --with-default-libstdcxx-abi=new --with-gcc-major-version-only --with-multilib-list=m32,m64,mx32 --with-target-system-zlib=auto --with-tune=generic --without-cuda-driver -v","cpu-microcode":"0xffffffff","security":"gather_data_sampling: Not affected + ghostwrite: Not affected + indirect_target_selection: Mitigation of Aligned branch\/return thunks + itlb_multihit: Not affected + l1tf: Not affected + mds: Not affected + meltdown: Not affected + mmio_stale_data: Not affected + old_microcode: Not affected + reg_file_data_sampling: Not affected + retbleed: Mitigation of Enhanced IBRS + spec_rstack_overflow: Not affected + spec_store_bypass: Mitigation of SSB disabled via prctl + spectre_v1: Mitigation of usercopy\/swapgs barriers and __user pointer sanitization + spectre_v2: Mitigation of Enhanced \/ Automatic IBRS; IBPB: conditional; PBRSB-eIBRS: SW sequence; BHI: Vulnerable + srbds: Not affected + tsa: Not affected + tsx_async_abort: Not affected + vmscape: Not affected"}</JSON>
+  </System>
+  <Result>
+    <Identifier>pts/hackbench-1.0.0</Identifier>
+    <Title>Hackbench</Title>
+    <AppVersion></AppVersion>
+    <Arguments>8 thread</Arguments>
+    <Description>Count: 8 - Type: Thread</Description>
+    <Scale>Seconds</Scale>
+    <Proportion>LIB</Proportion>
+    <DisplayFormat>BAR_GRAPH</DisplayFormat>
+    <Data>
+      <Entry>
+        <Identifier>Hopefully it works</Identifier>
+        <Value>26.251</Value>
+        <RawString>26.617:25.809:26.327</RawString>
+        <JSON>{"compiler-options":{"compiler-type":"CC","compiler":"gcc","compiler-options":"-lpthread"},"test-run-times":"26.66:25.85:26.37"}</JSON>
+      </Entry>
+    </Data>
+  </Result>
+  <Result>
+    <Identifier>pts/hackbench-1.0.0</Identifier>
+    <Title>Hackbench</Title>
+    <AppVersion></AppVersion>
+    <Arguments>8 process</Arguments>
+    <Description>Count: 8 - Type: Process</Description>
+    <Scale>Seconds</Scale>
+    <Proportion>LIB</Proportion>
+    <DisplayFormat>BAR_GRAPH</DisplayFormat>
+    <Data>
+      <Entry>
+        <Identifier>Hopefully it works</Identifier>
+        <Value>25.655</Value>
+        <RawString>25.404:25.708:25.852</RawString>
+        <JSON>{"compiler-options":{"compiler-type":"CC","compiler":"gcc","compiler-options":"-lpthread"},"test-run-times":"25.42:25.73:25.87"}</JSON>
+      </Entry>
+    </Data>
+  </Result>
+</PhoronixTestSuite>
