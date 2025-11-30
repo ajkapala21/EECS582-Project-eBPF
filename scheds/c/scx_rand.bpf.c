@@ -113,7 +113,7 @@ static long sample_cb(u64 idx, struct random_sample_ctx *rand_cxt)
     }
 
     // Optional early exit if time exceeded:
-    if (bpf_ktime_get_ns() - s->start_ns >= s->window_ns){
+    if (bpf_ktime_get_ns() - s->start_ns >= s->window_ns || idx >= map_size){
         //bpf_printk("Exited because of time: %llu\n", idx);
         return 1; // bpf_loop will stop early if callback returns 1
     }
