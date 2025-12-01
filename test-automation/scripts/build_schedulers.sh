@@ -82,15 +82,24 @@ for sched in $SCHEDULERS_TO_BUILD; do
     # Build the scheduler (this should generate .bpf.o, then .bpf.skel.h, then the binary)
     echo "    Running make ${sched}..."
     if make -C "$PROJECT_ROOT" "${sched}" >/tmp/build_${sched}_control.log 2>&1; then
-        # Verify BPF object was created
-        if [ ! -f "$PROJECT_ROOT/build/scheds/c/${sched}.bpf.o" ]; then
-            echo "    ERROR: BPF object file not created: ${sched}.bpf.o"
-            echo "    BPF compilation may have failed. Build log:"
-            grep -i "error\|fail" /tmp/build_${sched}_control.log | tail -10
+        # Verify build succeeded by checking for skeleton header and final binary
+        # (Note: .bpf.o is an intermediate file that Make removes after build)
+        if [ ! -f "$PROJECT_ROOT/build/scheds/c/${sched}.bpf.skel.h" ] || [ ! -f "$PROJECT_ROOT/build/scheds/c/${sched}" ]; then
+            echo "    ERROR: Build verification failed"
+            if [ ! -f "$PROJECT_ROOT/build/scheds/c/${sched}.bpf.skel.h" ]; then
+                echo "    - Skeleton header not found: ${sched}.bpf.skel.h"
+            fi
+            if [ ! -f "$PROJECT_ROOT/build/scheds/c/${sched}" ]; then
+                echo "    - Final binary not found: ${sched}"
+            fi
+            echo "    Full build log:"
+            echo "    ========================================="
+            cat /tmp/build_${sched}_control.log
+            echo "    ========================================="
             exit 1
         fi
         
-        # Verify skeleton header was generated
+        # Verify skeleton header was generated (redundant check, but kept for clarity)
         if [ ! -f "$PROJECT_ROOT/build/scheds/c/${sched}.bpf.skel.h" ]; then
             echo "    ERROR: Skeleton header not generated: ${sched}.bpf.skel.h"
             echo "    BPF object exists but skeleton generation failed."
@@ -142,15 +151,24 @@ for sched in $SCHEDULERS_TO_BUILD; do
     # Build the scheduler (this should generate .bpf.o, then .bpf.skel.h, then the binary)
     echo "    Running make ${sched}..."
     if make -C "$PROJECT_ROOT" "${sched}" >/tmp/build_${sched}_test.log 2>&1; then
-        # Verify BPF object was created
-        if [ ! -f "$PROJECT_ROOT/build/scheds/c/${sched}.bpf.o" ]; then
-            echo "    ERROR: BPF object file not created: ${sched}.bpf.o"
-            echo "    BPF compilation may have failed. Build log:"
-            grep -i "error\|fail" /tmp/build_${sched}_test.log | tail -10
+        # Verify build succeeded by checking for skeleton header and final binary
+        # (Note: .bpf.o is an intermediate file that Make removes after build)
+        if [ ! -f "$PROJECT_ROOT/build/scheds/c/${sched}.bpf.skel.h" ] || [ ! -f "$PROJECT_ROOT/build/scheds/c/${sched}" ]; then
+            echo "    ERROR: Build verification failed"
+            if [ ! -f "$PROJECT_ROOT/build/scheds/c/${sched}.bpf.skel.h" ]; then
+                echo "    - Skeleton header not found: ${sched}.bpf.skel.h"
+            fi
+            if [ ! -f "$PROJECT_ROOT/build/scheds/c/${sched}" ]; then
+                echo "    - Final binary not found: ${sched}"
+            fi
+            echo "    Full build log:"
+            echo "    ========================================="
+            cat /tmp/build_${sched}_test.log
+            echo "    ========================================="
             exit 1
         fi
         
-        # Verify skeleton header was generated
+        # Verify skeleton header was generated (redundant check, but kept for clarity)
         if [ ! -f "$PROJECT_ROOT/build/scheds/c/${sched}.bpf.skel.h" ]; then
             echo "    ERROR: Skeleton header not generated: ${sched}.bpf.skel.h"
             echo "    BPF object exists but skeleton generation failed."
