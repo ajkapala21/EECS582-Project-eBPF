@@ -10,12 +10,13 @@ char _license[] SEC("license") = "GPL";
 #define MAX_TASKS 65536
 #define SAMPLE_WINDOW_MIN 500
 #define SAMPLE_WINDOW_MAX 50000
+#define SAMPLE_WINDOW_NS 500
 #define SAMPLE_COUNT 500
 
 static u64 vtime_now;
 static u32 map_size = 0;
 static u64 sampling_bound_ns = 500;
-static u64 avg_slice_used = SCX_SLICE_DFL;
+static u64 avg_slice_used = 20000000; //20ms = SCX_SLICE_DFL
 
 UEI_DEFINE(uei);
 #define SHARED_DSQ 0
