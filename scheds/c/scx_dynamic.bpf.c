@@ -238,7 +238,7 @@ void BPF_STRUCT_OPS(dynamic_running, struct task_struct *p)
 void BPF_STRUCT_OPS(dynamic_stopping, struct task_struct *p, bool runnable)
 {
 	p->scx.dsq_vtime += (SCX_SLICE_DFL - p->scx.slice) * 100 / p->scx.weight;
-    bpf_spin_lock(time_lock);
+    bpf_spin_lock(&time_lock);
     u64 a = 85;
     avg_slice_used = (avg_slice_used * a + (SCX_SLICE_DFL - p->scx.slice) * (100 - a)) / 100;
     sampling_bound_ns = avg_slice_used / TIME_RATIO;
@@ -249,7 +249,7 @@ void BPF_STRUCT_OPS(dynamic_stopping, struct task_struct *p, bool runnable)
         sampling_bound_ns = SAMPLE_WINDOW_MAX;
     }
     bpf_printk("Time bound: %llu\n", sampling_bound_ns);
-    bpf_spin_unlock(time_lock);
+    bpf_spin_unlock(&time_lock);
 }
 
 void BPF_STRUCT_OPS(dynamic_enable, struct task_struct *p)
