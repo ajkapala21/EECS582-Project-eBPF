@@ -232,7 +232,7 @@ s32 BPF_STRUCT_OPS(nest_select_cpu, struct task_struct *p, s32 prev_cpu,
 
 	tctx = bpf_task_storage_get(&task_ctx_stor, p, 0, 0);
 	if (!tctx)
-		return -ENOENT;
+		return prev_cpu;
 
 	bpf_rcu_read_lock();
 	p_mask = tctx->tmp_mask;
@@ -240,7 +240,7 @@ s32 BPF_STRUCT_OPS(nest_select_cpu, struct task_struct *p, s32 prev_cpu,
 	reserve = reserve_cpumask;
 	if (!p_mask || !primary || !reserve) {
 		bpf_rcu_read_unlock();
-		return -ENOENT;
+		return prev_cpu;
 	}
 
 	tctx->prev_cpu = prev_cpu;
