@@ -12,6 +12,7 @@ char _license[] SEC("license") = "GPL";
 #define SAMPLE_WINDOW_MAX 50000
 #define SAMPLE_WINDOW_NS 500
 #define SAMPLE_COUNT 500
+#define TIME_RATIO 100
 
 static u64 vtime_now;
 static u32 map_size = 0;
@@ -36,6 +37,7 @@ struct task_ctx {
 };
 
 private(dynamic) struct bpf_spin_lock map_lock;
+private(dynamic) struct bpf_spin_lock time_lock;
 
 struct {
     __uint(type, BPF_MAP_TYPE_ARRAY);
@@ -236,9 +238,18 @@ void BPF_STRUCT_OPS(dynamic_running, struct task_struct *p)
 void BPF_STRUCT_OPS(dynamic_stopping, struct task_struct *p, bool runnable)
 {
 	p->scx.dsq_vtime += (SCX_SLICE_DFL - p->scx.slice) * 100 / p->scx.weight;
+    bpf_spin_lock(time_lock);
     u64 a = 85;
     avg_slice_used = (avg_slice_used * a + (SCX_SLICE_DFL - p->scx.slice) * (100 - a)) / 100;
-    bpf_printk("Avg slice used in nanoseconds: %llu\n", avg_slice_used);
+    sampling_bound_ns = avg_slice_used / TIME_RATIO;
+    if(sampling_bound_ns < SAMPLE_WINDOW_MIN){
+        sampling_bound_ns = SAMPLE_WINDOW_MIN;
+    }
+    if(sampling_bound_ns > SAMPLE_WINDOW_MAX){
+        sampling_bound_ns = SAMPLE_WINDOW_MAX;
+    }
+    bpf_printk("Time bound: %llu\n", sampling_bound_ns);
+    bpf_spin_unlock(time_lock);
 }
 
 void BPF_STRUCT_OPS(dynamic_enable, struct task_struct *p)
