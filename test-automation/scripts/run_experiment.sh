@@ -73,18 +73,36 @@ for iter in $(seq 1 $ITERATIONS); do
     METRICS_FILE="$RESULTS_DIR/control/${WORKLOAD}_run${iter}.csv"
     DMESG_FILE="$RESULTS_DIR/control/${WORKLOAD}_run${iter}_dmesg.log"
     
+    # Verify binary exists
+    if [ ! -f "$CONTROL_BIN" ]; then
+        echo "ERROR: Scheduler binary not found: $CONTROL_BIN"
+        echo "Please run: ./scripts/build_schedulers.sh $SCHEDULER"
+        exit 1
+    fi
+    
     # Start scheduler
+    echo "    Starting scheduler: $CONTROL_BIN"
     sudo "$CONTROL_BIN" >/tmp/scheduler_control.log 2>&1 &
     SCHED_PID=$!
-    sleep 2
+    sleep 3  # Give scheduler more time to load
     
     # Verify scheduler loaded (check for scheduler name without scx_ prefix)
     SCHED_NAME=$(echo "$SCHEDULER" | sed 's/^scx_//')
-    sleep 1
-    if ! grep -q "$SCHED_NAME\|$SCHEDULER" /sys/kernel/sched_ext/current 2>/dev/null; then
-        echo "WARNING: Scheduler may not have loaded. Check /tmp/scheduler_control.log"
-        echo "Current scheduler: $(cat /sys/kernel/sched_ext/current 2>/dev/null || echo 'none')"
-        # Don't exit - scheduler might still be loading
+    CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "")
+    if [ -z "$CURRENT_SCHED" ] || ! echo "$CURRENT_SCHED" | grep -qE "$SCHED_NAME|$SCHEDULER|simple"; then
+        echo "WARNING: Scheduler may not have loaded properly."
+        echo "    Expected: $SCHED_NAME or $SCHEDULER"
+        echo "    Current: ${CURRENT_SCHED:-none}"
+        echo "    Check /tmp/scheduler_control.log for errors"
+        # Check if process is still running
+        if ! kill -0 $SCHED_PID 2>/dev/null; then
+            echo "    ERROR: Scheduler process died. Log:"
+            tail -20 /tmp/scheduler_control.log
+            exit 1
+        fi
+        # Continue anyway - might still work
+    else
+        echo "    Scheduler loaded: $CURRENT_SCHED"
     fi
     
     # Start metrics collection
@@ -132,18 +150,36 @@ for iter in $(seq 1 $ITERATIONS); do
     METRICS_FILE="$RESULTS_DIR/test/${WORKLOAD}_run${iter}.csv"
     DMESG_FILE="$RESULTS_DIR/test/${WORKLOAD}_run${iter}_dmesg.log"
     
+    # Verify binary exists
+    if [ ! -f "$TEST_BIN" ]; then
+        echo "ERROR: Scheduler binary not found: $TEST_BIN"
+        echo "Please run: ./scripts/build_schedulers.sh $SCHEDULER"
+        exit 1
+    fi
+    
     # Start scheduler
+    echo "    Starting scheduler: $TEST_BIN"
     sudo "$TEST_BIN" >/tmp/scheduler_test.log 2>&1 &
     SCHED_PID=$!
-    sleep 2
+    sleep 3  # Give scheduler more time to load
     
     # Verify scheduler loaded (check for scheduler name without scx_ prefix)
     SCHED_NAME=$(echo "$SCHEDULER" | sed 's/^scx_//')
-    sleep 1
-    if ! grep -q "$SCHED_NAME\|$SCHEDULER" /sys/kernel/sched_ext/current 2>/dev/null; then
-        echo "WARNING: Scheduler may not have loaded. Check /tmp/scheduler_test.log"
-        echo "Current scheduler: $(cat /sys/kernel/sched_ext/current 2>/dev/null || echo 'none')"
-        # Don't exit - scheduler might still be loading
+    CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "")
+    if [ -z "$CURRENT_SCHED" ] || ! echo "$CURRENT_SCHED" | grep -qE "$SCHED_NAME|$SCHEDULER|simple"; then
+        echo "WARNING: Scheduler may not have loaded properly."
+        echo "    Expected: $SCHED_NAME or $SCHEDULER"
+        echo "    Current: ${CURRENT_SCHED:-none}"
+        echo "    Check /tmp/scheduler_test.log for errors"
+        # Check if process is still running
+        if ! kill -0 $SCHED_PID 2>/dev/null; then
+            echo "    ERROR: Scheduler process died. Log:"
+            tail -20 /tmp/scheduler_test.log
+            exit 1
+        fi
+        # Continue anyway - might still work
+    else
+        echo "    Scheduler loaded: $CURRENT_SCHED"
     fi
     
     # Start metrics collection

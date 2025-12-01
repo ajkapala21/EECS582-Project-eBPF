@@ -42,18 +42,40 @@ while [ $(date +%s) -lt $END_TIME ]; do
     # Count map entries
     MAP_ENTRIES=0
     if [ -n "$MAP_ID" ]; then
-        MAP_ENTRIES=$(bpftool map dump id "$MAP_ID" 2>/dev/null | grep -c "key:" || echo "0")
+        MAP_ENTRIES=$(bpftool map dump id "$MAP_ID" 2>/dev/null | grep -c "key:" 2>/dev/null || echo "0")
+        # Ensure it's a valid integer
+        MAP_ENTRIES=$(echo "$MAP_ENTRIES" | tr -d '[:space:]')
+        if [ -z "$MAP_ENTRIES" ] || ! [[ "$MAP_ENTRIES" =~ ^[0-9]+$ ]]; then
+            MAP_ENTRIES=0
+        fi
     fi
     
     # Get free memory (in KB)
-    FREE_MEM=$(free -k | awk '/^Mem:/ {print $4}')
+    FREE_MEM=$(free -k 2>/dev/null | awk '/^Mem:/ {print $4}' || echo "0")
+    # Ensure it's a valid integer
+    FREE_MEM=$(echo "$FREE_MEM" | tr -d '[:space:]')
+    if [ -z "$FREE_MEM" ] || ! [[ "$FREE_MEM" =~ ^[0-9]+$ ]]; then
+        FREE_MEM=0
+    fi
     
     # Get BPF slab cache size (in KB)
-    SLAB_BPF=$(grep -E "bpf_map|bpf_map_elem" /proc/slabinfo 2>/dev/null | awk '{sum+=$2*$3} END {print sum/1024}' || echo "0")
+    SLAB_BPF=$(grep -E "bpf_map|bpf_map_elem" /proc/slabinfo 2>/dev/null | awk '{sum+=$2*$3} END {if (sum>0) print sum/1024; else print 0}' || echo "0")
+    # Ensure it's a valid number (can be decimal)
+    SLAB_BPF=$(echo "$SLAB_BPF" | tr -d '[:space:]')
+    if [ -z "$SLAB_BPF" ]; then
+        SLAB_BPF=0
+    fi
     
     # Count evictions from dmesg
-    NEW_EVICTIONS=$(dmesg | grep -c "Map cleanup: evicted" || echo "0")
-    if [ "$NEW_EVICTIONS" -gt "$EVICTION_COUNT" ]; then
+    NEW_EVICTIONS=$(dmesg | grep -c "Map cleanup: evicted" 2>/dev/null || echo "0")
+    # Ensure it's a valid integer (remove any whitespace)
+    NEW_EVICTIONS=$(echo "$NEW_EVICTIONS" | tr -d '[:space:]')
+    # Default to 0 if empty or not a number
+    if [ -z "$NEW_EVICTIONS" ] || ! [[ "$NEW_EVICTIONS" =~ ^[0-9]+$ ]]; then
+        NEW_EVICTIONS=0
+    fi
+    # Compare as integers
+    if [ "$NEW_EVICTIONS" -gt "$EVICTION_COUNT" ] 2>/dev/null; then
         EVICTION_COUNT=$NEW_EVICTIONS
     fi
     
