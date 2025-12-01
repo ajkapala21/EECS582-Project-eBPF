@@ -195,9 +195,47 @@ TEST VERSION:
 - **Fix**: Reduce max_age threshold or increase workload intensity
 
 ### Issue: Scheduler fails to load
-- **Check**: Kernel has `scx_bpf_map_scan_timeout` helper
-- **Check**: BPF program compiles without verifier errors
-- **Fix**: Check dmesg for specific error messages
+
+**Symptoms:**
+- Warning: "Scheduler may not have loaded properly"
+- "Expected: simple or scx_simple, Current: none"
+- Map entries stay at 0 for both control and test versions
+
+**Diagnostic Steps:**
+1. **Check scheduler logs**:
+   ```bash
+   cat /tmp/scheduler_control.log
+   cat /tmp/scheduler_test.log
+   ```
+   Look for BPF verifier errors, permission denied, or missing helper functions.
+
+2. **Check kernel messages**:
+   ```bash
+   sudo dmesg | tail -50
+   ```
+   Look for BPF verifier errors or sched_ext related errors.
+
+3. **Verify kernel support**:
+   ```bash
+   ls -la /sys/kernel/sched_ext/
+   cat /sys/kernel/sched_ext/current
+   ```
+   If `/sys/kernel/sched_ext/` doesn't exist, kernel doesn't have sched_ext support.
+
+4. **Test manual load**:
+   ```bash
+   sudo ./build/scheds/c/scx_simple_control
+   # In another terminal:
+   cat /sys/kernel/sched_ext/current
+   ```
+
+**Common Causes:**
+- Kernel doesn't have `CONFIG_SCHED_CLASS_EXT=y` enabled
+- Missing `scx_bpf_map_scan_timeout` helper function
+- BPF verifier errors in the scheduler code
+- Permission issues (need root/sudo)
+
+**Fix**: See `TROUBLESHOOTING.md` for detailed solutions.
 
 ## File Locations in VM
 
