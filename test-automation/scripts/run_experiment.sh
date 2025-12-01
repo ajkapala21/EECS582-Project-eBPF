@@ -34,7 +34,7 @@ fi
 echo "Building schedulers..."
 "$SCRIPT_DIR/build_schedulers.sh" "$SCHEDULER" || exit 1
 
-SCHEDULER_BIN_DIR="$BASE_DIR/../scheds/c/build/scheds/c"
+SCHEDULER_BIN_DIR="$BASE_DIR/../build/scheds/c"
 CONTROL_BIN="$SCHEDULER_BIN_DIR/${SCHEDULER}_control"
 TEST_BIN="$SCHEDULER_BIN_DIR/${SCHEDULER}_test"
 
