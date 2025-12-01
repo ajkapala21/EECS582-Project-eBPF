@@ -16,7 +16,7 @@ ifeq ($(LIB_OBJ_DIR),)
   LIB_BPF_OBJ := ../../lib/lib.bpf.o
 endif
 
-C_SCHEDS := scx_simple scx_qmap scx_central scx_userland scx_nest scx_flatcg scx_pair scx_prev scx_cfsish scx_cfslike scx_rand
+C_SCHEDS := scx_simple scx_qmap scx_central scx_userland scx_nest scx_flatcg scx_pair scx_prev scx_cfsish scx_cfslike scx_rand scx_dynamic
 C_SCHEDS_LIB := scx_sdt
 
 ALL_SCHEDS := $(addprefix $(OBJ_DIR)/,$(C_SCHEDS) $(C_SCHEDS_LIB))
@@ -72,7 +72,7 @@ install: $(ALL_SCHEDS)
 	done
 
 clean:
-	rm -f *.bpf.o *.bpf.skel.h *.l1o *.l2o *.l3o scx_simple scx_qmap scx_central scx_userland scx_nest scx_flatcg scx_pair scx_prev scx_sdt scx_cfsish scx_cfslike scx_rand
+	rm -f *.bpf.o *.bpf.skel.h *.l1o *.l2o *.l3o scx_simple scx_qmap scx_central scx_userland scx_nest scx_flatcg scx_pair scx_prev scx_sdt scx_cfsish scx_cfslike scx_rand scx_dynamic
 	rm -f $(OBJ_DIR)/*.bpf.o $(OBJ_DIR)/*.bpf.skel.h $(OBJ_DIR)/*.l1o $(OBJ_DIR)/*.l2o $(OBJ_DIR)/*.l3o $(ALL_SCHEDS)
 
 .PHONY: all install clean
