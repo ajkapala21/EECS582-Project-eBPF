@@ -237,7 +237,7 @@ void BPF_STRUCT_OPS(dynamic_stopping, struct task_struct *p, bool runnable)
 {
 	p->scx.dsq_vtime += (SCX_SLICE_DFL - p->scx.slice) * 100 / p->scx.weight;
     u64 a = 85;
-    avg_slice_used = avg_slice_used * (a / 100) + (SCX_SLICE_DFL - p->scx.slice) * ((100 - a) / 100);
+    avg_slice_used = (avg_slice_used * a + (SCX_SLICE_DFL - p->scx.slice) * (100 - a)) / 100;
     bpf_printk("Avg slice used in nanoseconds: %llu\n", avg_slice_used);
 }
 
