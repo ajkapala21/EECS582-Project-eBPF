@@ -37,6 +37,11 @@ UEI_DEFINE(uei);
  * use SCX_DSQ_GLOBAL.
  */
 #define SHARED_DSQ 0
+struct task_info {
+	__u64 vruntime;
+	__u64 weight;
+	__u64 last_start;
+};
 
 struct {
 	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
@@ -44,6 +49,13 @@ struct {
 	__uint(value_size, sizeof(u64));
 	__uint(max_entries, 2);			/* [local, global] */
 } stats SEC(".maps");
+
+struct {
+	__uint(type, BPF_MAP_TYPE_HASH);
+	__uint(max_entries, 16384);
+	__type(key, __u32);
+	__type(value, struct task_info);
+} tasks SEC(".maps");
 
 static void stat_inc(u32 idx)
 {
@@ -69,7 +81,14 @@ s32 BPF_STRUCT_OPS(simple_select_cpu, struct task_struct *p, s32 prev_cpu, u64 w
 void BPF_STRUCT_OPS(simple_enqueue, struct task_struct *p, u64 enq_flags)
 {
 	stat_inc(1);	/* count global queueing */
-
+	
+	u32 pid = p->pid;
+	struct task_info info = {};
+	info.vruntime = p->scx.dsq_vtime;
+	info.weight = p->scx.weight;
+	info.last_start = bpf_ktime_get_ns();
+	bpf_map_update_elem(&tasks, &pid, &info, BPF_ANY);
+	
 	if (fifo_sched) {
 		scx_bpf_dsq_insert(p, SHARED_DSQ, SCX_SLICE_DFL, enq_flags);
 	} else {
@@ -89,11 +108,34 @@ void BPF_STRUCT_OPS(simple_enqueue, struct task_struct *p, u64 enq_flags)
 
 void BPF_STRUCT_OPS(simple_dispatch, s32 cpu, struct task_struct *prev)
 {
+	/*scx_bpf_dsq_move_to_local(SHARED_DSQ);*/
+	static u64 last_cleanup = 0;
+	u64 now = bpf_ktime_get_ns();
+	u32 evicted = 0;
+	
+	if (now - last_cleanup > 1000000000ULL) {
+		int ret = scx_bpf_map_scan_timeout(&tasks, 
+						100000ULL, 
+						5000000000ULL, &evicted);
+		if (ret == 0 && evicted > 0) {
+			bpf_printk("Map cleanup: evicted %u stale entries", evicted);
+		} else if (ret == -ETIMEDOUT) {
+			bpf_printk("Map cleanup: timeout after evicted %u entries", evicted);
+		}
+		last_cleanup = now;
+
+	}
+
 	scx_bpf_dsq_move_to_local(SHARED_DSQ);
+
 }
 
 void BPF_STRUCT_OPS(simple_running, struct task_struct *p)
 {
+	u32 pid = p->pid;
+	struct task_info *info = bpf_map_lookup_elem(&tasks, &pid);
+	if (info)
+		info->last_start = bpf_ktime_get_ns();
 	if (fifo_sched)
 		return;
 

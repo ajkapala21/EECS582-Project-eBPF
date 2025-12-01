@@ -1,0 +1,10 @@
+/home/nikhil-gunaratnam/EECS582-Project-eBPF/target/release/deps/thiserror-1d27854e748ce7ca.d: /home/nikhil-gunaratnam/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.12/src/lib.rs /home/nikhil-gunaratnam/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.12/src/aserror.rs /home/nikhil-gunaratnam/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.12/src/display.rs /home/nikhil-gunaratnam/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.12/src/var.rs
+
+/home/nikhil-gunaratnam/EECS582-Project-eBPF/target/release/deps/libthiserror-1d27854e748ce7ca.rlib: /home/nikhil-gunaratnam/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.12/src/lib.rs /home/nikhil-gunaratnam/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.12/src/aserror.rs /home/nikhil-gunaratnam/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.12/src/display.rs /home/nikhil-gunaratnam/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.12/src/var.rs
+
+/home/nikhil-gunaratnam/EECS582-Project-eBPF/target/release/deps/libthiserror-1d27854e748ce7ca.rmeta: /home/nikhil-gunaratnam/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.12/src/lib.rs /home/nikhil-gunaratnam/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.12/src/aserror.rs /home/nikhil-gunaratnam/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.12/src/display.rs /home/nikhil-gunaratnam/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.12/src/var.rs
+
+/home/nikhil-gunaratnam/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.12/src/lib.rs:
+/home/nikhil-gunaratnam/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.12/src/aserror.rs:
+/home/nikhil-gunaratnam/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.12/src/display.rs:
+/home/nikhil-gunaratnam/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.12/src/var.rs:

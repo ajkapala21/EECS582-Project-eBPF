@@ -108,7 +108,7 @@ struct cgroup *scx_bpf_task_cgroup(struct task_struct *p) __ksym __weak;
 u64 scx_bpf_now(void) __ksym __weak;
 void scx_bpf_events(struct scx_event_stats *events, size_t events__sz) __ksym __weak;
 u64 scx_bpf_hello_world(void) __ksym;
-
+int scx_bpf_map_scan_timeout(struct bpf_map *map, u64 timeout_ns, u64 max_age_ns, u32 *evicted) __ksym;
 /*
  * Use the following as @it__iter when calling scx_bpf_dsq_move[_vtime]() from
  * within bpf_for_each() loops.
