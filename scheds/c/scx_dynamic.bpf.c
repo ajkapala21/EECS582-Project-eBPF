@@ -10,9 +10,9 @@ char _license[] SEC("license") = "GPL";
 #define MAX_TASKS 65536
 #define SAMPLE_WINDOW_MIN 500
 #define SAMPLE_WINDOW_MAX 50000
-#define SAMPLE_WINDOW_NS 500
 #define SAMPLE_COUNT 500
 #define TIME_RATIO 100
+#define ALPHA 90
 
 static u64 vtime_now;
 static u32 map_size = 0;
@@ -37,7 +37,7 @@ struct task_ctx {
 };
 
 private(dynamic) struct bpf_spin_lock map_lock;
-private(dynamic) struct bpf_spin_lock time_lock;
+private(dynamic2) struct bpf_spin_lock time_lock;
 
 struct {
     __uint(type, BPF_MAP_TYPE_ARRAY);
@@ -138,7 +138,7 @@ void BPF_STRUCT_OPS(dynamic_dispatch, s32 cpu, struct task_struct *prev)
 	// my custom rand logic to choose task
     struct random_sample_ctx s = {
         .start_ns = bpf_ktime_get_ns(),
-        .window_ns = SAMPLE_WINDOW_NS,
+        .window_ns = sampling_bound_ns,
         .best_vtime = (u64)-1,
         .best_key = -1,
     };
@@ -239,8 +239,7 @@ void BPF_STRUCT_OPS(dynamic_stopping, struct task_struct *p, bool runnable)
 {
 	p->scx.dsq_vtime += (SCX_SLICE_DFL - p->scx.slice) * 100 / p->scx.weight;
     bpf_spin_lock(&time_lock);
-    u64 a = 85;
-    avg_slice_used = (avg_slice_used * a + (SCX_SLICE_DFL - p->scx.slice) * (100 - a)) / 100;
+    avg_slice_used = (avg_slice_used * ALPHA + (SCX_SLICE_DFL - p->scx.slice) * (100 - ALPHA)) / 100;
     sampling_bound_ns = avg_slice_used / TIME_RATIO;
     if(sampling_bound_ns < SAMPLE_WINDOW_MIN){
         sampling_bound_ns = SAMPLE_WINDOW_MIN;
@@ -248,8 +247,8 @@ void BPF_STRUCT_OPS(dynamic_stopping, struct task_struct *p, bool runnable)
     if(sampling_bound_ns > SAMPLE_WINDOW_MAX){
         sampling_bound_ns = SAMPLE_WINDOW_MAX;
     }
-    bpf_printk("Time bound: %llu\n", sampling_bound_ns);
     bpf_spin_unlock(&time_lock);
+    //bpf_printk("Time bound: %llu\n", sampling_bound_ns);
 }
 
 void BPF_STRUCT_OPS(dynamic_enable, struct task_struct *p)
