@@ -84,25 +84,60 @@ for iter in $(seq 1 $ITERATIONS); do
     echo "    Starting scheduler: $CONTROL_BIN"
     sudo "$CONTROL_BIN" >/tmp/scheduler_control.log 2>&1 &
     SCHED_PID=$!
-    sleep 3  # Give scheduler more time to load
     
-    # Verify scheduler loaded (check for scheduler name without scx_ prefix)
+    # Wait for scheduler to load and verify it's actually running
     SCHED_NAME=$(echo "$SCHEDULER" | sed 's/^scx_//')
-    CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "")
-    if [ -z "$CURRENT_SCHED" ] || ! echo "$CURRENT_SCHED" | grep -qE "$SCHED_NAME|$SCHEDULER|simple"; then
-        echo "WARNING: Scheduler may not have loaded properly."
-        echo "    Expected: $SCHED_NAME or $SCHEDULER"
-        echo "    Current: ${CURRENT_SCHED:-none}"
-        echo "    Check /tmp/scheduler_control.log for errors"
-        # Check if process is still running
+    MAX_WAIT=10
+    WAITED=0
+    LOADED=false
+    
+    while [ $WAITED -lt $MAX_WAIT ]; do
+        sleep 1
+        WAITED=$((WAITED + 1))
+        
+        # Check if process died
         if ! kill -0 $SCHED_PID 2>/dev/null; then
-            echo "    ERROR: Scheduler process died. Log:"
-            tail -20 /tmp/scheduler_control.log
+            echo "    ERROR: Scheduler process died after ${WAITED}s. Log:"
+            tail -30 /tmp/scheduler_control.log
             exit 1
         fi
-        # Continue anyway - might still work
+        
+        # Check if scheduler loaded
+        if [ -f /sys/kernel/sched_ext/current ]; then
+            CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "")
+            if [ -n "$CURRENT_SCHED" ] && [ "$CURRENT_SCHED" != "none" ]; then
+                if echo "$CURRENT_SCHED" | grep -qE "$SCHED_NAME|$SCHEDULER|simple"; then
+                    echo "    Scheduler loaded: $CURRENT_SCHED (after ${WAITED}s)"
+                    LOADED=true
+                    break
+                fi
+            fi
+        fi
+    done
+    
+    if [ "$LOADED" = false ]; then
+        echo "WARNING: Scheduler may not have loaded properly after ${MAX_WAIT}s."
+        echo "    Expected: $SCHED_NAME or $SCHEDULER"
+        CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "none")
+        echo "    Current: $CURRENT_SCHED"
+        echo "    Check /tmp/scheduler_control.log for errors:"
+        tail -30 /tmp/scheduler_control.log | head -20
+        echo "    Process still running: $(kill -0 $SCHED_PID 2>/dev/null && echo 'yes' || echo 'no')"
+        # Don't exit - continue to see if it works anyway
+    fi
+    
+    # Verify scheduler is still loaded before starting metrics
+    if [ -f /sys/kernel/sched_ext/current ]; then
+        CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "")
+        if [ -z "$CURRENT_SCHED" ] || [ "$CURRENT_SCHED" = "none" ]; then
+            echo "    ERROR: Scheduler not loaded before starting metrics collection"
+            echo "    Current: ${CURRENT_SCHED:-none}"
+            sudo kill $SCHED_PID 2>/dev/null || true
+            exit 1
+        fi
     else
-        echo "    Scheduler loaded: $CURRENT_SCHED"
+        echo "    WARNING: /sys/kernel/sched_ext/current doesn't exist"
+        echo "    Scheduler may not be loaded, but continuing anyway..."
     fi
     
     # Start metrics collection
@@ -161,25 +196,60 @@ for iter in $(seq 1 $ITERATIONS); do
     echo "    Starting scheduler: $TEST_BIN"
     sudo "$TEST_BIN" >/tmp/scheduler_test.log 2>&1 &
     SCHED_PID=$!
-    sleep 3  # Give scheduler more time to load
     
-    # Verify scheduler loaded (check for scheduler name without scx_ prefix)
+    # Wait for scheduler to load and verify it's actually running
     SCHED_NAME=$(echo "$SCHEDULER" | sed 's/^scx_//')
-    CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "")
-    if [ -z "$CURRENT_SCHED" ] || ! echo "$CURRENT_SCHED" | grep -qE "$SCHED_NAME|$SCHEDULER|simple"; then
-        echo "WARNING: Scheduler may not have loaded properly."
-        echo "    Expected: $SCHED_NAME or $SCHEDULER"
-        echo "    Current: ${CURRENT_SCHED:-none}"
-        echo "    Check /tmp/scheduler_test.log for errors"
-        # Check if process is still running
+    MAX_WAIT=10
+    WAITED=0
+    LOADED=false
+    
+    while [ $WAITED -lt $MAX_WAIT ]; do
+        sleep 1
+        WAITED=$((WAITED + 1))
+        
+        # Check if process died
         if ! kill -0 $SCHED_PID 2>/dev/null; then
-            echo "    ERROR: Scheduler process died. Log:"
-            tail -20 /tmp/scheduler_test.log
+            echo "    ERROR: Scheduler process died after ${WAITED}s. Log:"
+            tail -30 /tmp/scheduler_test.log
             exit 1
         fi
-        # Continue anyway - might still work
+        
+        # Check if scheduler loaded
+        if [ -f /sys/kernel/sched_ext/current ]; then
+            CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "")
+            if [ -n "$CURRENT_SCHED" ] && [ "$CURRENT_SCHED" != "none" ]; then
+                if echo "$CURRENT_SCHED" | grep -qE "$SCHED_NAME|$SCHEDULER|simple"; then
+                    echo "    Scheduler loaded: $CURRENT_SCHED (after ${WAITED}s)"
+                    LOADED=true
+                    break
+                fi
+            fi
+        fi
+    done
+    
+    if [ "$LOADED" = false ]; then
+        echo "WARNING: Scheduler may not have loaded properly after ${MAX_WAIT}s."
+        echo "    Expected: $SCHED_NAME or $SCHEDULER"
+        CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "none")
+        echo "    Current: $CURRENT_SCHED"
+        echo "    Check /tmp/scheduler_test.log for errors:"
+        tail -30 /tmp/scheduler_test.log | head -20
+        echo "    Process still running: $(kill -0 $SCHED_PID 2>/dev/null && echo 'yes' || echo 'no')"
+        # Don't exit - continue to see if it works anyway
+    fi
+    
+    # Verify scheduler is still loaded before starting metrics
+    if [ -f /sys/kernel/sched_ext/current ]; then
+        CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "")
+        if [ -z "$CURRENT_SCHED" ] || [ "$CURRENT_SCHED" = "none" ]; then
+            echo "    ERROR: Scheduler not loaded before starting metrics collection"
+            echo "    Current: ${CURRENT_SCHED:-none}"
+            sudo kill $SCHED_PID 2>/dev/null || true
+            exit 1
+        fi
     else
-        echo "    Scheduler loaded: $CURRENT_SCHED"
+        echo "    WARNING: /sys/kernel/sched_ext/current doesn't exist"
+        echo "    Scheduler may not be loaded, but continuing anyway..."
     fi
     
     # Start metrics collection
