@@ -1,0 +1,196 @@
+#!/bin/bash
+# Main experiment runner
+# Usage: run_experiment.sh <scheduler> <workload> <duration> [iterations]
+
+set -e
+
+SCHEDULER=$1
+WORKLOAD=$2
+DURATION=$3
+ITERATIONS=${4:-3}
+
+if [ -z "$SCHEDULER" ] || [ -z "$WORKLOAD" ] || [ -z "$DURATION" ]; then
+    echo "Usage: $0 <scheduler> <workload> <duration> [iterations]" >&2
+    echo "  scheduler: scx_simple, scx_cfsish, scx_flatcg, scx_nest" >&2
+    echo "  workload: stress-ng, hackbench, custom-churn" >&2
+    echo "  duration: test duration in seconds" >&2
+    exit 1
+fi
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASE_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+source "$BASE_DIR/config/test_config.sh"
+
+RESULTS_DIR="$BASE_DIR/results/$SCHEDULER"
+mkdir -p "$RESULTS_DIR/control" "$RESULTS_DIR/test"
+
+MAP_NAME=${MAP_NAMES[$SCHEDULER]}
+if [ -z "$MAP_NAME" ]; then
+    echo "ERROR: Unknown scheduler $SCHEDULER" >&2
+    exit 1
+fi
+
+# Build schedulers
+echo "Building schedulers..."
+"$SCRIPT_DIR/build_schedulers.sh" "$SCHEDULER" || exit 1
+
+SCHEDULER_BIN_DIR="$BASE_DIR/../scheds/c/build/scheds/c"
+CONTROL_BIN="$SCHEDULER_BIN_DIR/${SCHEDULER}_control"
+TEST_BIN="$SCHEDULER_BIN_DIR/${SCHEDULER}_test"
+
+if [ ! -f "$CONTROL_BIN" ] || [ ! -f "$TEST_BIN" ]; then
+    echo "ERROR: Scheduler binaries not found" >&2
+    exit 1
+fi
+
+# Cleanup function
+cleanup() {
+    echo "Cleaning up..."
+    sudo pkill -f "${SCHEDULER}_control" 2>/dev/null || true
+    sudo pkill -f "${SCHEDULER}_test" 2>/dev/null || true
+    sudo pkill -f stress-ng 2>/dev/null || true
+    sudo pkill -f hackbench 2>/dev/null || true
+    sudo pkill -f collect_metrics 2>/dev/null || true
+}
+
+trap cleanup EXIT
+
+# Setup: clear dmesg, drop caches, set CPU governor
+echo "Setting up test environment..."
+sudo dmesg -C
+echo 3 | sudo tee /proc/sys/vm/drop_caches >/dev/null
+echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor >/dev/null 2>&1 || true
+
+for iter in $(seq 1 $ITERATIONS); do
+    echo ""
+    echo "=========================================="
+    echo "Iteration $iter of $ITERATIONS"
+    echo "=========================================="
+    
+    # CONTROL RUN
+    echo ""
+    echo "Running CONTROL version..."
+    METRICS_FILE="$RESULTS_DIR/control/${WORKLOAD}_run${iter}.csv"
+    DMESG_FILE="$RESULTS_DIR/control/${WORKLOAD}_run${iter}_dmesg.log"
+    
+    # Start scheduler
+    sudo "$CONTROL_BIN" >/tmp/scheduler_control.log 2>&1 &
+    SCHED_PID=$!
+    sleep 2
+    
+    # Verify scheduler loaded (check for scheduler name without scx_ prefix)
+    SCHED_NAME=$(echo "$SCHEDULER" | sed 's/^scx_//')
+    sleep 1
+    if ! grep -q "$SCHED_NAME\|$SCHEDULER" /sys/kernel/sched_ext/current 2>/dev/null; then
+        echo "WARNING: Scheduler may not have loaded. Check /tmp/scheduler_control.log"
+        echo "Current scheduler: $(cat /sys/kernel/sched_ext/current 2>/dev/null || echo 'none')"
+        # Don't exit - scheduler might still be loading
+    fi
+    
+    # Start metrics collection
+    "$SCRIPT_DIR/collect_metrics.sh" "$SCHEDULER" "$MAP_NAME" "$METRICS_FILE" "$DURATION" &
+    METRICS_PID=$!
+    
+    # Run workload
+    case "$WORKLOAD" in
+        stress-ng)
+            WORKLOAD_PID=$("$SCRIPT_DIR/workloads/stress_ng_workload.sh" "$STRESS_NG_PROCESSES" "$DURATION")
+            ;;
+        hackbench)
+            "$SCRIPT_DIR/workloads/hackbench_workload.sh" "$HACKBENCH_PROCESSES" "$HACKBENCH_LOOPS" &
+            WORKLOAD_PID=$!
+            ;;
+        custom-churn)
+            "$SCRIPT_DIR/workloads/custom_churn_workload.sh" "$CUSTOM_CHURN_SPAWNS" "$DURATION" &
+            WORKLOAD_PID=$!
+            ;;
+        *)
+            echo "ERROR: Unknown workload $WORKLOAD" >&2
+            exit 1
+            ;;
+    esac
+    
+    # Wait for workload
+    sleep "$DURATION"
+    wait $WORKLOAD_PID 2>/dev/null || true
+    
+    # Stop scheduler and metrics
+    sudo kill $SCHED_PID 2>/dev/null || true
+    kill $METRICS_PID 2>/dev/null || true
+    wait $SCHED_PID 2>/dev/null || true
+    wait $METRICS_PID 2>/dev/null || true
+    
+    # Save dmesg
+    sudo dmesg > "$DMESG_FILE"
+    sudo dmesg -C
+    
+    echo "Control run $iter completed. Results: $METRICS_FILE"
+    
+    # TEST RUN
+    echo ""
+    echo "Running TEST version..."
+    METRICS_FILE="$RESULTS_DIR/test/${WORKLOAD}_run${iter}.csv"
+    DMESG_FILE="$RESULTS_DIR/test/${WORKLOAD}_run${iter}_dmesg.log"
+    
+    # Start scheduler
+    sudo "$TEST_BIN" >/tmp/scheduler_test.log 2>&1 &
+    SCHED_PID=$!
+    sleep 2
+    
+    # Verify scheduler loaded (check for scheduler name without scx_ prefix)
+    SCHED_NAME=$(echo "$SCHEDULER" | sed 's/^scx_//')
+    sleep 1
+    if ! grep -q "$SCHED_NAME\|$SCHEDULER" /sys/kernel/sched_ext/current 2>/dev/null; then
+        echo "WARNING: Scheduler may not have loaded. Check /tmp/scheduler_test.log"
+        echo "Current scheduler: $(cat /sys/kernel/sched_ext/current 2>/dev/null || echo 'none')"
+        # Don't exit - scheduler might still be loading
+    fi
+    
+    # Start metrics collection
+    "$SCRIPT_DIR/collect_metrics.sh" "$SCHEDULER" "$MAP_NAME" "$METRICS_FILE" "$DURATION" &
+    METRICS_PID=$!
+    
+    # Run workload
+    case "$WORKLOAD" in
+        stress-ng)
+            WORKLOAD_PID=$("$SCRIPT_DIR/workloads/stress_ng_workload.sh" "$STRESS_NG_PROCESSES" "$DURATION")
+            ;;
+        hackbench)
+            "$SCRIPT_DIR/workloads/hackbench_workload.sh" "$HACKBENCH_PROCESSES" "$HACKBENCH_LOOPS" &
+            WORKLOAD_PID=$!
+            ;;
+        custom-churn)
+            "$SCRIPT_DIR/workloads/custom_churn_workload.sh" "$CUSTOM_CHURN_SPAWNS" "$DURATION" &
+            WORKLOAD_PID=$!
+            ;;
+    esac
+    
+    # Wait for workload
+    sleep "$DURATION"
+    wait $WORKLOAD_PID 2>/dev/null || true
+    
+    # Stop scheduler and metrics
+    sudo kill $SCHED_PID 2>/dev/null || true
+    kill $METRICS_PID 2>/dev/null || true
+    wait $SCHED_PID 2>/dev/null || true
+    wait $METRICS_PID 2>/dev/null || true
+    
+    # Save dmesg
+    sudo dmesg > "$DMESG_FILE"
+    sudo dmesg -C
+    
+    echo "Test run $iter completed. Results: $METRICS_FILE"
+    
+    # Brief pause between iterations
+    sleep 2
+done
+
+echo ""
+echo "=========================================="
+echo "All iterations completed!"
+echo "Results saved in: $RESULTS_DIR"
+echo "=========================================="
+
+# Generate summary
+"$SCRIPT_DIR/aggregate_results.sh" "$SCHEDULER" "$WORKLOAD"
+
