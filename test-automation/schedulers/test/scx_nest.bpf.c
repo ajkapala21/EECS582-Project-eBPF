@@ -407,22 +407,38 @@ void BPF_STRUCT_OPS(nest_enqueue, struct task_struct *p, u64 enq_flags)
 {
 	struct task_ctx *tctx;
 	u64 vtime = p->scx.dsq_vtime;
+	u32 pid = p->pid;
+
+	/* Debug: log occasionally to verify enqueue is being called */
+	if (pid % 50 == 0) {
+		bpf_printk("nest_enqueue: Called for task pid=%u", pid);
+	}
 
 	/* Try to get existing task storage, or create it if it doesn't exist */
 	tctx = bpf_task_storage_get(&task_ctx_stor, p, 0,
 				    BPF_LOCAL_STORAGE_GET_F_CREATE);
 	if (!tctx) {
 		/* If creation failed, continue without task tracking */
+		if (pid % 50 == 0) {
+			bpf_printk("nest_enqueue: Failed to get/create task ctx for pid=%u", pid);
+		}
 		goto skip_task_tracking;
 	}
 
 	/* TEST VERSION: Track tasks in map for cleanup */
-	u32 pid = p->pid;
 	struct task_info info = {};
 	info.vruntime = p->scx.dsq_vtime;
 	info.weight = p->scx.weight;
 	info.last_start = bpf_ktime_get_ns();
-	bpf_map_update_elem(&tasks, &pid, &info, BPF_ANY);
+	int ret = bpf_map_update_elem(&tasks, &pid, &info, BPF_ANY);
+	if (ret == 0) {
+		/* Debug: log occasionally to verify map updates */
+		if (pid % 50 == 0) {
+			bpf_printk("nest_enqueue: Added task pid=%u to map", pid);
+		}
+	} else {
+		bpf_printk("nest_enqueue: Failed to add task pid=%u to map, ret=%d", pid, ret);
+	}
 
 skip_task_tracking:
 	/*
@@ -444,6 +460,7 @@ void BPF_STRUCT_OPS(nest_dispatch, s32 cpu, struct task_struct *prev)
 	u32 evicted = 0;
 	
 	if (cleanup_now - last_cleanup > 1000000000ULL) {
+		bpf_printk("Map cleanup: Starting cleanup scan");
 		int ret = scx_bpf_map_scan_timeout(&tasks, 
 						100000ULL, 
 						5000000000ULL, &evicted);
@@ -451,6 +468,10 @@ void BPF_STRUCT_OPS(nest_dispatch, s32 cpu, struct task_struct *prev)
 			bpf_printk("Map cleanup: evicted %u stale entries", evicted);
 		} else if (ret == -ETIMEDOUT) {
 			bpf_printk("Map cleanup: timeout after evicted %u entries", evicted);
+		} else if (ret == 0 && evicted == 0) {
+			bpf_printk("Map cleanup: scan completed, no entries evicted (ret=%d)", ret);
+		} else {
+			bpf_printk("Map cleanup: scan failed with ret=%d, evicted=%u", ret, evicted);
 		}
 		last_cleanup = cleanup_now;
 	}
@@ -521,8 +542,18 @@ void BPF_STRUCT_OPS(nest_running, struct task_struct *p)
 	/* TEST VERSION: Update last_start timestamp */
 	u32 pid = p->pid;
 	struct task_info *info = bpf_map_lookup_elem(&tasks, &pid);
-	if (info)
+	if (info) {
 		info->last_start = bpf_ktime_get_ns();
+		/* Debug: log occasionally (every 100th task to avoid spam) */
+		if (pid % 100 == 0) {
+			bpf_printk("nest_running: Updated task pid=%u last_start", pid);
+		}
+	} else {
+		/* Debug: log if task not found in map */
+		if (pid % 100 == 0) {
+			bpf_printk("nest_running: Task pid=%u not found in map", pid);
+		}
+	}
 
 	/*
 	 * Global vtime always progresses forward as tasks start executing. The
