@@ -1,0 +1,15 @@
+========================================
+Summary: scx_simple - 
+Generated: Mon Dec  1 18:45:04 EST 2025
+========================================
+
+CONTROL VERSION:
+  Files found: 3
+  Max map entries: 0
+  Avg map entries: 0
+
+TEST VERSION:
+  Files found: 3
+  Max map entries: 0
+  Avg map entries: 0
+  Total evictions: 0

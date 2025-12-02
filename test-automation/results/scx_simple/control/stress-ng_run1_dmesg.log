@@ -1,0 +1,3 @@
+[27000.794693] tee (651758): drop_caches: 3
+[27001.168380] sched_ext: BPF scheduler "simple" enabled
+[27071.675050] sched_ext: BPF scheduler "simple" disabled (unregistered from user space)

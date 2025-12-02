@@ -1,0 +1,2 @@
+[27144.602821] sched_ext: BPF scheduler "simple" enabled
+[27215.065511] sched_ext: BPF scheduler "simple" disabled (unregistered from user space)

@@ -1,0 +1,2 @@
+[29598.011839] sched_ext: BPF scheduler "nest" enabled
+[29667.898103] sched_ext: BPF scheduler "nest" disabled (unregistered from user space)
