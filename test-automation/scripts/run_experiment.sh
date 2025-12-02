@@ -122,7 +122,19 @@ for iter in $(seq 1 $ITERATIONS); do
         fi
         
         # Check if scheduler loaded
-        if [ -f /sys/kernel/sched_ext/current ]; then
+        # Try /sys/kernel/sched_ext/state first (newer kernels)
+        if [ -f /sys/kernel/sched_ext/state ]; then
+            SCHED_STATE=$(cat /sys/kernel/sched_ext/state 2>/dev/null || echo "disabled")
+            if [ "$SCHED_STATE" != "disabled" ] && [ -n "$SCHED_STATE" ]; then
+                # State might be "enabled" or contain scheduler name
+                if echo "$SCHED_STATE" | grep -qE "$SCHED_NAME|$SCHEDULER|enabled|simple"; then
+                    echo "    Scheduler loaded: state=$SCHED_STATE (after ${WAITED}s)"
+                    LOADED=true
+                    break
+                fi
+            fi
+        # Fallback to /sys/kernel/sched_ext/current (older kernels)
+        elif [ -f /sys/kernel/sched_ext/current ]; then
             CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "")
             if [ -n "$CURRENT_SCHED" ] && [ "$CURRENT_SCHED" != "none" ]; then
                 if echo "$CURRENT_SCHED" | grep -qE "$SCHED_NAME|$SCHEDULER|simple"; then
@@ -143,12 +155,24 @@ for iter in $(seq 1 $ITERATIONS); do
             echo "    ERROR: /sys/kernel/sched_ext directory doesn't exist!"
             echo "    This means sched_ext is not enabled in the kernel."
             echo "    Please ensure CONFIG_SCHED_CLASS_EXT=y is set."
-        elif [ ! -f /sys/kernel/sched_ext/current ]; then
-            echo "    ERROR: /sys/kernel/sched_ext/current file doesn't exist!"
-            CURRENT_SCHED="none"
         else
-            CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "none")
-            echo "    Current: $CURRENT_SCHED"
+            # Check state file (newer kernels)
+            if [ -f /sys/kernel/sched_ext/state ]; then
+                SCHED_STATE=$(cat /sys/kernel/sched_ext/state 2>/dev/null || echo "unknown")
+                echo "    State: $SCHED_STATE"
+                if [ "$SCHED_STATE" = "disabled" ]; then
+                    CURRENT_SCHED="none"
+                else
+                    CURRENT_SCHED="$SCHED_STATE"
+                fi
+            # Fallback to current file (older kernels)
+            elif [ -f /sys/kernel/sched_ext/current ]; then
+                CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "none")
+                echo "    Current: $CURRENT_SCHED"
+            else
+                echo "    WARNING: Neither state nor current file found in /sys/kernel/sched_ext/"
+                CURRENT_SCHED="none"
+            fi
         fi
         
         echo ""
@@ -168,11 +192,24 @@ for iter in $(seq 1 $ITERATIONS); do
         echo "    Recent BPF/dmesg errors:"
         dmesg | tail -20 | grep -iE "bpf|sched_ext|verifier|error" || echo "    (no recent BPF errors in dmesg)"
         
+        # Try to check if map exists
+        echo ""
+        echo "    Checking for BPF maps:"
+        "$SCRIPT_DIR/check_map.sh" "$SCHEDULER" "${MAP_NAME}" 2>&1 | head -30 || echo "    (could not check maps)"
+        
         # Don't exit - continue to see if it works anyway
     fi
     
     # Verify scheduler is still loaded before starting metrics
-    if [ -f /sys/kernel/sched_ext/current ]; then
+    if [ -f /sys/kernel/sched_ext/state ]; then
+        SCHED_STATE=$(cat /sys/kernel/sched_ext/state 2>/dev/null || echo "disabled")
+        if [ "$SCHED_STATE" = "disabled" ] || [ -z "$SCHED_STATE" ]; then
+            echo "    ERROR: Scheduler not loaded before starting metrics collection"
+            echo "    State: ${SCHED_STATE:-disabled}"
+            sudo kill $SCHED_PID 2>/dev/null || true
+            exit 1
+        fi
+    elif [ -f /sys/kernel/sched_ext/current ]; then
         CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "")
         if [ -z "$CURRENT_SCHED" ] || [ "$CURRENT_SCHED" = "none" ]; then
             echo "    ERROR: Scheduler not loaded before starting metrics collection"
@@ -181,7 +218,7 @@ for iter in $(seq 1 $ITERATIONS); do
             exit 1
         fi
     else
-        echo "    WARNING: /sys/kernel/sched_ext/current doesn't exist"
+        echo "    WARNING: /sys/kernel/sched_ext/state and /sys/kernel/sched_ext/current don't exist"
         echo "    Scheduler may not be loaded, but continuing anyway..."
     fi
     
@@ -279,7 +316,19 @@ for iter in $(seq 1 $ITERATIONS); do
         fi
         
         # Check if scheduler loaded
-        if [ -f /sys/kernel/sched_ext/current ]; then
+        # Try /sys/kernel/sched_ext/state first (newer kernels)
+        if [ -f /sys/kernel/sched_ext/state ]; then
+            SCHED_STATE=$(cat /sys/kernel/sched_ext/state 2>/dev/null || echo "disabled")
+            if [ "$SCHED_STATE" != "disabled" ] && [ -n "$SCHED_STATE" ]; then
+                # State might be "enabled" or contain scheduler name
+                if echo "$SCHED_STATE" | grep -qE "$SCHED_NAME|$SCHEDULER|enabled|simple"; then
+                    echo "    Scheduler loaded: state=$SCHED_STATE (after ${WAITED}s)"
+                    LOADED=true
+                    break
+                fi
+            fi
+        # Fallback to /sys/kernel/sched_ext/current (older kernels)
+        elif [ -f /sys/kernel/sched_ext/current ]; then
             CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "")
             if [ -n "$CURRENT_SCHED" ] && [ "$CURRENT_SCHED" != "none" ]; then
                 if echo "$CURRENT_SCHED" | grep -qE "$SCHED_NAME|$SCHEDULER|simple"; then
@@ -300,12 +349,24 @@ for iter in $(seq 1 $ITERATIONS); do
             echo "    ERROR: /sys/kernel/sched_ext directory doesn't exist!"
             echo "    This means sched_ext is not enabled in the kernel."
             echo "    Please ensure CONFIG_SCHED_CLASS_EXT=y is set."
-        elif [ ! -f /sys/kernel/sched_ext/current ]; then
-            echo "    ERROR: /sys/kernel/sched_ext/current file doesn't exist!"
-            CURRENT_SCHED="none"
         else
-            CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "none")
-            echo "    Current: $CURRENT_SCHED"
+            # Check state file (newer kernels)
+            if [ -f /sys/kernel/sched_ext/state ]; then
+                SCHED_STATE=$(cat /sys/kernel/sched_ext/state 2>/dev/null || echo "unknown")
+                echo "    State: $SCHED_STATE"
+                if [ "$SCHED_STATE" = "disabled" ]; then
+                    CURRENT_SCHED="none"
+                else
+                    CURRENT_SCHED="$SCHED_STATE"
+                fi
+            # Fallback to current file (older kernels)
+            elif [ -f /sys/kernel/sched_ext/current ]; then
+                CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "none")
+                echo "    Current: $CURRENT_SCHED"
+            else
+                echo "    WARNING: Neither state nor current file found in /sys/kernel/sched_ext/"
+                CURRENT_SCHED="none"
+            fi
         fi
         
         echo ""
@@ -325,11 +386,24 @@ for iter in $(seq 1 $ITERATIONS); do
         echo "    Recent BPF/dmesg errors:"
         dmesg | tail -20 | grep -iE "bpf|sched_ext|verifier|error" || echo "    (no recent BPF errors in dmesg)"
         
+        # Try to check if map exists
+        echo ""
+        echo "    Checking for BPF maps:"
+        "$SCRIPT_DIR/check_map.sh" "$SCHEDULER" "${MAP_NAME}" 2>&1 | head -30 || echo "    (could not check maps)"
+        
         # Don't exit - continue to see if it works anyway
     fi
     
     # Verify scheduler is still loaded before starting metrics
-    if [ -f /sys/kernel/sched_ext/current ]; then
+    if [ -f /sys/kernel/sched_ext/state ]; then
+        SCHED_STATE=$(cat /sys/kernel/sched_ext/state 2>/dev/null || echo "disabled")
+        if [ "$SCHED_STATE" = "disabled" ] || [ -z "$SCHED_STATE" ]; then
+            echo "    ERROR: Scheduler not loaded before starting metrics collection"
+            echo "    State: ${SCHED_STATE:-disabled}"
+            sudo kill $SCHED_PID 2>/dev/null || true
+            exit 1
+        fi
+    elif [ -f /sys/kernel/sched_ext/current ]; then
         CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "")
         if [ -z "$CURRENT_SCHED" ] || [ "$CURRENT_SCHED" = "none" ]; then
             echo "    ERROR: Scheduler not loaded before starting metrics collection"
@@ -338,7 +412,7 @@ for iter in $(seq 1 $ITERATIONS); do
             exit 1
         fi
     else
-        echo "    WARNING: /sys/kernel/sched_ext/current doesn't exist"
+        echo "    WARNING: /sys/kernel/sched_ext/state and /sys/kernel/sched_ext/current don't exist"
         echo "    Scheduler may not be loaded, but continuing anyway..."
     fi
     
