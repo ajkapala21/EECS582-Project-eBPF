@@ -1,0 +1,101 @@
+Building schedulers...
+Build environment check:
+  bpftool: /usr/sbin/bpftool
+  clang: /usr/bin/clang
+
+Building scx_nest...
+  Building control version...
+    Cleaning previous build artifacts...
+    Building lib dependency...
+    Running make scx_nest...
+    Control version built successfully: build/scheds/c/scx_nest_control
+  Building test version...
+    Building lib dependency...
+    Running make scx_nest...
+    Test version built successfully: build/scheds/c/scx_nest_test
+All schedulers built successfully!
+Setting up test environment...
+
+==========================================
+Iteration 1 of 3
+==========================================
+
+Running CONTROL version...
+    Starting scheduler: /home/nikhil-gunaratnam/EECS582-Project-eBPF/test-automation/../build/scheds/c/scx_nest_control
+    Scheduler loaded: state=enabled (after 1s)
+[13:03:40] Starting hackbench: -p 10 -l 100
+[13:03:40] Hackbench completed in .476037257s
+DURATION:.476037257
+Control run 1 completed. Results: /home/nikhil-gunaratnam/EECS582-Project-eBPF/test-automation/results/scx_nest/control/hackbench_run1.csv
+
+Running TEST version...
+    Starting scheduler: /home/nikhil-gunaratnam/EECS582-Project-eBPF/test-automation/../build/scheds/c/scx_nest_test
+    Scheduler loaded: state=enabled (after 1s)
+[13:04:41] Starting hackbench: -p 10 -l 100
+[13:04:42] Hackbench completed in .464539262s
+DURATION:.464539262
+Test run 1 completed. Results: /home/nikhil-gunaratnam/EECS582-Project-eBPF/test-automation/results/scx_nest/test/hackbench_run1.csv
+
+==========================================
+Iteration 2 of 3
+==========================================
+
+Running CONTROL version...
+    Starting scheduler: /home/nikhil-gunaratnam/EECS582-Project-eBPF/test-automation/../build/scheds/c/scx_nest_control
+    Scheduler loaded: state=enabled (after 1s)
+[13:05:45] Starting hackbench: -p 10 -l 100
+[13:05:46] Hackbench completed in .420246898s
+DURATION:.420246898
+Control run 2 completed. Results: /home/nikhil-gunaratnam/EECS582-Project-eBPF/test-automation/results/scx_nest/control/hackbench_run2.csv
+
+Running TEST version...
+    Starting scheduler: /home/nikhil-gunaratnam/EECS582-Project-eBPF/test-automation/../build/scheds/c/scx_nest_test
+    Scheduler loaded: state=enabled (after 1s)
+[13:06:47] Starting hackbench: -p 10 -l 100
+[13:06:47] Hackbench completed in .427437363s
+DURATION:.427437363
+Test run 2 completed. Results: /home/nikhil-gunaratnam/EECS582-Project-eBPF/test-automation/results/scx_nest/test/hackbench_run2.csv
+
+==========================================
+Iteration 3 of 3
+==========================================
+
+Running CONTROL version...
+    Starting scheduler: /home/nikhil-gunaratnam/EECS582-Project-eBPF/test-automation/../build/scheds/c/scx_nest_control
+    Scheduler loaded: state=enabled (after 1s)
+[13:07:51] Starting hackbench: -p 10 -l 100
+[13:07:51] Hackbench completed in .402024458s
+DURATION:.402024458
+Control run 3 completed. Results: /home/nikhil-gunaratnam/EECS582-Project-eBPF/test-automation/results/scx_nest/control/hackbench_run3.csv
+
+Running TEST version...
+    Starting scheduler: /home/nikhil-gunaratnam/EECS582-Project-eBPF/test-automation/../build/scheds/c/scx_nest_test
+    Scheduler loaded: state=enabled (after 1s)
+[13:08:53] Starting hackbench: -p 10 -l 100
+[13:08:53] Hackbench completed in .409934818s
+DURATION:.409934818
+Test run 3 completed. Results: /home/nikhil-gunaratnam/EECS582-Project-eBPF/test-automation/results/scx_nest/test/hackbench_run3.csv
+
+==========================================
+All iterations completed!
+Results saved in: /home/nikhil-gunaratnam/EECS582-Project-eBPF/test-automation/results/scx_nest
+==========================================
+Aggregating results for scx_nest with hackbench workload...
+========================================
+Summary: scx_nest - 
+Generated: Tue Dec  2 13:09:55 EST 2025
+========================================
+
+CONTROL VERSION:
+  Files found: 3
+  Max map entries: 0
+  Avg map entries: 0
+
+TEST VERSION:
+  Files found: 3
+  Max map entries: 0
+  Avg map entries: 0
+  Total evictions: 0
+
+Summary saved to: /home/nikhil-gunaratnam/EECS582-Project-eBPF/test-automation/results/summary_scx_nest_hackbench.txt
+Cleaning up...
