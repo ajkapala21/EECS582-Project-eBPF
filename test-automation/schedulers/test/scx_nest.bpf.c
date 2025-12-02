@@ -408,10 +408,12 @@ void BPF_STRUCT_OPS(nest_enqueue, struct task_struct *p, u64 enq_flags)
 	struct task_ctx *tctx;
 	u64 vtime = p->scx.dsq_vtime;
 
-	tctx = bpf_task_storage_get(&task_ctx_stor, p, 0, 0);
+	/* Try to get existing task storage, or create it if it doesn't exist */
+	tctx = bpf_task_storage_get(&task_ctx_stor, p, 0,
+				    BPF_LOCAL_STORAGE_GET_F_CREATE);
 	if (!tctx) {
-		scx_bpf_error("Unable to find task ctx");
-		return;
+		/* If creation failed, continue without task tracking */
+		goto skip_task_tracking;
 	}
 
 	/* TEST VERSION: Track tasks in map for cleanup */
@@ -422,6 +424,7 @@ void BPF_STRUCT_OPS(nest_enqueue, struct task_struct *p, u64 enq_flags)
 	info.last_start = bpf_ktime_get_ns();
 	bpf_map_update_elem(&tasks, &pid, &info, BPF_ANY);
 
+skip_task_tracking:
 	/*
 	 * Limit the amount of budget that an idling task can accumulate
 	 * to one slice.
