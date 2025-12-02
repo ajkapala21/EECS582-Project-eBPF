@@ -407,40 +407,19 @@ void BPF_STRUCT_OPS(nest_enqueue, struct task_struct *p, u64 enq_flags)
 {
 	struct task_ctx *tctx;
 	u64 vtime = p->scx.dsq_vtime;
-	u32 pid = p->pid;
 
-	/* Debug: log occasionally to verify enqueue is being called */
-	if (pid % 50 == 0) {
-		bpf_printk("nest_enqueue: Called for task pid=%u", pid);
-	}
+	/* Note: Task tracking moved to nest_running() to capture all tasks,
+	 * including those that go through direct dispatch and skip enqueue */
 
 	/* Try to get existing task storage, or create it if it doesn't exist */
 	tctx = bpf_task_storage_get(&task_ctx_stor, p, 0,
 				    BPF_LOCAL_STORAGE_GET_F_CREATE);
 	if (!tctx) {
-		/* If creation failed, continue without task tracking */
-		if (pid % 50 == 0) {
-			bpf_printk("nest_enqueue: Failed to get/create task ctx for pid=%u", pid);
-		}
-		goto skip_task_tracking;
+		/* If creation failed, continue without task context */
+		goto skip_task_ctx;
 	}
 
-	/* TEST VERSION: Track tasks in map for cleanup */
-	struct task_info info = {};
-	info.vruntime = p->scx.dsq_vtime;
-	info.weight = p->scx.weight;
-	info.last_start = bpf_ktime_get_ns();
-	int ret = bpf_map_update_elem(&tasks, &pid, &info, BPF_ANY);
-	if (ret == 0) {
-		/* Debug: log occasionally to verify map updates */
-		if (pid % 50 == 0) {
-			bpf_printk("nest_enqueue: Added task pid=%u to map", pid);
-		}
-	} else {
-		bpf_printk("nest_enqueue: Failed to add task pid=%u to map, ret=%d", pid, ret);
-	}
-
-skip_task_tracking:
+skip_task_ctx:
 	/*
 	 * Limit the amount of budget that an idling task can accumulate
 	 * to one slice.
@@ -539,19 +518,33 @@ void BPF_STRUCT_OPS(nest_dispatch, s32 cpu, struct task_struct *prev)
 
 void BPF_STRUCT_OPS(nest_running, struct task_struct *p)
 {
-	/* TEST VERSION: Update last_start timestamp */
+	/* TEST VERSION: Track tasks in map (called for all running tasks) */
 	u32 pid = p->pid;
 	struct task_info *info = bpf_map_lookup_elem(&tasks, &pid);
+	
 	if (info) {
+		/* Task exists in map, just update timestamp */
 		info->last_start = bpf_ktime_get_ns();
-		/* Debug: log occasionally (every 100th task to avoid spam) */
-		if (pid % 100 == 0) {
-			bpf_printk("nest_running: Updated task pid=%u last_start", pid);
+		/* Debug: log occasionally */
+		if (pid % 200 == 0) {
+			bpf_printk("nest_running: Updated task pid=%u", pid);
 		}
 	} else {
-		/* Debug: log if task not found in map */
-		if (pid % 100 == 0) {
-			bpf_printk("nest_running: Task pid=%u not found in map", pid);
+		/* Task not in map yet, add it */
+		struct task_info new_info = {};
+		new_info.vruntime = p->scx.dsq_vtime;
+		new_info.weight = p->scx.weight;
+		new_info.last_start = bpf_ktime_get_ns();
+		
+		int ret = bpf_map_update_elem(&tasks, &pid, &new_info, BPF_ANY);
+		if (ret == 0) {
+			/* Debug: log when adding new task */
+			if (pid % 200 == 0) {
+				bpf_printk("nest_running: Added new task pid=%u to map", pid);
+			}
+		} else {
+			/* Log failures (these should be rare) */
+			bpf_printk("nest_running: Failed to add task pid=%u, ret=%d", pid, ret);
 		}
 	}
 
