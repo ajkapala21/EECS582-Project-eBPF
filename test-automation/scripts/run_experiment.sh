@@ -73,17 +73,36 @@ for iter in $(seq 1 $ITERATIONS); do
     METRICS_FILE="$RESULTS_DIR/control/${WORKLOAD}_run${iter}.csv"
     DMESG_FILE="$RESULTS_DIR/control/${WORKLOAD}_run${iter}_dmesg.log"
     
-    # Verify binary exists
+    # Verify binary exists and is executable
     if [ ! -f "$CONTROL_BIN" ]; then
         echo "ERROR: Scheduler binary not found: $CONTROL_BIN"
         echo "Please run: ./scripts/build_schedulers.sh $SCHEDULER"
         exit 1
     fi
     
+    if [ ! -x "$CONTROL_BIN" ]; then
+        echo "ERROR: Scheduler binary is not executable: $CONTROL_BIN"
+        exit 1
+    fi
+    
+    # Clear previous log
+    > /tmp/scheduler_control.log
+    
     # Start scheduler
     echo "    Starting scheduler: $CONTROL_BIN"
     sudo "$CONTROL_BIN" >/tmp/scheduler_control.log 2>&1 &
     SCHED_PID=$!
+    
+    # Give it a moment to start
+    sleep 0.5
+    
+    # Check if process started successfully
+    if ! kill -0 $SCHED_PID 2>/dev/null; then
+        echo "    ERROR: Scheduler process died immediately after starting!"
+        echo "    Log output:"
+        cat /tmp/scheduler_control.log
+        exit 1
+    fi
     
     # Wait for scheduler to load and verify it's actually running
     SCHED_NAME=$(echo "$SCHEDULER" | sed 's/^scx_//')
@@ -118,11 +137,37 @@ for iter in $(seq 1 $ITERATIONS); do
     if [ "$LOADED" = false ]; then
         echo "WARNING: Scheduler may not have loaded properly after ${MAX_WAIT}s."
         echo "    Expected: $SCHED_NAME or $SCHEDULER"
-        CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "none")
-        echo "    Current: $CURRENT_SCHED"
-        echo "    Check /tmp/scheduler_control.log for errors:"
-        tail -30 /tmp/scheduler_control.log | head -20
+        
+        # Check if the sched_ext directory exists
+        if [ ! -d /sys/kernel/sched_ext ]; then
+            echo "    ERROR: /sys/kernel/sched_ext directory doesn't exist!"
+            echo "    This means sched_ext is not enabled in the kernel."
+            echo "    Please ensure CONFIG_SCHED_CLASS_EXT=y is set."
+        elif [ ! -f /sys/kernel/sched_ext/current ]; then
+            echo "    ERROR: /sys/kernel/sched_ext/current file doesn't exist!"
+            CURRENT_SCHED="none"
+        else
+            CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "none")
+            echo "    Current: $CURRENT_SCHED"
+        fi
+        
+        echo ""
+        echo "    Full scheduler log (/tmp/scheduler_control.log):"
+        echo "    ========================================="
+        if [ -f /tmp/scheduler_control.log ]; then
+            cat /tmp/scheduler_control.log
+        else
+            echo "    Log file not found!"
+        fi
+        echo "    ========================================="
+        echo ""
         echo "    Process still running: $(kill -0 $SCHED_PID 2>/dev/null && echo 'yes' || echo 'no')"
+        
+        # Check for BPF verifier errors in dmesg
+        echo ""
+        echo "    Recent BPF/dmesg errors:"
+        dmesg | tail -20 | grep -iE "bpf|sched_ext|verifier|error" || echo "    (no recent BPF errors in dmesg)"
+        
         # Don't exit - continue to see if it works anyway
     fi
     
@@ -185,17 +230,36 @@ for iter in $(seq 1 $ITERATIONS); do
     METRICS_FILE="$RESULTS_DIR/test/${WORKLOAD}_run${iter}.csv"
     DMESG_FILE="$RESULTS_DIR/test/${WORKLOAD}_run${iter}_dmesg.log"
     
-    # Verify binary exists
+    # Verify binary exists and is executable
     if [ ! -f "$TEST_BIN" ]; then
         echo "ERROR: Scheduler binary not found: $TEST_BIN"
         echo "Please run: ./scripts/build_schedulers.sh $SCHEDULER"
         exit 1
     fi
     
+    if [ ! -x "$TEST_BIN" ]; then
+        echo "ERROR: Scheduler binary is not executable: $TEST_BIN"
+        exit 1
+    fi
+    
+    # Clear previous log
+    > /tmp/scheduler_test.log
+    
     # Start scheduler
     echo "    Starting scheduler: $TEST_BIN"
     sudo "$TEST_BIN" >/tmp/scheduler_test.log 2>&1 &
     SCHED_PID=$!
+    
+    # Give it a moment to start
+    sleep 0.5
+    
+    # Check if process started successfully
+    if ! kill -0 $SCHED_PID 2>/dev/null; then
+        echo "    ERROR: Scheduler process died immediately after starting!"
+        echo "    Log output:"
+        cat /tmp/scheduler_test.log
+        exit 1
+    fi
     
     # Wait for scheduler to load and verify it's actually running
     SCHED_NAME=$(echo "$SCHEDULER" | sed 's/^scx_//')
@@ -230,11 +294,37 @@ for iter in $(seq 1 $ITERATIONS); do
     if [ "$LOADED" = false ]; then
         echo "WARNING: Scheduler may not have loaded properly after ${MAX_WAIT}s."
         echo "    Expected: $SCHED_NAME or $SCHEDULER"
-        CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "none")
-        echo "    Current: $CURRENT_SCHED"
-        echo "    Check /tmp/scheduler_test.log for errors:"
-        tail -30 /tmp/scheduler_test.log | head -20
+        
+        # Check if the sched_ext directory exists
+        if [ ! -d /sys/kernel/sched_ext ]; then
+            echo "    ERROR: /sys/kernel/sched_ext directory doesn't exist!"
+            echo "    This means sched_ext is not enabled in the kernel."
+            echo "    Please ensure CONFIG_SCHED_CLASS_EXT=y is set."
+        elif [ ! -f /sys/kernel/sched_ext/current ]; then
+            echo "    ERROR: /sys/kernel/sched_ext/current file doesn't exist!"
+            CURRENT_SCHED="none"
+        else
+            CURRENT_SCHED=$(cat /sys/kernel/sched_ext/current 2>/dev/null || echo "none")
+            echo "    Current: $CURRENT_SCHED"
+        fi
+        
+        echo ""
+        echo "    Full scheduler log (/tmp/scheduler_test.log):"
+        echo "    ========================================="
+        if [ -f /tmp/scheduler_test.log ]; then
+            cat /tmp/scheduler_test.log
+        else
+            echo "    Log file not found!"
+        fi
+        echo "    ========================================="
+        echo ""
         echo "    Process still running: $(kill -0 $SCHED_PID 2>/dev/null && echo 'yes' || echo 'no')"
+        
+        # Check for BPF verifier errors in dmesg
+        echo ""
+        echo "    Recent BPF/dmesg errors:"
+        dmesg | tail -20 | grep -iE "bpf|sched_ext|verifier|error" || echo "    (no recent BPF errors in dmesg)"
+        
         # Don't exit - continue to see if it works anyway
     fi
     
