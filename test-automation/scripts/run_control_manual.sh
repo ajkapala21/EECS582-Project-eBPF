@@ -22,9 +22,13 @@ echo "Trace file: $TRACE_FILE"
 echo "=========================================="
 echo ""
 
+# Refresh sudo timestamp to avoid multiple password prompts
+echo "Authenticating with sudo (you may be prompted for password)..."
+sudo -v
+
 # Start trace capture
 echo "Starting trace capture..."
-sudo cat /sys/kernel/debug/tracing/trace_pipe > "$TRACE_FILE" &
+sudo bash -c "cat /sys/kernel/debug/tracing/trace_pipe > '$TRACE_FILE'" &
 TRACE_PID=$!
 sleep 1
 
@@ -36,11 +40,11 @@ echo "Trace capture running (PID: $TRACE_PID)"
 
 # Clear trace buffer
 echo "Clearing trace buffer..."
-echo | sudo tee /sys/kernel/debug/tracing/trace >/dev/null
+sudo bash -c "echo > /sys/kernel/debug/tracing/trace"
 
 # Start scheduler
 echo "Starting scheduler..."
-sudo ../build/scheds/c/scx_nest_control >/tmp/scheduler_control.log 2>&1 &
+sudo bash -c "../build/scheds/c/scx_nest_control >/tmp/scheduler_control.log 2>&1" &
 SCHED_PID=$!
 sleep 2
 
@@ -73,13 +77,14 @@ echo "Stopping workload and scheduler..."
 kill $WORKLOAD_PID 2>/dev/null || true
 wait $WORKLOAD_PID 2>/dev/null || true
 
-sudo kill $SCHED_PID 2>/dev/null || true
+# Use sudo -n to avoid password prompt (non-interactive)
+sudo -n kill $SCHED_PID 2>/dev/null || sudo kill $SCHED_PID 2>/dev/null || true
 wait $SCHED_PID 2>/dev/null || true
 
 # Give trace a moment to flush, then stop it
 echo "Stopping trace capture..."
 sleep 2
-sudo kill $TRACE_PID 2>/dev/null || true
+sudo -n kill $TRACE_PID 2>/dev/null || sudo kill $TRACE_PID 2>/dev/null || true
 wait $TRACE_PID 2>/dev/null || true
 
 # Check trace file
@@ -107,7 +112,7 @@ else
 fi
 
 # Save dmesg
-sudo dmesg > "$RESULTS_DIR/hackbench_manual_dmesg.log"
+sudo -n dmesg > "$RESULTS_DIR/hackbench_manual_dmesg.log" 2>/dev/null || sudo dmesg > "$RESULTS_DIR/hackbench_manual_dmesg.log"
 
 echo ""
 echo "=========================================="
