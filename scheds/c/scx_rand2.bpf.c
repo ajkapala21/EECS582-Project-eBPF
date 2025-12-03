@@ -12,10 +12,11 @@ char _license[] SEC("license") = "GPL";
 #define SAMPLE_COUNT 500
 
 static u64 vtime_now;
-static index = 0;
+static u64 index = 0;
 
 
 UEI_DEFINE(uei);
+#define SHARED_DSQ 0
 
 struct random_sample_ctx {
     u64 start_ns;
@@ -106,14 +107,14 @@ void BPF_STRUCT_OPS(rand2_enqueue, struct task_struct *p, u64 enq_flags)
     bpf_spin_unlock(&cpu_lock);
 
     u32 zero = 0;
-    struct map_ctx *context = bpf_map_lookup_percpu_elem(map_size, &zero, cpu_id);
+    struct map_ctx *context = bpf_map_lookup_percpu_elem(&map_size, &zero, cpu_id);
     if(!context){
         bpf_printk("NO CONTEXT FOUND\n");
         return;
     }
 
     u64 size = context->size;
-    struct task_ctx *ti = bpf_map_lookup_percpu_elem(task_map, &size, cpu_id);
+    struct task_ctx *ti = bpf_map_lookup_percpu_elem(&task_map, &size, cpu_id);
     if(!ti){
         bpf_printk("to large of size\n");
         return;
@@ -126,7 +127,7 @@ void BPF_STRUCT_OPS(rand2_enqueue, struct task_struct *p, u64 enq_flags)
     }
     ti->vruntime = vtime;
     ti->pid = pid;
-    ti->valid = valid;
+    ti->valid = true;
     context->size++;
 
     bpf_spin_unlock(&context->lock);
@@ -139,11 +140,12 @@ static long sample_cb(u64 idx, struct random_sample_ctx *rand_cxt)
     // use bpf_get_prandom_u32() inside callback
     u32 r = bpf_get_prandom_u32();
 
-    int cpu = bpf_get_smp_processor_id();
-    struct map_ctx *context = bpf_map_lookup_percpu_elem(map_size, &zero, cpu);
+    int cpu_id = bpf_get_smp_processor_id();
+    u32 zero = 0;
+    struct map_ctx *context = bpf_map_lookup_percpu_elem(&map_size, &zero, cpu_id);
     if(!context){
         bpf_printk("NO CONTEXT FOUND\n");
-        return;
+        return 0;
     }
     u64 size = context->size;
     u32 key = r % size;
@@ -174,8 +176,9 @@ void BPF_STRUCT_OPS(rand2_dispatch, s32 cpu, struct task_struct *prev)
         .best_key = -1,
     };
 
-    int cpu = bpf_get_smp_processor_id();
-    struct map_ctx *context = bpf_map_lookup_percpu_elem(map_size, &zero, cpu);
+    int cpu_id = bpf_get_smp_processor_id();
+    u32 zero = 0;
+    struct map_ctx *context = bpf_map_lookup_percpu_elem(&map_size, &zero, cpu_id);
     if(!context){
         bpf_printk("NO CONTEXT FOUND\n");
         return;
