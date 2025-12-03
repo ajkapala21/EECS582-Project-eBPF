@@ -71,7 +71,7 @@ void BPF_STRUCT_OPS(rand2_enqueue, struct task_struct *p, u64 enq_flags)
 {
 	stat_inc(1);	/* count global queueing */
 
-    scx_bpf_random_enqueue(&task_map, &map_info, p, &vtime_now)
+    scx_bpf_random_enqueue(&task_map, &map_info, p, &vtime_now);
 
     //bpf_printk("Enqueue: map_size = %llu\n", map_size);
 }
