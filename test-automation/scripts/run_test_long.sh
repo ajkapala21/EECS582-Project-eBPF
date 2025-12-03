@@ -25,18 +25,24 @@ echo "Trace file: $TRACE_FILE"
 echo "=========================================="
 echo ""
 
+# Check if trace_pipe is already in use and kill any existing processes
+echo "Checking for existing trace capture processes..."
+sudo pkill -f "cat.*trace_pipe" 2>/dev/null || true
+sleep 1
+
 # Clear trace buffer
 echo "Clearing trace buffer..."
-echo | sudo tee /sys/kernel/debug/tracing/trace >/dev/null
+sudo bash -c "echo > /sys/kernel/debug/tracing/trace"
 
 # Start trace capture
 echo "Starting trace capture..."
-sudo cat /sys/kernel/debug/tracing/trace_pipe > "$TRACE_FILE" &
+sudo bash -c "cat /sys/kernel/debug/tracing/trace_pipe > '$TRACE_FILE' 2>&1" &
 TRACE_PID=$!
-sleep 1
+sleep 2
 
 if ! kill -0 $TRACE_PID 2>/dev/null; then
     echo "ERROR: Trace capture failed to start"
+    echo "Check if trace_pipe is available: ls -l /sys/kernel/debug/tracing/trace_pipe"
     exit 1
 fi
 echo "Trace capture running (PID: $TRACE_PID)"
@@ -104,7 +110,17 @@ wait $SCHED_PID 2>/dev/null || true
 # Give trace a moment to flush, then stop it
 echo "Stopping trace capture..."
 sleep 2
-sudo kill $TRACE_PID 2>/dev/null || true
+# Kill trace process and wait for it to fully terminate
+sudo -n kill $TRACE_PID 2>/dev/null || sudo kill $TRACE_PID 2>/dev/null || true
+# Wait up to 5 seconds for it to terminate
+for i in {1..5}; do
+    if ! kill -0 $TRACE_PID 2>/dev/null; then
+        break
+    fi
+    sleep 1
+done
+# Force kill if still running
+sudo -n kill -9 $TRACE_PID 2>/dev/null || sudo kill -9 $TRACE_PID 2>/dev/null || true
 wait $TRACE_PID 2>/dev/null || true
 
 # Check trace file

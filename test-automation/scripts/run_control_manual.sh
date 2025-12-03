@@ -26,14 +26,20 @@ echo ""
 echo "Authenticating with sudo (you may be prompted for password)..."
 sudo -v
 
+# Check if trace_pipe is already in use and kill any existing processes
+echo "Checking for existing trace capture processes..."
+sudo pkill -f "cat.*trace_pipe" 2>/dev/null || true
+sleep 1
+
 # Start trace capture
 echo "Starting trace capture..."
-sudo bash -c "cat /sys/kernel/debug/tracing/trace_pipe > '$TRACE_FILE'" &
+sudo bash -c "cat /sys/kernel/debug/tracing/trace_pipe > '$TRACE_FILE' 2>&1" &
 TRACE_PID=$!
-sleep 1
+sleep 2
 
 if ! kill -0 $TRACE_PID 2>/dev/null; then
     echo "ERROR: Trace capture failed to start"
+    echo "Check if trace_pipe is available: ls -l /sys/kernel/debug/tracing/trace_pipe"
     exit 1
 fi
 echo "Trace capture running (PID: $TRACE_PID)"
@@ -62,9 +68,16 @@ else
     echo "WARNING: Cannot check scheduler state"
 fi
 
-# Run workload (run it longer or multiple times to generate more activity)
-echo "Starting workload..."
-./scripts/workloads/hackbench_workload.sh 10 100 &
+# Run workload continuously for the duration
+echo "Starting workload (will run for $DURATION seconds)..."
+# Run hackbench in a loop until duration expires
+(
+    START_TIME=$(date +%s)
+    while [ $(($(date +%s) - START_TIME)) -lt $DURATION ]; do
+        ./scripts/workloads/hackbench_workload.sh 10 100 >/dev/null 2>&1
+        sleep 1  # Small delay between runs
+    done
+) &
 WORKLOAD_PID=$!
 
 # Wait for duration
@@ -84,7 +97,17 @@ wait $SCHED_PID 2>/dev/null || true
 # Give trace a moment to flush, then stop it
 echo "Stopping trace capture..."
 sleep 2
+# Kill trace process and wait for it to fully terminate
 sudo -n kill $TRACE_PID 2>/dev/null || sudo kill $TRACE_PID 2>/dev/null || true
+# Wait up to 5 seconds for it to terminate
+for i in {1..5}; do
+    if ! kill -0 $TRACE_PID 2>/dev/null; then
+        break
+    fi
+    sleep 1
+done
+# Force kill if still running
+sudo -n kill -9 $TRACE_PID 2>/dev/null || sudo kill -9 $TRACE_PID 2>/dev/null || true
 wait $TRACE_PID 2>/dev/null || true
 
 # Check trace file
