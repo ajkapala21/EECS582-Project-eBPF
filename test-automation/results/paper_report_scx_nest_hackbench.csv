@@ -1,0 +1,7 @@
+version,run,max_entries,final_entries,total_evictions,cleanup_runs,avg_evictions_per_run
+control,hackbench_run1,0,0,0,0,0
+control,hackbench_run2,0,0,0,0,0
+control,hackbench_run3,0,0,0,0,0
+test,hackbench_run1,0,0,0,0,0
+test,hackbench_run2,0,0,0,0,0
+test,hackbench_run3,0,0,0,0,0

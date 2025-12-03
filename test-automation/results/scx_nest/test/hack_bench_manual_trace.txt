@@ -1,0 +1,418 @@
+          <idle>-0       [000] dN.21  4096.084153: bpf_trace_printk: Map cleanup: Starting cleanup scan
+          <idle>-0       [003] dN.21  4096.084155: bpf_trace_printk: Map cleanup: Starting cleanup scan
+          <idle>-0       [000] dN.21  4096.085035: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+          <idle>-0       [003] dN.21  4096.085040: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+     rcu_preempt-15      [003] d..21  4097.102484: bpf_trace_printk: Map cleanup: Starting cleanup scan
+         systemd-1501    [001] d..21  4097.102737: bpf_trace_printk: Map cleanup: Starting cleanup scan
+         systemd-1501    [001] d..21  4097.103377: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+     rcu_preempt-15      [003] d..21  4097.103382: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+      llvmpipe-1-1753    [001] d..21  4098.103429: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     gnome-shell-1694    [002] d..21  4098.103429: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-2-1754    [003] d..21  4098.103429: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-0-1752    [000] d..21  4098.103437: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     gnome-shell-1694    [002] d..21  4098.103571: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+      llvmpipe-0-1752    [000] d..21  4098.103662: bpf_trace_printk: Map cleanup: scan completed, no entries evicted (ret=0)
+      llvmpipe-2-1754    [003] d..21  4098.103664: bpf_trace_printk: Map cleanup: scan completed, no entries evicted (ret=0)
+      llvmpipe-1-1753    [001] d..21  4098.103666: bpf_trace_printk: Map cleanup: scan completed, no entries evicted (ret=0)
+         systemd-1       [003] d..21  4099.107081: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     rcu_preempt-15      [000] d..21  4099.107099: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     rcu_preempt-15      [000] d..21  4099.107242: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+         systemd-1       [003] d..21  4099.107243: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+      llvmpipe-2-1754    [001] d..21  4100.107925: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-1-1753    [002] d..21  4100.107925: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-1-1753    [002] d..21  4100.108084: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+      llvmpipe-2-1754    [001] d..21  4100.108091: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+     rcu_preempt-15      [003] d..21  4101.109944: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     rcu_preempt-15      [003] d..21  4101.110106: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+          <idle>-0       [003] dN.21  4102.110872: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ Mutter Input Th-1778    [002] d..21  4102.111179: bpf_trace_printk: Map cleanup: Starting cleanup scan
+          <idle>-0       [003] dN.21  4102.111321: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ Mutter Input Th-1778    [002] d..21  4102.111323: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ Mutter Input Th-1778    [003] d..21  4103.127878: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ Mutter Input Th-1778    [003] d..21  4103.128098: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+           gmain-2045    [001] d..21  4104.145763: bpf_trace_printk: Map cleanup: Starting cleanup scan
+           gmain-2045    [001] d..21  4104.145915: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+           gmain-2348    [000] d..21  4105.146129: bpf_trace_printk: Map cleanup: Starting cleanup scan
+           gmain-2348    [000] d..21  4105.146272: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+          ptyxis-2617    [000] d..21  4106.152114: bpf_trace_printk: Map cleanup: Starting cleanup scan
+          ptyxis-2617    [000] d..21  4106.152256: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+           gmain-17362   [003] d..21  4107.206028: bpf_trace_printk: Map cleanup: Starting cleanup scan
+           gmain-17362   [003] d..21  4107.206257: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+          ptyxis-2617    [001] d..21  4108.218408: bpf_trace_printk: Map cleanup: Starting cleanup scan
+          ptyxis-2617    [001] d..21  4108.218549: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+     rcu_preempt-15      [003] d..21  4109.221941: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ rcu_tasks_trace-38      [000] d..21  4109.221960: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     rcu_preempt-15      [003] d..21  4109.222097: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ rcu_tasks_trace-38      [000] d..21  4109.222231: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+           gdbus-1712    [003] d..21  4110.222117: bpf_trace_printk: Map cleanup: Starting cleanup scan
+           gdbus-1712    [003] d..21  4110.222339: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+     rcu_preempt-15      [000] d..21  4111.223124: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     rcu_preempt-15      [000] d..21  4111.223296: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+           gdbus-1712    [003] d..21  4112.223423: bpf_trace_printk: Map cleanup: Starting cleanup scan
+           gdbus-1712    [003] d..21  4112.223572: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+          <idle>-0       [003] dN.21  4113.241454: bpf_trace_printk: Map cleanup: Starting cleanup scan
+          <idle>-0       [003] dN.21  4113.241609: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ Mutter Input Th-1778    [003] d..21  4114.268691: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ Mutter Input Th-1778    [003] d..21  4114.268845: bpf_trace_printk: Map cleanup: timeout after evicted 7 entries
+          <idle>-0       [003] dN.21  4115.324171: bpf_trace_printk: Map cleanup: Starting cleanup scan
+          <idle>-0       [003] dN.21  4115.324378: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+ Mutter Input Th-1778    [003] d..21  4116.339050: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ Mutter Input Th-1778    [003] d..21  4116.339191: bpf_trace_printk: Map cleanup: timeout after evicted 5 entries
+         systemd-1501    [001] d..21  4117.349137: bpf_trace_printk: Map cleanup: Starting cleanup scan
+         systemd-1501    [001] d..21  4117.349280: bpf_trace_printk: Map cleanup: timeout after evicted 4 entries
+           gdbus-2076    [001] d..21  4118.349293: bpf_trace_printk: Map cleanup: Starting cleanup scan
+           gdbus-2076    [001] d..21  4118.349509: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+         systemd-1501    [000] d..21  4119.352025: bpf_trace_printk: Map cleanup: Starting cleanup scan
+         systemd-1501    [000] d..21  4119.352231: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+     rcu_preempt-15      [000] d..21  4120.353803: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     rcu_preempt-15      [000] d..21  4120.353947: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+          ptyxis-2617    [002] d..21  4121.355507: bpf_trace_printk: Map cleanup: Starting cleanup scan
+          ptyxis-2617    [002] d..21  4121.355717: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+     rcu_preempt-15      [001] d..21  4122.359242: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     rcu_preempt-15      [001] d..21  4122.359407: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+          <idle>-0       [002] dN.21  4123.393899: bpf_trace_printk: Map cleanup: Starting cleanup scan
+          <idle>-0       [002] dN.21  4123.394112: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+        pool-162-21435   [001] d..21  4124.423565: bpf_trace_printk: Map cleanup: Starting cleanup scan
+        pool-162-21435   [001] d..21  4124.423748: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+      kcompactd0-43      [001] d..21  4125.546528: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [001] d..21  4125.546774: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+       hackbench-21598   [000] d..21  4125.754362: bpf_trace_printk: nest_running: Added new task pid=21600 to map
+       hackbench-21796   [003] d..21  4125.858971: bpf_trace_printk: nest_running: Added new task pid=21800 to map
+       hackbench-21816   [003] d..21  4125.901125: bpf_trace_printk: nest_running: Updated task pid=21800
+       hackbench-21605   [003] d..21  4125.943639: bpf_trace_printk: nest_running: Updated task pid=21600
+       hackbench-21599   [001] d..21  4125.994106: bpf_trace_printk: nest_running: Updated task pid=21600
+       hackbench-21589   [000] d..21  4125.994946: bpf_trace_printk: nest_running: Updated task pid=21600
+       hackbench-21594   [000] d..21  4125.996109: bpf_trace_printk: nest_running: Updated task pid=21600
+       hackbench-21598   [003] d..21  4125.997048: bpf_trace_printk: nest_running: Updated task pid=21600
+       hackbench-21599   [002] d..21  4125.997760: bpf_trace_printk: nest_running: Updated task pid=21600
+       hackbench-21607   [001] d..21  4126.004488: bpf_trace_printk: nest_running: Updated task pid=21600
+       hackbench-21816   [003] d..21  4126.013223: bpf_trace_printk: nest_running: Updated task pid=21800
+       hackbench-21794   [002] d..21  4126.033496: bpf_trace_printk: nest_running: Updated task pid=21800
+       hackbench-21764   [000] d..21  4126.097501: bpf_trace_printk: nest_running: Updated task pid=21600
+       hackbench-21809   [003] d..21  4126.106456: bpf_trace_printk: nest_running: Updated task pid=21800
+       hackbench-21787   [001] d..21  4126.111039: bpf_trace_printk: nest_running: Updated task pid=21800
+       hackbench-21724   [002] d..21  4126.128384: bpf_trace_printk: nest_running: Updated task pid=21800
+       hackbench-21561   [002] d..21  4126.147002: bpf_trace_printk: nest_running: Updated task pid=21600
+          ptyxis-2617    [002] d..21  4126.553460: bpf_trace_printk: Map cleanup: Starting cleanup scan
+          ptyxis-2617    [002] d..21  4126.553605: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+      kcompactd0-43      [000] d..21  4127.562376: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [000] d..21  4127.562584: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+      kcompactd0-43      [000] d..21  4128.570030: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [000] d..21  4128.570219: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+      llvmpipe-2-1754    [000] d..21  4129.570020: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     gnome-shell-1694    [003] d..21  4129.570023: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-2-1754    [000] d..21  4129.570172: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+     gnome-shell-1694    [003] d..21  4129.570238: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+      kcompactd0-43      [001] d..21  4130.586102: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [001] d..21  4130.586279: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+      kcompactd0-43      [000] d..21  4131.594217: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [000] d..21  4131.594448: bpf_trace_printk: Map cleanup: timeout after evicted 4 entries
+      kcompactd0-43      [002] d..21  4132.602842: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [002] d..21  4132.603066: bpf_trace_printk: Map cleanup: timeout after evicted 4 entries
+      kcompactd0-43      [001] d..21  4133.610268: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [001] d..21  4133.610491: bpf_trace_printk: Map cleanup: timeout after evicted 3 entries
+      kcompactd0-43      [001] d..21  4134.618705: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [001] d..21  4134.618841: bpf_trace_printk: Map cleanup: timeout after evicted 12 entries
+      llvmpipe-0-2820    [001] d..21  4135.618763: bpf_trace_printk: Map cleanup: Starting cleanup scan
+          ptyxis-2819    [002] d..21  4135.618763: bpf_trace_printk: Map cleanup: Starting cleanup scan
+           <...>-2821    [003] d..21  4135.618763: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-0-2820    [001] d..21  4135.618887: bpf_trace_printk: Map cleanup: timeout after evicted 9 entries
+          ptyxis-2819    [002] d..21  4135.618888: bpf_trace_printk: Map cleanup: timeout after evicted 6 entries
+           <...>-2821    [003] d..21  4135.618888: bpf_trace_printk: Map cleanup: timeout after evicted 9 entries
+      llvmpipe-3-1755    [001] d..21  4136.620546: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-1-1753    [003] d..21  4136.620552: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-2-1754    [002] d..21  4136.620553: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-3-1755    [001] d..21  4136.620681: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+      llvmpipe-1-1753    [003] d..21  4136.620681: bpf_trace_printk: Map cleanup: timeout after evicted 4 entries
+      llvmpipe-2-1754    [002] d..21  4136.620682: bpf_trace_printk: Map cleanup: timeout after evicted 5 entries
+ Mutter Input Th-1778    [000] d..21  4137.628361: bpf_trace_printk: Map cleanup: Starting cleanup scan
+           <...>-1750    [002] d..21  4137.628380: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ Mutter Input Th-1778    [000] d..21  4137.628494: bpf_trace_printk: Map cleanup: timeout after evicted 5 entries
+           <...>-1750    [002] d..21  4137.628494: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+      kcompactd0-43      [003] d..21  4138.658038: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [003] d..21  4138.658199: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+      kcompactd0-43      [002] d..21  4139.666999: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [002] d..21  4139.667243: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+      kcompactd0-43      [000] d..21  4140.674735: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [000] d..21  4140.674928: bpf_trace_printk: Map cleanup: timeout after evicted 3 entries
+      kcompactd0-43      [001] d..21  4141.683083: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [001] d..21  4141.683283: bpf_trace_printk: Map cleanup: timeout after evicted 4 entries
+      kcompactd0-43      [000] d..21  4142.691802: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [000] d..21  4142.692081: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+           gdbus-2076    [001] d..21  4143.691761: bpf_trace_printk: Map cleanup: Starting cleanup scan
+           gdbus-2076    [001] d..21  4143.691910: bpf_trace_printk: Map cleanup: timeout after evicted 5 entries
+      kcompactd0-43      [002] d..21  4144.707558: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [002] d..21  4144.707805: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+   kworker/u16:5-3272    [003] d..21  4145.708358: bpf_trace_printk: Map cleanup: Starting cleanup scan
+   kworker/u16:5-3272    [003] d..21  4145.708543: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+          ptyxis-2617    [001] d..21  4146.708395: bpf_trace_printk: Map cleanup: Starting cleanup scan
+          ptyxis-2617    [001] d..21  4146.708534: bpf_trace_printk: Map cleanup: timeout after evicted 4 entries
+      kcompactd0-43      [001] d..21  4147.731108: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [001] d..21  4147.731344: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+     rcu_preempt-15      [003] d..21  4148.731745: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-3-2823    [000] d..21  4148.731784: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-2-2822    [002] d..21  4148.731789: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     rcu_preempt-15      [003] d..21  4148.731877: bpf_trace_printk: Map cleanup: timeout after evicted 5 entries
+      llvmpipe-3-2823    [000] d..21  4148.731895: bpf_trace_printk: Map cleanup: timeout after evicted 5 entries
+      llvmpipe-2-2822    [002] d..21  4148.731900: bpf_trace_printk: Map cleanup: timeout after evicted 4 entries
+      kcompactd0-43      [003] d..21  4149.746560: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [003] d..21  4149.746772: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+      kcompactd0-43      [002] d..21  4150.755029: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [002] d..21  4150.755205: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+      kcompactd0-43      [003] d..21  4151.762713: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [003] d..21  4151.762931: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+      kcompactd0-43      [001] d..21  4152.771199: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [001] d..21  4152.771449: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+      kcompactd0-43      [002] d..21  4153.779711: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [002] d..21  4153.779985: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+      llvmpipe-1-2821    [000] d..21  4154.780761: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-0-2820    [002] d..21  4154.780761: bpf_trace_printk: Map cleanup: Starting cleanup scan
+          ptyxis-2819    [003] d..21  4154.780761: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-2-2822    [001] d..21  4154.780786: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-1-2821    [000] d..21  4154.780954: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+          ptyxis-2819    [003] d..21  4154.780954: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+      llvmpipe-2-2822    [001] d..21  4154.780955: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+      llvmpipe-0-2820    [002] d..21  4154.780956: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+      kcompactd0-43      [001] d..21  4155.794912: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [001] d..21  4155.795127: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+      kcompactd0-43      [000] d..21  4156.803488: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [000] d..21  4156.803773: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+      llvmpipe-2-1754    [000] d..21  4157.805097: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-1-1753    [002] d..21  4157.805097: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     gnome-shell-1694    [003] d..21  4157.805102: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-2-1754    [000] d..21  4157.805256: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+      llvmpipe-1-1753    [002] d..21  4157.805256: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+     gnome-shell-1694    [003] d..21  4157.805256: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+      kcompactd0-43      [000] d..21  4158.819134: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [000] d..21  4158.819374: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+      kcompactd0-43      [000] d..21  4159.827680: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [000] d..21  4159.827936: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+      kcompactd0-43      [003] d..21  4160.834208: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [003] d..21  4160.834353: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+      kcompactd0-43      [003] d..21  4161.843501: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [003] d..21  4161.843702: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+      kcompactd0-43      [002] d..21  4162.850563: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      kcompactd0-43      [002] d..21  4162.850760: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+     rcu_preempt-15      [000] d..21  4163.853555: bpf_trace_printk: Map cleanup: Starting cleanup scan
+         systemd-1501    [001] d..21  4163.853555: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     rcu_preempt-15      [000] d..21  4163.853731: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+         systemd-1501    [001] d..21  4163.853731: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+     rcu_preempt-15      [001] d..21  4164.854470: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     rcu_preempt-15      [001] d..21  4164.854683: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+         systemd-1       [002] d..21  4165.854614: bpf_trace_printk: Map cleanup: Starting cleanup scan
+         systemd-1       [002] d..21  4165.854890: bpf_trace_printk: Map cleanup: timeout after evicted 5 entries
+         systemd-1       [000] d..21  4166.855958: bpf_trace_printk: Map cleanup: Starting cleanup scan
+         systemd-1       [000] d..21  4166.856174: bpf_trace_printk: Map cleanup: timeout after evicted 3 entries
+     kworker/0:3-71      [000] d..21  4167.858049: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     kworker/0:3-71      [000] d..21  4167.858243: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+     rcu_preempt-15      [001] d..21  4168.858583: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     rcu_preempt-15      [001] d..21  4168.858781: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+     rcu_preempt-15      [003] d..21  4169.860460: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     rcu_preempt-15      [003] d..21  4169.860692: bpf_trace_printk: Map cleanup: timeout after evicted 3 entries
+          <idle>-0       [001] dN.21  4170.891369: bpf_trace_printk: Map cleanup: Starting cleanup scan
+          <idle>-0       [001] dN.21  4170.891635: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+ gvfs-afc-volume-2245    [003] d..21  4171.910457: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [003] d..21  4171.910679: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+ gvfs-afc-volume-2245    [001] d..21  4172.912524: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [001] d..21  4172.912739: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ gvfs-afc-volume-2245    [001] d..21  4173.915363: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [001] d..21  4173.915601: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+ gvfs-afc-volume-2245    [003] d..21  4174.918389: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [003] d..21  4174.918672: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ gvfs-afc-volume-2245    [001] d..21  4175.920994: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [001] d..21  4175.921267: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+ gvfs-afc-volume-2245    [000] d..21  4176.923620: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [000] d..21  4176.923876: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ gvfs-afc-volume-2245    [003] d..21  4177.927219: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [003] d..21  4177.927524: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+ gvfs-afc-volume-2245    [003] d..21  4178.929221: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [003] d..21  4178.929501: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+ gvfs-afc-volume-2245    [002] d..21  4179.931968: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [002] d..21  4179.932175: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ gvfs-afc-volume-2245    [001] d..21  4180.933622: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [001] d..21  4180.933806: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+ gvfs-afc-volume-2245    [003] d..21  4181.935826: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [003] d..21  4181.936088: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+ gvfs-afc-volume-2245    [003] d..21  4182.939006: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [003] d..21  4182.939186: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ gvfs-afc-volume-2245    [003] d..21  4183.943308: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [003] d..21  4183.943579: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ gvfs-afc-volume-2245    [002] d..21  4184.945560: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [002] d..21  4184.945767: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ gvfs-afc-volume-2245    [003] d..21  4185.946801: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [003] d..21  4185.946929: bpf_trace_printk: Map cleanup: timeout after evicted 4 entries
+ gvfs-afc-volume-2245    [000] d..21  4186.948660: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [000] d..21  4186.948832: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ gvfs-afc-volume-2245    [000] d..21  4187.951640: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [000] d..21  4187.951871: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+ gvfs-afc-volume-2245    [000] d..21  4188.953820: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [000] d..21  4188.954249: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+ gvfs-afc-volume-2245    [002] d..21  4189.956260: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [002] d..21  4189.956506: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ gvfs-afc-volume-2245    [000] d..21  4190.959040: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [000] d..21  4190.959269: bpf_trace_printk: Map cleanup: timeout after evicted 3 entries
+ gvfs-afc-volume-2245    [002] d..21  4191.961610: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [002] d..21  4191.961826: bpf_trace_printk: Map cleanup: timeout after evicted 4 entries
+ gvfs-afc-volume-2245    [002] d..21  4192.964575: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [002] d..21  4192.964824: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+ gvfs-afc-volume-2245    [000] d..21  4193.967141: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [000] d..21  4193.967465: bpf_trace_printk: Map cleanup: timeout after evicted 3 entries
+ gvfs-afc-volume-2245    [003] d..21  4194.969868: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [003] d..21  4194.970139: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ gvfs-afc-volume-2245    [002] d..21  4195.972113: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [002] d..21  4195.972288: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+ gvfs-afc-volume-2245    [001] d..21  4196.974569: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [001] d..21  4196.974825: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+     rcu_preempt-15      [001] d..21  4197.974837: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [003] d..21  4197.974885: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [003] d..21  4197.974995: bpf_trace_printk: Map cleanup: timeout after evicted 3 entries
+     rcu_preempt-15      [001] d..21  4197.975007: bpf_trace_printk: Map cleanup: timeout after evicted 4 entries
+ gvfs-afc-volume-2245    [001] d..21  4198.977589: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [001] d..21  4198.977791: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+      llvmpipe-1-1753    [001] d..21  4199.979065: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-1-1753    [001] d..21  4199.979203: bpf_trace_printk: Map cleanup: timeout after evicted 4 entries
+ Mutter Input Th-1778    [002] d..21  4200.979723: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      KMS thread-1750    [003] d..21  4200.979747: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ Mutter Input Th-1778    [002] d..21  4200.979869: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+      KMS thread-1750    [003] d..21  4200.979869: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+ gvfs-afc-volume-2245    [003] d..21  4201.981444: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [003] d..21  4201.981621: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+   kworker/u16:0-12      [002] d..21  4202.981861: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      KMS thread-1750    [001] d..21  4202.982076: bpf_trace_printk: Map cleanup: Starting cleanup scan
+   kworker/u16:0-12      [002] d..21  4202.982076: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+      KMS thread-1750    [001] d..21  4202.982190: bpf_trace_printk: Map cleanup: timeout after evicted 4 entries
+      llvmpipe-2-1754    [002] dN.21  4203.988623: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-1-1753    [001] dN.21  4203.988624: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-0-1752    [000] dN.21  4203.988628: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-3-1755    [003] dN.21  4203.989112: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-3-1755    [003] dN.21  4203.989874: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+      llvmpipe-2-1754    [002] dN.21  4203.989876: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+      llvmpipe-0-1752    [000] dN.21  4203.989879: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+      llvmpipe-1-1753    [001] dN.21  4203.990635: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ gvfs-afc-volume-2245    [000] d..21  4204.991802: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [000] d..21  4204.991948: bpf_trace_printk: Map cleanup: timeout after evicted 3 entries
+      llvmpipe-1-2821    [001] d..21  4205.992037: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-0-2820    [003] d..21  4205.992037: bpf_trace_printk: Map cleanup: Starting cleanup scan
+          ptyxis-2819    [002] d..21  4205.992040: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-2-2822    [000] d..21  4205.992043: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-2-2822    [000] d..21  4205.992160: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+      llvmpipe-1-2821    [001] d..21  4205.992160: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+          ptyxis-2819    [002] d..21  4205.992160: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+      llvmpipe-0-2820    [003] d..21  4205.992161: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+ gvfs-afc-volume-2245    [002] d..21  4206.995140: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [002] d..21  4206.995346: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+     rcu_preempt-15      [000] d..21  4207.996328: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [001] d..21  4207.996359: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     rcu_preempt-15      [000] d..21  4207.996456: bpf_trace_printk: Map cleanup: timeout after evicted 3 entries
+ gvfs-afc-volume-2245    [001] d..21  4207.996469: bpf_trace_printk: Map cleanup: timeout after evicted 3 entries
+ gvfs-afc-volume-2245    [001] d..21  4208.999012: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [001] d..21  4208.999245: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+ gvfs-afc-volume-2245    [001] d..21  4209.999479: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [001] d..21  4209.999629: bpf_trace_printk: Map cleanup: timeout after evicted 3 entries
+     rcu_preempt-15      [000] d..21  4211.000711: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [002] d..21  4211.000765: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     rcu_preempt-15      [000] d..21  4211.000847: bpf_trace_printk: Map cleanup: timeout after evicted 4 entries
+ gvfs-afc-volume-2245    [002] d..21  4211.000875: bpf_trace_printk: Map cleanup: timeout after evicted 4 entries
+          <idle>-0       [001] dN.21  4211.695299: bpf_trace_printk: nest_running: Added new task pid=22000 to map
+     rcu_preempt-15      [001] d..21  4212.001559: bpf_trace_printk: Map cleanup: Starting cleanup scan
+          <idle>-0       [002] dN.21  4212.001564: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     rcu_preempt-15      [001] d..21  4212.001684: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+          <idle>-0       [002] dN.21  4212.001684: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+ gvfs-afc-volume-2245    [000] d..21  4213.005964: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [000] d..21  4213.006166: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+           gdbus-1712    [000] d..21  4214.006523: bpf_trace_printk: Map cleanup: Starting cleanup scan
+           gdbus-1712    [000] d..21  4214.006721: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+ gvfs-afc-volume-2245    [003] d..21  4215.011119: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [003] d..21  4215.011344: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ gvfs-afc-volume-2245    [002] d..21  4216.013587: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [002] d..21  4216.013788: bpf_trace_printk: Map cleanup: timeout after evicted 4 entries
+ gvfs-afc-volume-2245    [002] d..21  4217.016170: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [002] d..21  4217.016499: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+ gvfs-afc-volume-2245    [000] d..21  4218.018331: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [000] d..21  4218.018491: bpf_trace_printk: Map cleanup: timeout after evicted 4 entries
+ gvfs-afc-volume-2245    [003] d..21  4219.020368: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [003] d..21  4219.020534: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+ gvfs-afc-volume-2245    [002] d..21  4220.022279: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [002] d..21  4220.022439: bpf_trace_printk: Map cleanup: timeout after evicted 3 entries
+ gvfs-afc-volume-2245    [002] d..21  4221.023785: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [002] d..21  4221.023931: bpf_trace_printk: Map cleanup: timeout after evicted 4 entries
+      llvmpipe-2-1754    [001] d..21  4222.024535: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     gnome-shell-1694    [002] d..21  4222.024535: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-1-1753    [003] d..21  4222.024535: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-0-1752    [000] d..21  4222.024639: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-2-1754    [001] d..21  4222.024659: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+      llvmpipe-1-1753    [003] d..21  4222.024659: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+     gnome-shell-1694    [002] d..21  4222.024661: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+      llvmpipe-0-1752    [000] d..21  4222.024752: bpf_trace_printk: Map cleanup: timeout after evicted 4 entries
+ gvfs-afc-volume-2245    [002] d..21  4223.028056: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [002] d..21  4223.028307: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ gvfs-afc-volume-2245    [001] d..21  4224.030286: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [001] d..21  4224.030558: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+ gvfs-afc-volume-2245    [001] d..21  4225.031762: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [001] d..21  4225.031898: bpf_trace_printk: Map cleanup: timeout after evicted 5 entries
+      KMS thread-1750    [001] d..21  4226.031821: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-2-2822    [003] d..21  4226.031843: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-1-2821    [002] d..21  4226.031916: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      KMS thread-1750    [001] d..21  4226.031958: bpf_trace_printk: Map cleanup: timeout after evicted 3 entries
+      llvmpipe-2-2822    [003] d..21  4226.031975: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+      llvmpipe-1-2821    [002] d..21  4226.032029: bpf_trace_printk: Map cleanup: timeout after evicted 3 entries
+ gvfs-afc-volume-2245    [001] d..21  4227.035421: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [001] d..21  4227.035631: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ gvfs-afc-volume-2245    [003] d..21  4228.038265: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [003] d..21  4228.038497: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ gvfs-afc-volume-2245    [003] d..21  4229.040600: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [003] d..21  4229.040750: bpf_trace_printk: Map cleanup: timeout after evicted 3 entries
+          <idle>-0       [003] dN.21  4230.040653: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      KMS thread-1750    [002] d..21  4230.040687: bpf_trace_printk: Map cleanup: Starting cleanup scan
+          <idle>-0       [003] dN.21  4230.040789: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+      KMS thread-1750    [002] d..21  4230.040799: bpf_trace_printk: Map cleanup: timeout after evicted 3 entries
+ gvfs-afc-volume-2245    [002] d..21  4231.044482: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [002] d..21  4231.044686: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+ gvfs-afc-volume-2245    [002] d..21  4232.045795: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [002] d..21  4232.045955: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+ gvfs-afc-volume-2245    [001] d..21  4233.049201: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [001] d..21  4233.049463: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ gvfs-afc-volume-2245    [001] d..21  4234.051676: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [001] d..21  4234.051930: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ gvfs-afc-volume-2245    [001] d..21  4235.053721: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [001] d..21  4235.053884: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+   rs:main Q:Reg-679     [003] d..21  4236.053950: bpf_trace_printk: Map cleanup: Starting cleanup scan
+   rs:main Q:Reg-679     [003] d..21  4236.054126: bpf_trace_printk: Map cleanup: timeout after evicted 3 entries
+      llvmpipe-1-1753    [001] d..21  4237.061097: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-2-1754    [002] d..21  4237.061115: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-0-1752    [003] d..21  4237.061133: bpf_trace_printk: Map cleanup: Starting cleanup scan
+      llvmpipe-1-1753    [001] d..21  4237.061229: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+      llvmpipe-2-1754    [002] d..21  4237.061229: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+      llvmpipe-0-1752    [003] d..21  4237.061247: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+ gvfs-afc-volume-2245    [001] d..21  4238.063595: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [001] d..21  4238.063824: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+ gvfs-afc-volume-2245    [003] d..21  4239.065497: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [003] d..21  4239.065639: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+ gvfs-afc-volume-2245    [001] d..21  4240.068507: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [001] d..21  4240.068745: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+ gvfs-afc-volume-2245    [000] d..21  4241.071185: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [000] d..21  4241.071442: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+ gvfs-afc-volume-2245    [002] d..21  4242.074125: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [002] d..21  4242.074406: bpf_trace_printk: Map cleanup: timeout after evicted 3 entries
+ gvfs-afc-volume-2245    [000] d..21  4243.076553: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [000] d..21  4243.076806: bpf_trace_printk: Map cleanup: timeout after evicted 4 entries
+ gvfs-afc-volume-2245    [003] d..21  4244.079071: bpf_trace_printk: Map cleanup: Starting cleanup scan
+           <...>-992     [000] d..21  4244.079079: bpf_trace_printk: Map cleanup: Starting cleanup scan
+          <idle>-0       [001] dN.21  4244.079115: bpf_trace_printk: Map cleanup: Starting cleanup scan
+           <...>-992     [000] d..21  4244.079247: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+          <idle>-0       [001] dN.21  4244.079247: bpf_trace_printk: Map cleanup: timeout after evicted 4 entries
+ gvfs-afc-volume-2245    [003] d..21  4244.079247: bpf_trace_printk: Map cleanup: timeout after evicted 0 entries
+     rcu_preempt-15      [002] d..21  4245.080268: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [003] d..21  4245.080304: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     rcu_preempt-15      [002] d..21  4245.080453: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ gvfs-afc-volume-2245    [003] d..21  4245.080453: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ gvfs-afc-volume-2245    [002] d..21  4246.082576: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [002] d..21  4246.082755: bpf_trace_printk: Map cleanup: timeout after evicted 3 entries
+ gvfs-afc-volume-2245    [002] d..21  4247.085011: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [002] d..21  4247.085231: bpf_trace_printk: Map cleanup: timeout after evicted 1 entries
+ gvfs-afc-volume-2245    [001] d..21  4248.086960: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [001] d..21  4248.087183: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+ gvfs-afc-volume-2245    [001] d..21  4249.088252: bpf_trace_printk: Map cleanup: Starting cleanup scan
+ gvfs-afc-volume-2245    [001] d..21  4249.088443: bpf_trace_printk: Map cleanup: timeout after evicted 2 entries
+     rcu_preempt-15      [003] d..21  4250.088442: bpf_trace_printk: Map cleanup: Starting cleanup scan
+     rcu_preempt-15      [003] d..21  4250.088614: bpf_trace_printk: Map cleanup: timeout after evicted 5 entries
