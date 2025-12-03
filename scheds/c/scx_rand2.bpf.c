@@ -101,9 +101,10 @@ void BPF_STRUCT_OPS(rand2_enqueue, struct task_struct *p, u64 enq_flags)
     if (time_before(vtime, vtime_now - SCX_SLICE_DFL))
         vtime = vtime_now - SCX_SLICE_DFL;
 
+    u32 num_cpus = scx_bpf_nr_cpu_ids();
     bpf_spin_lock(&cpu_lock);
-    u32 cpu_id = index % scx_bpf_nr_cpu_ids();
-    index = (index + 1) % scx_bpf_nr_cpu_ids();
+    u32 cpu_id = index % num_cpus;
+    index = (index + 1) % num_cpus;
     bpf_spin_unlock(&cpu_lock);
 
     u32 zero = 0;
