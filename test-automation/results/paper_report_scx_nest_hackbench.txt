@@ -1,0 +1,60 @@
+==================================================================================
+Memory Cleanup Effectiveness Report
+Scheduler: scx_nest | Workload: hackbench
+Generated: Tue Dec  2 21:32:35 EST 2025
+==================================================================================
+
+EXECUTIVE SUMMARY
+-----------------
+
+CONTROL VERSION (No Cleanup):
+  - Map entries accumulate over time (no cleanup)
+  - Memory usage may grow unbounded
+
+  Max map entries observed: 0
+  Final map entries: 0
+
+TEST VERSION (With Cleanup):
+  - Map entries are actively cleaned up
+  - Memory usage remains bounded
+
+  Max map entries observed: 0
+  Final map entries: 0
+  Total entries evicted: 0
+
+COMPARISON
+----------
+  (Insufficient data for comparison)
+
+DETAILED METRICS
+----------------
+
+Control Version Runs:
+  hackbench_run1.csv:
+    Max entries: 0
+    Final entries: 0
+  hackbench_run2.csv:
+    Max entries: 0
+    Final entries: 0
+  hackbench_run3.csv:
+    Max entries: 0
+    Final entries: 0
+
+Test Version Runs:
+  hackbench_run1.csv:
+    Max entries: 0
+    Final entries: 0
+    Total evictions: 0
+  hackbench_run2.csv:
+    Max entries: 0
+    Final entries: 0
+    Total evictions: 0
+  hackbench_run3.csv:
+    Max entries: 0
+    Final entries: 0
+    Total evictions: 0
+
+CONCLUSION
+----------
+Cleanup mechanism is active but no evictions were recorded.
+This may indicate all entries were fresh or the workload was too short.
