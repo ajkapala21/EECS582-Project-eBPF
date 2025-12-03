@@ -25,7 +25,6 @@ struct random_sample_ctx {
 };
 
 struct task_ctx {
-    struct bpf_spin_lock lock;
     u32 pid;
     u64 vruntime;
     bool valid;
