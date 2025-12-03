@@ -59,8 +59,8 @@ for iter in $(seq 1 $ITERATIONS); do
     TRACE_FILE="$RESULTS_DIR/control/${WORKLOAD}_run${iter}_trace.txt"
     CSV_FILE="$RESULTS_DIR/control/${WORKLOAD}_run${iter}.csv"
     
-    # Clear trace buffer
-    echo > /sys/kernel/debug/tracing/trace
+    # Clear trace buffer (requires sudo)
+    echo | sudo tee /sys/kernel/debug/tracing/trace >/dev/null
     
     # Start trace capture
     echo "    Starting trace capture..."
@@ -147,8 +147,8 @@ for iter in $(seq 1 $ITERATIONS); do
     TRACE_FILE="$RESULTS_DIR/test/${WORKLOAD}_run${iter}_trace.txt"
     CSV_FILE="$RESULTS_DIR/test/${WORKLOAD}_run${iter}.csv"
     
-    # Clear trace buffer
-    echo > /sys/kernel/debug/tracing/trace
+    # Clear trace buffer (requires sudo)
+    echo | sudo tee /sys/kernel/debug/tracing/trace >/dev/null
     
     # Start trace capture
     echo "    Starting trace capture..."
