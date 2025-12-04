@@ -8,7 +8,7 @@
 char _license[] SEC("license") = "GPL";
 
 #define MAX_TASKS 65536
-#define SAMPLE_WINDOW_NS 500
+#define SAMPLE_WINDOW_NS 5000
 #define SAMPLE_COUNT 500
 
 static u64 vtime_now;

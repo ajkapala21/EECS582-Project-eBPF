@@ -9,7 +9,7 @@ char _license[] SEC("license") = "GPL";
 
 #define MAX_TASKS 65536
 #define SAMPLE_WINDOW_MIN 500
-#define SAMPLE_WINDOW_MAX 50000
+#define SAMPLE_WINDOW_MAX 25000
 #define SAMPLE_COUNT 500
 #define TIME_RATIO 100
 #define ALPHA 90
