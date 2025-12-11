@@ -28,7 +28,7 @@ You will need two terminals:
 In Terminal 2, run:
 
 ```bash
-sudo cat /sys/kernel/debug/tracing/trace_pipe
+sudo cat /sys/kernel/debug/tracing/trace_pipe | grep -E "Map cleanup|evict"
 ```
 
 Leave this running. This will display map cleanup eviction messages in real-time.
