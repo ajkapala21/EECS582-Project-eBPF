@@ -123,11 +123,6 @@ static long sample_cb(u64 idx, struct random_sample_ctx *rand_cxt)
         //bpf_printk("Exited because of time: %llu\n", idx);
         return 1; // bpf_loop will stop early if callback returns 1
     }
-
-    // may want to also add logic to cancel if you have sampled more than the size map_size
-    // currently with the static window of 500ns it samples around 15 (on my pc)
-    // this is overkill if the map_size is small, which it often will be, although maybe not
-    // for benchmarks
         
     return 0; // continue
 }
