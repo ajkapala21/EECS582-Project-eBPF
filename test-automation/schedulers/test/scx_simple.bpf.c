@@ -108,7 +108,7 @@ void BPF_STRUCT_OPS(simple_enqueue, struct task_struct *p, u64 enq_flags)
 
 void BPF_STRUCT_OPS(simple_dispatch, s32 cpu, struct task_struct *prev)
 {
-	/*scx_bpf_dsq_move_to_local(SHARED_DSQ);*/
+	/* TEST VERSION: Periodic cleanup of stale map entries */
 	static u64 last_cleanup = 0;
 	u64 now = bpf_ktime_get_ns();
 	u32 evicted = 0;
@@ -123,11 +123,9 @@ void BPF_STRUCT_OPS(simple_dispatch, s32 cpu, struct task_struct *prev)
 			bpf_printk("Map cleanup: timeout after evicted %u entries", evicted);
 		}
 		last_cleanup = now;
-
 	}
 
 	scx_bpf_dsq_move_to_local(SHARED_DSQ);
-
 }
 
 void BPF_STRUCT_OPS(simple_running, struct task_struct *p)
@@ -191,3 +189,4 @@ SCX_OPS_DEFINE(simple_ops,
 	       .init			= (void *)simple_init,
 	       .exit			= (void *)simple_exit,
 	       .name			= "simple");
+

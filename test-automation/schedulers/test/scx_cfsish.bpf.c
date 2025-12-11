@@ -37,25 +37,49 @@ UEI_DEFINE(uei);
  * use SCX_DSQ_GLOBAL.
  */
 #define SHARED_DSQ 0
+
+#define MAX_CPUS 256
+
 struct task_info {
-	__u64 vruntime;
-	__u64 weight;
-	__u64 last_start;
+    struct bpf_rb_node rb_node;
+    u64 vruntime;
+    u32 weight;
+    u64 start;
+    u64 last_start;  /* Added for cleanup tracking */
+    u32 pid;
 };
+
+struct cpu_rq {
+    u64 total_weight;
+    u64 min_vruntime;
+};
+
+// array of my cpu_rqs
+struct {
+  __uint(type, BPF_MAP_TYPE_ARRAY);
+  __uint(key_size, sizeof(u32));
+  __uint(value_size, sizeof(struct cpu_rq));
+  __uint(max_entries, MAX_CPUS);
+} cpu_rqs SEC(".maps");
+
+private(CGV_TREE) struct bpf_spin_lock cgv_tree_lock;
+private(CGV_TREE) struct bpf_rb_root rbtree __contains(task_info, rb_node);
+
+// task info map
+struct {
+    __uint(type, BPF_MAP_TYPE_HASH);
+    __uint(key_size, sizeof(u32));
+    __uint(value_size, sizeof(struct task_info));
+    __uint(max_entries, 65536);
+} task_info_map SEC(".maps");
 
 struct {
 	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
 	__uint(key_size, sizeof(u32));
 	__uint(value_size, sizeof(u64));
-	__uint(max_entries, 2);			/* [local, global] */
+	__uint(max_entries, 3);			/* [local, global] */
 } stats SEC(".maps");
 
-struct {
-	__uint(type, BPF_MAP_TYPE_HASH);
-	__uint(max_entries, 16384);
-	__type(key, __u32);
-	__type(value, struct task_info);
-} tasks SEC(".maps");
 
 static void stat_inc(u32 idx)
 {
@@ -68,6 +92,12 @@ s32 BPF_STRUCT_OPS(simple_select_cpu, struct task_struct *p, s32 prev_cpu, u64 w
 {
 	bool is_idle = false;
 	s32 cpu;
+	bpf_spin_lock(&cgv_tree_lock);
+	u64 res = scx_bpf_hello_world();
+	if(res == 5){
+		stat_inc(2);
+	}
+	bpf_spin_unlock(&cgv_tree_lock);
 
 	cpu = scx_bpf_select_cpu_dfl(p, prev_cpu, wake_flags, &is_idle);
 	if (is_idle) {
@@ -81,14 +111,17 @@ s32 BPF_STRUCT_OPS(simple_select_cpu, struct task_struct *p, s32 prev_cpu, u64 w
 void BPF_STRUCT_OPS(simple_enqueue, struct task_struct *p, u64 enq_flags)
 {
 	stat_inc(1);	/* count global queueing */
-	
+
+	/* TEST VERSION: Track tasks in map for cleanup */
 	u32 pid = p->pid;
 	struct task_info info = {};
 	info.vruntime = p->scx.dsq_vtime;
 	info.weight = p->scx.weight;
+	info.start = bpf_ktime_get_ns();
 	info.last_start = bpf_ktime_get_ns();
-	bpf_map_update_elem(&tasks, &pid, &info, BPF_ANY);
-	
+	info.pid = pid;
+	bpf_map_update_elem(&task_info_map, &pid, &info, BPF_ANY);
+
 	if (fifo_sched) {
 		scx_bpf_dsq_insert(p, SHARED_DSQ, SCX_SLICE_DFL, enq_flags);
 	} else {
@@ -108,13 +141,13 @@ void BPF_STRUCT_OPS(simple_enqueue, struct task_struct *p, u64 enq_flags)
 
 void BPF_STRUCT_OPS(simple_dispatch, s32 cpu, struct task_struct *prev)
 {
-	/*scx_bpf_dsq_move_to_local(SHARED_DSQ);*/
+	/* TEST VERSION: Periodic cleanup of stale map entries */
 	static u64 last_cleanup = 0;
 	u64 now = bpf_ktime_get_ns();
 	u32 evicted = 0;
 	
 	if (now - last_cleanup > 1000000000ULL) {
-		int ret = scx_bpf_map_scan_timeout(&tasks, 
+		int ret = scx_bpf_map_scan_timeout(&task_info_map, 
 						100000ULL, 
 						5000000000ULL, &evicted);
 		if (ret == 0 && evicted > 0) {
@@ -123,19 +156,19 @@ void BPF_STRUCT_OPS(simple_dispatch, s32 cpu, struct task_struct *prev)
 			bpf_printk("Map cleanup: timeout after evicted %u entries", evicted);
 		}
 		last_cleanup = now;
-
 	}
 
 	scx_bpf_dsq_move_to_local(SHARED_DSQ);
-
 }
 
 void BPF_STRUCT_OPS(simple_running, struct task_struct *p)
 {
+	/* TEST VERSION: Update last_start timestamp */
 	u32 pid = p->pid;
-	struct task_info *info = bpf_map_lookup_elem(&tasks, &pid);
+	struct task_info *info = bpf_map_lookup_elem(&task_info_map, &pid);
 	if (info)
 		info->last_start = bpf_ktime_get_ns();
+
 	if (fifo_sched)
 		return;
 
@@ -190,4 +223,5 @@ SCX_OPS_DEFINE(simple_ops,
 	       .enable			= (void *)simple_enable,
 	       .init			= (void *)simple_init,
 	       .exit			= (void *)simple_exit,
-	       .name			= "simple");
+	       .name			= "helper");
+
